@@ -1,0 +1,77 @@
+---
+/**
+ * Halaman Daftar Berita (halaman 2, 3, dst) — paginasi dinamis.
+ * Halaman 1 ditangani oleh index.astro.
+ *
+ * Validates: Requirements 4.4, 4.5
+ */
+import { getCollection } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import BeritaCard from '../../components/berita/BeritaCard.astro';
+import Pagination from '../../components/ui/Pagination.astro';
+import EmptyState from '../../components/ui/EmptyState.astro';
+import { paginate } from '../../utils/pagination';
+
+export async function getStaticPaths() {
+  const allBerita = await getCollection('berita', ({ data }) => data.status === 'published');
+  const sortedBerita = allBerita.sort(
+    (a, b) => b.data.tanggal.getTime() - a.data.tanggal.getTime()
+  );
+
+  const pageSize = 10;
+  const totalPages = Math.ceil(sortedBerita.length / pageSize);
+
+  // Generate paths for page 2 onwards (page 1 is index.astro)
+  const paths = [];
+  for (let pageNum = 2; pageNum <= totalPages; pageNum++) {
+    paths.push({
+      params: { page: pageNum.toString() },
+      props: { page: pageNum, sortedBerita },
+    });
+  }
+
+  return paths;
+}
+
+const { page, sortedBerita } = Astro.props;
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Berita', href: '/berita' },
+  { label: `Halaman ${page}` },
+];
+
+const paginationResult = paginate(sortedBerita, page, 10);
+---
+
+<ContentLayout
+  title={`Berita Desa — Halaman ${page}`}
+  description={`Daftar berita Desa Makmurjaya halaman ${page}.`}
+  breadcrumbItems={breadcrumbItems}
+>
+  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Berita Desa</h1>
+
+  {paginationResult.data.length === 0 ? (
+    <EmptyState message="Belum ada berita yang dipublikasikan." icon="berita" />
+  ) : (
+    <>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {paginationResult.data.map((berita) => (
+          <BeritaCard
+            judul={berita.data.judul}
+            tanggal={berita.data.tanggal}
+            foto_thumbnail={berita.data.foto_thumbnail}
+            cuplikan={berita.data.cuplikan}
+            slug={berita.slug}
+          />
+        ))}
+      </div>
+
+      <Pagination
+        currentPage={paginationResult.currentPage}
+        totalPages={paginationResult.totalPages}
+        baseUrl="/berita"
+      />
+    </>
+  )}
+</ContentLayout>

@@ -1,0 +1,91 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import PetaKantor from '../../components/kontak/PetaKantor.astro';
+import { getCollection } from 'astro:content';
+
+// Fetch halaman statis with type profil-lokasi
+const halamanStatis = await getCollection('halaman-statis');
+const lokasiPage = halamanStatis.find((page) => page.data.tipe === 'profil-lokasi');
+
+const title = lokasiPage?.data.judul || 'Lokasi Desa';
+const lat = lokasiPage?.data.lokasi_lat;
+const lng = lokasiPage?.data.lokasi_lng;
+const label = lokasiPage?.data.lokasi_label || 'Lokasi Desa Makmurjaya';
+
+// Render markdown body
+const Content = lokasiPage ? (await lokasiPage.render()).Content : null;
+
+// Sub-page navigation items
+const subPages = [
+  { label: 'Sejarah', href: '/profil/sejarah' },
+  { label: 'Visi & Misi', href: '/profil/visi-misi' },
+  { label: 'Lokasi', href: '/profil/lokasi' },
+];
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Profil Desa', href: '/profil/sejarah' },
+  { label: 'Lokasi' },
+];
+---
+
+<ContentLayout
+  title={title}
+  description="Lokasi dan peta Desa Makmurjaya. Lihat posisi desa di peta interaktif dan petunjuk akses menuju desa."
+  breadcrumbItems={breadcrumbItems}
+>
+  {/* Sub-page navigation - Requirement 2.4 */}
+  <nav aria-label="Navigasi sub-halaman Profil Desa" class="mb-8">
+    <ul class="flex flex-wrap gap-2">
+      {subPages.map((page) => (
+        <li>
+          <a
+            href={page.href}
+            class:list={[
+              'inline-block px-4 py-2 rounded-lg text-sm font-medium transition-colors min-h-[44px] flex items-center',
+              page.href === '/profil/lokasi'
+                ? 'bg-green-700 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900',
+            ]}
+            aria-current={page.href === '/profil/lokasi' ? 'page' : undefined}
+          >
+            {page.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <article class="space-y-8">
+    <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">{title}</h1>
+
+    {/* Peta interaktif - Requirements 2.3, 2.5 */}
+    {lat && lng ? (
+      <section aria-labelledby="peta-heading">
+        <h2 id="peta-heading" class="sr-only">Peta Lokasi Desa</h2>
+        <PetaKantor lat={lat} lng={lng} label={label} zoom={15} />
+      </section>
+    ) : (
+      <div class="rounded-lg bg-gray-100 p-6 text-center text-gray-600">
+        <p>
+          Data koordinat lokasi belum tersedia.
+          <a
+            href="https://www.openstreetmap.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-green-700 underline hover:text-green-900"
+          >
+            Cari lokasi di OpenStreetMap &rarr;
+          </a>
+        </p>
+      </div>
+    )}
+
+    {/* Konten markdown dari halaman statis */}
+    {Content && (
+      <div class="prose prose-green max-w-none">
+        <Content />
+      </div>
+    )}
+  </article>
+</ContentLayout>

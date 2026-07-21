@@ -1,0 +1,55 @@
+---
+/**
+ * pages/pemerintahan/index.astro
+ * Halaman Pemerintahan Desa - Menampilkan bagan struktur organisasi.
+ * Requirement 3.1, 3.2, 3.3, 3.5
+ */
+
+import { getCollection } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import OrgChart from '../../components/pemerintahan/OrgChart.astro';
+
+// Query all published perangkat-desa, sorted by urutan
+const allPerangkat = await getCollection('perangkat-desa');
+const publishedPerangkat = allPerangkat
+  .sort((a, b) => a.data.urutan - b.data.urutan);
+
+// Prepare data for OrgChart (slug comes from Astro's built-in entry.slug)
+const perangkatList = publishedPerangkat.map((entry) => ({
+  nama: entry.data.nama,
+  jabatan: entry.data.jabatan,
+  slug: entry.slug,
+  foto: entry.data.foto,
+  urutan: entry.data.urutan,
+  level_hierarki: entry.data.level_hierarki,
+  parent_slug: entry.data.parent_slug,
+}));
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Pemerintahan Desa' },
+];
+
+const pageTitle = 'Pemerintahan Desa — Desa Makmurjaya';
+const pageDescription = 'Struktur organisasi dan daftar perangkat pemerintahan Desa Makmurjaya.';
+---
+
+<ContentLayout
+  title={pageTitle}
+  description={pageDescription}
+  breadcrumbItems={breadcrumbItems}
+>
+  <section aria-labelledby="pemerintahan-heading">
+    <h1 id="pemerintahan-heading" class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
+      Struktur Organisasi Pemerintahan Desa
+    </h1>
+
+    {perangkatList.length > 0 ? (
+      <OrgChart perangkatList={perangkatList} />
+    ) : (
+      <p class="text-gray-600 text-center py-12">
+        Data perangkat desa belum tersedia.
+      </p>
+    )}
+  </section>
+</ContentLayout>

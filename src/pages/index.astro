@@ -1,14 +1,77 @@
 ---
-// Halaman beranda sementara — akan diganti di task 7
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSection from '../components/beranda/HeroSection.astro';
+import BeritaTerbaru from '../components/beranda/BeritaTerbaru.astro';
+import PengumumanTerbaru from '../components/beranda/PengumumanTerbaru.astro';
+import HighlightWisata from '../components/beranda/HighlightWisata.astro';
+import HighlightUMKM from '../components/beranda/HighlightUMKM.astro';
+
+const seoTitle = 'Beranda — Desa Makmurjaya';
+const seoDescription =
+  'Website resmi Desa Makmurjaya. Informasi berita desa, pengumuman, wisata, UMKM, dan layanan pemerintahan desa.';
+
+const siteUrl = import.meta.env.SITE ?? 'https://desamakmurjaya.id';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'GovernmentOrganization',
+  name: 'Pemerintah Desa Makmurjaya',
+  url: siteUrl,
+  description: seoDescription,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Makmurjaya',
+    addressRegion: 'Jawa Barat',
+    addressCountry: 'ID',
+  },
+};
 ---
-<html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Desa Makmurjaya</title>
-  </head>
-  <body>
-    <h1>Website Desa Makmurjaya</h1>
-    <p>Website sedang dalam pengembangan.</p>
-  </body>
-</html>
+
+<BaseLayout title={seoTitle} description={seoDescription} jsonLd={jsonLd}>
+  <!-- Hero Section -->
+  <HeroSection
+    foto="/uploads/hero-desa.webp"
+    tagline="Membangun Desa, Memajukan Bersama"
+    namaDesaSubtitle="Desa Makmurjaya"
+  />
+
+  <!-- Berita Terbaru -->
+  <section class="py-12 md:py-16" aria-labelledby="berita-heading">
+    <div class="container mx-auto px-4">
+      <h2 id="berita-heading" class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
+        Berita Terbaru
+      </h2>
+      <BeritaTerbaru />
+    </div>
+  </section>
+
+  <!-- Pengumuman Terbaru -->
+  <section class="py-12 md:py-16 bg-gray-50" aria-labelledby="pengumuman-heading">
+    <div class="container mx-auto px-4">
+      <h2 id="pengumuman-heading" class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
+        Pengumuman & Agenda
+      </h2>
+      <PengumumanTerbaru />
+    </div>
+  </section>
+
+  <!-- Highlight Wisata -->
+  <section class="py-12 md:py-16" aria-labelledby="wisata-heading">
+    <div class="container mx-auto px-4">
+      <h2 id="wisata-heading" class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
+        Wisata Desa
+      </h2>
+      <HighlightWisata />
+    </div>
+  </section>
+
+  <!-- Highlight UMKM -->
+  <section class="py-12 md:py-16 bg-gray-50" aria-labelledby="umkm-heading">
+    <div class="container mx-auto px-4">
+      <h2 id="umkm-heading" class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
+        UMKM Desa
+      </h2>
+      <HighlightUMKM />
+    </div>
+  </section>
+</BaseLayout>

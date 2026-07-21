@@ -1,0 +1,52 @@
+---
+/**
+ * Breadcrumb navigation component.
+ * Displays hierarchical position of the current page.
+ * Not displayed on the homepage (/).
+ *
+ * Validates: Requirement 12.3
+ */
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+// Do not render breadcrumb on homepage
+const isHomepage = currentPath === '/' || currentPath === '';
+---
+
+{!isHomepage && items.length > 0 && (
+  <nav aria-label="Breadcrumb" class="py-3 text-sm text-gray-600">
+    <ol class="flex flex-wrap items-center gap-1">
+      {items.map((item, index) => {
+        const isLast = index === items.length - 1;
+        return (
+          <li class="flex items-center">
+            {index > 0 && (
+              <span class="mx-1 text-gray-400 select-none" aria-hidden="true">/</span>
+            )}
+            {isLast || !item.href ? (
+              <span class="text-gray-900 font-medium" aria-current="page">
+                {item.label}
+              </span>
+            ) : (
+              <a
+                href={item.href}
+                class="hover:text-blue-600 hover:underline focus:outline-2 focus:outline-blue-600 focus:outline-offset-2 rounded"
+              >
+                {item.label}
+              </a>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  </nav>
+)}

@@ -1,0 +1,47 @@
+---
+/**
+ * Halaman Galeri — menampilkan galeri foto desa dalam layout grid responsif,
+ * dikelompokkan berdasarkan album, dengan mode lightbox untuk tampilan penuh.
+ *
+ * Validates: Requirements 8.1, 8.2, 8.3, 8.4, 8.5
+ */
+import { getCollection } from 'astro:content';
+import ContentLayout from '../layouts/ContentLayout.astro';
+import GaleriGrid from '../components/galeri/GaleriGrid.astro';
+import Lightbox from '../components/galeri/Lightbox.astro';
+import EmptyState from '../components/ui/EmptyState.astro';
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Galeri' },
+];
+
+// Query semua galeri, sort by urutan
+const allGaleri = await getCollection('galeri');
+const sortedGaleri = allGaleri
+  .sort((a, b) => a.data.urutan - b.data.urutan)
+  .map((item) => ({
+    id: item.id,
+    judul_foto: item.data.judul_foto,
+    file_foto: item.data.file_foto,
+    caption: item.data.caption,
+    album: item.data.album,
+    urutan: item.data.urutan,
+  }));
+---
+
+<ContentLayout
+  title="Galeri Foto — Desa Makmurjaya"
+  description="Galeri foto kegiatan dan dokumentasi Desa Makmurjaya."
+  breadcrumbItems={breadcrumbItems}
+>
+  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Galeri Foto</h1>
+
+  {sortedGaleri.length === 0 ? (
+    <EmptyState message="Belum ada foto galeri yang tersedia." icon="galeri" />
+  ) : (
+    <GaleriGrid items={sortedGaleri} />
+  )}
+
+  <Lightbox />
+</ContentLayout>

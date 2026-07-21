@@ -1,0 +1,61 @@
+---
+/**
+ * Halaman Daftar Berita — menampilkan berita yang dipublikasikan,
+ * diurutkan berdasarkan tanggal terbaru dengan paginasi 10 per halaman.
+ *
+ * Validates: Requirements 4.1, 4.2, 4.4
+ */
+import { getCollection } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import BeritaCard from '../../components/berita/BeritaCard.astro';
+import Pagination from '../../components/ui/Pagination.astro';
+import EmptyState from '../../components/ui/EmptyState.astro';
+import { paginate } from '../../utils/pagination';
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Berita' },
+];
+
+// Query berita yang sudah published, sort tanggal desc
+const allBerita = await getCollection('berita', ({ data }) => data.status === 'published');
+const sortedBerita = allBerita.sort(
+  (a, b) => b.data.tanggal.getTime() - a.data.tanggal.getTime()
+);
+
+// Paginate halaman 1, 10 item per halaman
+const page = 1;
+const paginationResult = paginate(sortedBerita, page, 10);
+---
+
+<ContentLayout
+  title="Berita Desa — Desa Makmurjaya"
+  description="Daftar berita dan informasi terbaru dari Desa Makmurjaya."
+  breadcrumbItems={breadcrumbItems}
+>
+  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Berita Desa</h1>
+
+  {paginationResult.data.length === 0 ? (
+    <EmptyState message="Belum ada berita yang dipublikasikan." icon="berita" />
+  ) : (
+    <>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {paginationResult.data.map((berita) => (
+          <BeritaCard
+            judul={berita.data.judul}
+            tanggal={berita.data.tanggal}
+            foto_thumbnail={berita.data.foto_thumbnail}
+            cuplikan={berita.data.cuplikan}
+            slug={berita.slug}
+          />
+        ))}
+      </div>
+
+      <Pagination
+        currentPage={paginationResult.currentPage}
+        totalPages={paginationResult.totalPages}
+        baseUrl="/berita"
+      />
+    </>
+  )}
+</ContentLayout>

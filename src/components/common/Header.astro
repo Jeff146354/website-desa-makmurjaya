@@ -1,0 +1,177 @@
+---
+/**
+ * Header.astro
+ * Sticky header with logo, navigation, search, and hamburger button.
+ * - Logo + Nama Desa di kiri
+ * - Navigation bar di tengah/kanan (desktop)
+ * - SearchBar placeholder — saat submit redirect ke /search?q={keyword}
+ * - Hamburger icon for mobile (toggle Navigation mobile)
+ * - Sticky positioning (position: sticky; top: 0) with backdrop blur
+ *
+ * Requirements: 12.1, 12.2, 13.4, 18.5
+ */
+import Navigation from './Navigation.astro';
+---
+
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm" data-pagefind-ignore>
+  <div class="relative max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
+    <!-- Logo + Nama Desa -->
+    <a
+      href="/"
+      class="flex items-center gap-2 text-lg font-bold text-gray-900 min-h-[44px] min-w-[44px] shrink-0 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2 rounded-md"
+    >
+      <!-- Logo placeholder (SVG icon) -->
+      <span class="inline-flex items-center justify-center w-9 h-9 bg-green-700 text-white rounded-full text-sm font-bold" aria-hidden="true">
+        DM
+      </span>
+      <span class="hidden sm:inline">Desa Makmurjaya</span>
+      <span class="sm:hidden">Desa M.</span>
+    </a>
+
+    <!-- Navigation Component (desktop nav is flex-1, mobile nav is absolute positioned) -->
+    <div class="flex-1 flex justify-center">
+      <Navigation />
+    </div>
+
+    <!-- Search + Hamburger -->
+    <div class="flex items-center gap-2 shrink-0">
+      <!-- Search Bar (inline placeholder — full SearchBar.astro will be task 4.5) -->
+      <form
+        action="/search"
+        method="get"
+        class="hidden lg:flex items-center"
+        role="search"
+        aria-label="Pencarian website"
+      >
+        <label for="header-search" class="sr-only">Cari di website</label>
+        <div class="relative">
+          <input
+            id="header-search"
+            type="search"
+            name="q"
+            placeholder="Cari..."
+            class="w-40 xl:w-52 px-3 py-2 pl-9 text-sm border border-gray-300 rounded-md bg-gray-50 focus:bg-white focus:border-green-500 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2 transition-colors"
+            autocomplete="off"
+          />
+          <svg
+            class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+      </form>
+
+      <!-- Mobile Search Button (opens /search page) -->
+      <a
+        href="/search"
+        class="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-md text-gray-600 hover:text-green-700 hover:bg-green-50 transition-colors focus:outline-2 focus:outline-blue-600 focus:outline-offset-2"
+        aria-label="Buka halaman pencarian"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </a>
+
+      <!-- Hamburger Button (Mobile) -->
+      <button
+        id="hamburger-btn"
+        type="button"
+        class="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-md text-gray-600 hover:text-green-700 hover:bg-green-50 transition-colors focus:outline-2 focus:outline-blue-600 focus:outline-offset-2"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        aria-label="Buka menu navigasi"
+      >
+        <!-- Hamburger Icon -->
+        <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <!-- Close Icon (hidden by default) -->
+        <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const mobileNav = document.getElementById('mobile-nav');
+  const hamburgerIcon = document.getElementById('hamburger-icon');
+  const closeIcon = document.getElementById('close-icon');
+
+  if (hamburgerBtn && mobileNav && hamburgerIcon && closeIcon) {
+    function openMenu() {
+      hamburgerBtn!.setAttribute('aria-expanded', 'true');
+      hamburgerBtn!.setAttribute('aria-label', 'Tutup menu navigasi');
+      mobileNav!.setAttribute('aria-hidden', 'false');
+      mobileNav!.style.maxHeight = mobileNav!.scrollHeight + 'px';
+      hamburgerIcon!.classList.add('hidden');
+      closeIcon!.classList.remove('hidden');
+    }
+
+    function closeMenu() {
+      hamburgerBtn!.setAttribute('aria-expanded', 'false');
+      hamburgerBtn!.setAttribute('aria-label', 'Buka menu navigasi');
+      mobileNav!.setAttribute('aria-hidden', 'true');
+      mobileNav!.style.maxHeight = '0';
+      hamburgerIcon!.classList.remove('hidden');
+      closeIcon!.classList.add('hidden');
+    }
+
+    function toggleMenu() {
+      const expanded = hamburgerBtn!.getAttribute('aria-expanded') === 'true';
+      if (expanded) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    }
+
+    // Click handler
+    hamburgerBtn.addEventListener('click', toggleMenu);
+
+    // Keyboard handler: Enter, Space, Escape
+    hamburgerBtn.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleMenu();
+      }
+      if (e.key === 'Escape') {
+        closeMenu();
+        hamburgerBtn!.focus();
+      }
+    });
+
+    // Close menu on Escape from within mobile nav
+    mobileNav.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeMenu();
+        hamburgerBtn!.focus();
+      }
+    });
+
+    // Close menu when clicking outside (optional UX improvement)
+    document.addEventListener('click', (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        hamburgerBtn!.getAttribute('aria-expanded') === 'true' &&
+        !hamburgerBtn!.contains(target) &&
+        !mobileNav!.contains(target)
+      ) {
+        closeMenu();
+      }
+    });
+
+    // Close menu on window resize to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        closeMenu();
+      }
+    });
+  }
+</script>

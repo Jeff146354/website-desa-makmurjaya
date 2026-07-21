@@ -1,0 +1,156 @@
+---
+/**
+ * Pagination component — navigasi antar halaman.
+ * Menampilkan tombol prev/next dan nomor halaman dengan ellipsis.
+ * URL pattern: {baseUrl}/{page} — halaman 1 menggunakan {baseUrl} (tanpa nomor).
+ *
+ * Validates: Requirements 4.4, 5.7, 7.5
+ */
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string;
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+// Handle edge cases: totalPages <= 1 means no pagination needed
+if (totalPages <= 1) {
+  // Render nothing — no pagination needed
+}
+
+/**
+ * Generate URL for a given page number.
+ * Page 1 uses baseUrl without number suffix.
+ */
+function getPageUrl(page: number): string {
+  if (page === 1) {
+    return baseUrl;
+  }
+  // Remove trailing slash from baseUrl for consistent URL pattern
+  const base = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+  return `${base}/${page}`;
+}
+
+/**
+ * Generate array of page numbers to display, with ellipsis represented as null.
+ * Shows: first, last, current, and neighbors with ellipsis for gaps.
+ */
+function getPageNumbers(current: number, total: number): (number | null)[] {
+  if (total <= 7) {
+    // Show all pages if total is small
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  const pages: (number | null)[] = [];
+
+  // Always show first page
+  pages.push(1);
+
+  if (current > 3) {
+    pages.push(null); // ellipsis
+  }
+
+  // Show pages around current
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  if (current < total - 2) {
+    pages.push(null); // ellipsis
+  }
+
+  // Always show last page
+  pages.push(total);
+
+  return pages;
+}
+
+const hasPrev = currentPage > 1;
+const hasNext = currentPage < totalPages;
+const pageNumbers = getPageNumbers(currentPage, totalPages);
+---
+
+{totalPages > 1 && (
+  <nav aria-label="Navigasi halaman" class="mt-8 flex items-center justify-center gap-1">
+    {/* Previous button */}
+    {hasPrev ? (
+      <a
+        href={getPageUrl(currentPage - 1)}
+        class="inline-flex h-10 min-w-[44px] items-center justify-center rounded-lg border border-gray-300 px-3 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2 transition-colors"
+        aria-label="Halaman sebelumnya"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+        <span class="hidden sm:inline">Sebelumnya</span>
+      </a>
+    ) : (
+      <span
+        class="inline-flex h-10 min-w-[44px] items-center justify-center rounded-lg border border-gray-200 px-3 text-sm font-medium text-gray-500 cursor-not-allowed"
+        aria-disabled="true"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+        </svg>
+        <span class="hidden sm:inline">Sebelumnya</span>
+      </span>
+    )}
+
+    {/* Page numbers */}
+    {pageNumbers.map((page) => {
+      if (page === null) {
+        return (
+          <span class="inline-flex h-10 w-10 items-center justify-center text-sm text-gray-500" aria-hidden="true">
+            &hellip;
+          </span>
+        );
+      }
+      const isCurrent = page === currentPage;
+      return isCurrent ? (
+        <span
+          class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-sm font-medium text-white"
+          aria-current="page"
+          aria-label={`Halaman ${page}, halaman saat ini`}
+        >
+          {page}
+        </span>
+      ) : (
+        <a
+          href={getPageUrl(page)}
+          class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2 transition-colors"
+          aria-label={`Halaman ${page}`}
+        >
+          {page}
+        </a>
+      );
+    })}
+
+    {/* Next button */}
+    {hasNext ? (
+      <a
+        href={getPageUrl(currentPage + 1)}
+        class="inline-flex h-10 min-w-[44px] items-center justify-center rounded-lg border border-gray-300 px-3 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2 transition-colors"
+        aria-label="Halaman berikutnya"
+      >
+        <span class="hidden sm:inline">Berikutnya</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    ) : (
+      <span
+        class="inline-flex h-10 min-w-[44px] items-center justify-center rounded-lg border border-gray-200 px-3 text-sm font-medium text-gray-500 cursor-not-allowed"
+        aria-disabled="true"
+      >
+        <span class="hidden sm:inline">Berikutnya</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+        </svg>
+      </span>
+    )}
+  </nav>
+)}

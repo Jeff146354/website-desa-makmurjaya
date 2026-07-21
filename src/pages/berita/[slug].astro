@@ -1,0 +1,95 @@
+---
+/**
+ * Halaman Detail Berita — menampilkan artikel lengkap berdasarkan slug.
+ * Mendukung Pagefind indexing via data-pagefind-body dan data-pagefind-meta.
+ *
+ * Validates: Requirements 4.3, 4.5
+ */
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { formatTanggalIndonesia } from '../../utils/date';
+
+export async function getStaticPaths() {
+  const allBerita = await getCollection('berita', ({ data }) => data.status === 'published');
+
+  return allBerita.map((berita) => ({
+    params: { slug: berita.slug },
+    props: { entry: berita },
+  }));
+}
+
+const { entry } = Astro.props;
+const { judul, tanggal, foto_thumbnail, penulis, cuplikan } = entry.data;
+const { Content } = await entry.render();
+
+const siteUrl = import.meta.env.SITE ?? 'https://desamakmurjaya.id';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: judul,
+  datePublished: tanggal.toISOString(),
+  ...(penulis && { author: { '@type': 'Person', name: penulis } }),
+  description: cuplikan || judul,
+  ...(foto_thumbnail && { image: new URL(foto_thumbnail, siteUrl).toString() }),
+};
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Berita', href: '/berita' },
+  { label: judul },
+];
+---
+
+<ContentLayout
+  title={`${judul} — Desa Makmurjaya`}
+  description={entry.data.cuplikan || judul}
+  breadcrumbItems={breadcrumbItems}
+  type="article"
+  publishedDate={tanggal.toISOString()}
+  jsonLd={jsonLd}
+>
+  <article
+    data-pagefind-body
+    data-pagefind-meta={`title:${judul}, date:${tanggal.toISOString()}`}
+  >
+    {/* Header */}
+    <header class="mb-8">
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+        {judul}
+      </h1>
+
+      <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-600">
+        <time datetime={tanggal.toISOString()}>
+          {formatTanggalIndonesia(tanggal)}
+        </time>
+        {penulis && (
+          <>
+            <span aria-hidden="true" class="text-gray-300">|</span>
+            <span>Oleh: {penulis}</span>
+          </>
+        )}
+      </div>
+    </header>
+
+    {/* Foto utama */}
+    {foto_thumbnail && (
+      <figure class="mb-8">
+        <Image
+          src={foto_thumbnail}
+          alt={judul}
+          width={960}
+          format="webp"
+          loading="eager"
+          class="w-full rounded-lg object-cover"
+        />
+      </figure>
+    )}
+
+    {/* Body artikel */}
+    <div class="prose prose-lg prose-gray max-w-none prose-headings:text-gray-900 prose-a:text-green-700 prose-img:rounded-lg">
+      <Content />
+    </div>
+  </article>
+</ContentLayout>

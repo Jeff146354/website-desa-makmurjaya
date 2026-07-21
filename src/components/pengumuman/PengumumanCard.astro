@@ -1,0 +1,73 @@
+---
+/**
+ * PengumumanCard.astro
+ * Menampilkan kartu pengumuman/agenda individual dengan judul, tanggal publikasi,
+ * badge kategori (pengumuman/agenda), cuplikan 2 baris, dan tanggal pelaksanaan
+ * jika berkategori agenda.
+ * Touch target minimal 44x44px untuk aksesibilitas mobile.
+ *
+ * Validates: Requirements 5.1, 5.2, 5.5, 5.6
+ */
+import Badge from '../ui/Badge.astro';
+import { formatTanggalIndonesia } from '../../utils/date';
+
+interface Props {
+  judul: string;
+  tanggal: Date;
+  kategori: 'pengumuman' | 'agenda';
+  cuplikan?: string;
+  slug: string;
+  tanggal_pelaksanaan?: Date;
+  waktu_pelaksanaan?: string;
+}
+
+const { judul, tanggal, kategori, cuplikan, slug, tanggal_pelaksanaan, waktu_pelaksanaan } = Astro.props;
+
+const badgeLabel = kategori === 'agenda' ? 'Agenda' : 'Pengumuman';
+---
+
+<article class="rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-md">
+  <a
+    href={`/pengumuman/${slug}`}
+    class="block min-h-[44px] p-4 sm:p-5 group focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 rounded-lg"
+    aria-label={`Baca ${kategori}: ${judul}`}
+  >
+    {/* Header: Badge kategori */}
+    <div class="mb-2">
+      <Badge label={badgeLabel} variant={kategori} />
+    </div>
+
+    {/* Judul */}
+    <h3 class="text-base sm:text-lg font-semibold text-gray-900 group-hover:text-green-700 transition-colors line-clamp-2">
+      {judul}
+    </h3>
+
+    {/* Tanggal publikasi */}
+    <time
+      datetime={tanggal.toISOString()}
+      class="mt-2 block text-sm text-gray-500"
+    >
+      {formatTanggalIndonesia(tanggal)}
+    </time>
+
+    {/* Tanggal pelaksanaan (hanya untuk agenda) */}
+    {kategori === 'agenda' && tanggal_pelaksanaan && (
+      <div class="mt-1 flex items-center gap-1 text-sm text-orange-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span>
+          Pelaksanaan: {formatTanggalIndonesia(tanggal_pelaksanaan)}
+          {waktu_pelaksanaan && `, ${waktu_pelaksanaan}`}
+        </span>
+      </div>
+    )}
+
+    {/* Cuplikan */}
+    {cuplikan && (
+      <p class="mt-3 text-sm text-gray-600 line-clamp-2">
+        {cuplikan}
+      </p>
+    )}
+  </a>
+</article>

@@ -14,6 +14,16 @@ dist/
 .env
 .env.*
 .env.local
+.env.development
+.env.production
+
+# Security-sensitive files
+*.pem
+*.key
+*.cert
+*.p12
+*.pfx
+*.jks
 
 # Logs
 *.log

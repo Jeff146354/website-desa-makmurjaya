@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProfilNav from '../../components/profil/ProfilNav.astro';
+
+const halamanStatis = await getCollection('halaman-statis');
+const sejarahEntry = halamanStatis.find((entry) => entry.data.tipe === 'profil-sejarah');
+
+if (!sejarahEntry) {
+  throw new Error('Konten halaman sejarah belum tersedia. Buat file dengan tipe "profil-sejarah" di collection halaman-statis.');
+}
+
+const { Content } = await sejarahEntry.render();
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Profil Desa', href: '/profil/sejarah' },
+  { label: 'Sejarah' },
+];
+---
+
+<ContentLayout
+  title="Sejarah Desa Makmurjaya"
+  description="Mengenal sejarah dan perjalanan Desa Makmurjaya dari masa ke masa."
+  breadcrumbItems={breadcrumbItems}
+>
+  <ProfilNav currentPath="/profil/sejarah" />
+
+  <article class="prose prose-green max-w-none">
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+      {sejarahEntry.data.judul}
+    </h1>
+
+    <!-- Foto pendukung sejarah desa -->
+    <figure class="my-8">
+      <img
+        src="/uploads/galeri/sejarah-desa.jpg"
+        alt="Foto sejarah Desa Makmurjaya menampilkan pemandangan desa dari masa ke masa"
+        class="w-full rounded-lg shadow-md object-cover max-h-96"
+        width={1200}
+        height={600}
+        loading="eager"
+        decoding="async"
+      />
+      <figcaption class="mt-2 text-sm text-gray-600 text-center">
+        Desa Makmurjaya — Pemandangan desa yang asri dan hijau
+      </figcaption>
+    </figure>
+
+    <!-- Konten Markdown dari collection -->
+    <div class="mt-6">
+      <Content />
+    </div>
+  </article>
+</ContentLayout>

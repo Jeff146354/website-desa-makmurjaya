@@ -1,0 +1,227 @@
+---
+/**
+ * Lightbox component — menampilkan foto ukuran penuh dalam mode modal/lightbox.
+ * Navigasi prev/next antar foto dalam album yang sama.
+ * Menyembunyikan navigasi jika album hanya punya 1 foto.
+ * Aksesibilitas: role="dialog", aria-modal="true", focus trap, Escape untuk tutup.
+ *
+ * Validates: Requirements 8.2, 8.5
+ */
+---
+
+<div
+  id="galeri-lightbox"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Tampilan foto ukuran penuh"
+>
+  {/* Overlay close area */}
+  <button
+    id="lightbox-overlay"
+    type="button"
+    class="absolute inset-0 w-full h-full cursor-default"
+    aria-label="Tutup lightbox"
+    tabindex="-1"
+  ></button>
+
+  {/* Content container */}
+  <div class="relative z-10 flex flex-col items-center justify-center max-w-[90vw] max-h-[90vh]">
+    {/* Close button */}
+    <button
+      id="lightbox-close"
+      type="button"
+      class="absolute -top-2 -right-2 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-gray-800 shadow-lg hover:bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
+      aria-label="Tutup lightbox"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    {/* Previous button */}
+    <button
+      id="lightbox-prev"
+      type="button"
+      class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-14 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-gray-800 shadow-lg hover:bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
+      aria-label="Foto sebelumnya"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+
+    {/* Next button */}
+    <button
+      id="lightbox-next"
+      type="button"
+      class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-14 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-gray-800 shadow-lg hover:bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
+      aria-label="Foto berikutnya"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+
+    {/* Image */}
+    <img
+      id="lightbox-image"
+      src=""
+      alt=""
+      class="max-w-full max-h-[80vh] rounded-lg object-contain shadow-2xl"
+    />
+
+    {/* Caption */}
+    <p
+      id="lightbox-caption"
+      class="mt-4 text-center text-white text-sm sm:text-base max-w-lg"
+      aria-live="polite"
+    ></p>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const lightbox = document.getElementById('galeri-lightbox') as HTMLDivElement;
+    const lightboxImage = document.getElementById('lightbox-image') as HTMLImageElement;
+    const lightboxCaption = document.getElementById('lightbox-caption') as HTMLParagraphElement;
+    const closeBtn = document.getElementById('lightbox-close') as HTMLButtonElement;
+    const prevBtn = document.getElementById('lightbox-prev') as HTMLButtonElement;
+    const nextBtn = document.getElementById('lightbox-next') as HTMLButtonElement;
+    const overlay = document.getElementById('lightbox-overlay') as HTMLButtonElement;
+
+    if (!lightbox || !lightboxImage || !lightboxCaption || !closeBtn || !prevBtn || !nextBtn || !overlay) return;
+
+    let currentAlbumItems: HTMLElement[] = [];
+    let currentIndex = 0;
+    let previouslyFocusedElement: HTMLElement | null = null;
+
+    // Collect all focusable elements inside the lightbox for focus trapping
+    function getFocusableElements(): HTMLElement[] {
+      return Array.from(
+        lightbox.querySelectorAll<HTMLElement>(
+          'button:not([disabled]):not([tabindex="-1"]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((el) => !el.closest('[hidden]') && el.offsetParent !== null);
+    }
+
+    function openLightbox(triggerEl: HTMLElement) {
+      const album = triggerEl.getAttribute('data-album') || '';
+      const src = triggerEl.getAttribute('data-src') || '';
+      const caption = triggerEl.getAttribute('data-caption') || '';
+
+      // Get all items in the same album
+      currentAlbumItems = Array.from(
+        document.querySelectorAll<HTMLElement>(`.galeri-item[data-album="${album}"]`)
+      );
+      currentIndex = currentAlbumItems.indexOf(triggerEl);
+      if (currentIndex === -1) currentIndex = 0;
+
+      // Show/hide navigation based on album size
+      const hasMultiple = currentAlbumItems.length > 1;
+      prevBtn.classList.toggle('hidden', !hasMultiple);
+      nextBtn.classList.toggle('hidden', !hasMultiple);
+
+      // Set image and caption
+      lightboxImage.src = src;
+      lightboxImage.alt = caption;
+      lightboxCaption.textContent = caption;
+
+      // Save focus and open
+      previouslyFocusedElement = document.activeElement as HTMLElement;
+      lightbox.classList.remove('hidden');
+      lightbox.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+
+      // Focus close button
+      closeBtn.focus();
+    }
+
+    function closeLightbox() {
+      lightbox.classList.add('hidden');
+      lightbox.classList.remove('flex');
+      document.body.style.overflow = '';
+
+      // Restore focus
+      if (previouslyFocusedElement) {
+        previouslyFocusedElement.focus();
+        previouslyFocusedElement = null;
+      }
+    }
+
+    function navigateTo(index: number) {
+      if (currentAlbumItems.length === 0) return;
+
+      // Wrap around
+      if (index < 0) index = currentAlbumItems.length - 1;
+      if (index >= currentAlbumItems.length) index = 0;
+
+      currentIndex = index;
+      const item = currentAlbumItems[currentIndex];
+      const src = item.getAttribute('data-src') || '';
+      const caption = item.getAttribute('data-caption') || '';
+
+      lightboxImage.src = src;
+      lightboxImage.alt = caption;
+      lightboxCaption.textContent = caption;
+    }
+
+    function handleFocusTrap(e: KeyboardEvent) {
+      const focusable = getFocusableElements();
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+
+    // Event listeners
+    closeBtn.addEventListener('click', closeLightbox);
+    overlay.addEventListener('click', closeLightbox);
+    prevBtn.addEventListener('click', () => navigateTo(currentIndex - 1));
+    nextBtn.addEventListener('click', () => navigateTo(currentIndex + 1));
+
+    // Keyboard navigation
+    lightbox.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (lightbox.classList.contains('hidden')) return;
+
+      switch (e.key) {
+        case 'Escape':
+          e.preventDefault();
+          closeLightbox();
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          if (currentAlbumItems.length > 1) navigateTo(currentIndex - 1);
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          if (currentAlbumItems.length > 1) navigateTo(currentIndex + 1);
+          break;
+        case 'Tab':
+          handleFocusTrap(e);
+          break;
+      }
+    });
+
+    // Delegate click on gallery items
+    document.addEventListener('click', (e: Event) => {
+      const target = (e.target as HTMLElement).closest('.galeri-item') as HTMLElement | null;
+      if (target) {
+        e.preventDefault();
+        openLightbox(target);
+      }
+    });
+  });
+</script>

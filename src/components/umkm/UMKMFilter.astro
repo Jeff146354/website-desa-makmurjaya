@@ -1,0 +1,98 @@
+---
+/**
+ * UMKMFilter.astro
+ * Filter dropdown untuk UMKM berdasarkan kategori usaha.
+ * Menggunakan client-side JavaScript untuk filter: update URL query param.
+ * Menampilkan EmptyState jika filter tidak menghasilkan data.
+ *
+ * Validates: Requirements 7.4, 7.6
+ */
+import EmptyState from '../ui/EmptyState.astro';
+
+interface Props {
+  kategoriList: string[];
+  selectedKategori?: string;
+}
+
+const { kategoriList, selectedKategori } = Astro.props;
+---
+
+<div class="mb-8">
+  <label for="umkm-filter" class="block text-sm font-medium text-gray-700 mb-2">
+    Filter Kategori
+  </label>
+  <select
+    id="umkm-filter"
+    class="block w-full sm:w-64 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none min-h-[44px]"
+  >
+    <option value="" selected={!selectedKategori}>Semua Kategori</option>
+    {kategoriList.map((kat) => (
+      <option value={kat} selected={selectedKategori === kat}>
+        {kat}
+      </option>
+    ))}
+  </select>
+</div>
+
+{/* Empty state container, hidden by default */}
+<div id="umkm-empty-state" class="hidden">
+  <EmptyState message="Tidak ada UMKM dalam kategori ini." icon="umkm" />
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filter = document.getElementById('umkm-filter') as HTMLSelectElement | null;
+    const grid = document.getElementById('umkm-grid');
+    const emptyState = document.getElementById('umkm-empty-state');
+
+    if (!filter || !grid || !emptyState) return;
+
+    // Set initial value from URL params
+    const params = new URLSearchParams(window.location.search);
+    const initialKategori = params.get('kategori') || '';
+    if (initialKategori) {
+      filter.value = initialKategori;
+      applyFilter(initialKategori);
+    }
+
+    filter.addEventListener('change', () => {
+      const selected = filter.value;
+      applyFilter(selected);
+
+      // Update URL query param
+      const url = new URL(window.location.href);
+      if (selected) {
+        url.searchParams.set('kategori', selected);
+      } else {
+        url.searchParams.delete('kategori');
+      }
+      window.history.replaceState({}, '', url.toString());
+    });
+
+    function applyFilter(kategori: string) {
+      if (!grid || !emptyState) return;
+
+      const cards = grid.querySelectorAll<HTMLElement>('[data-kategori]');
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const cardKategori = card.getAttribute('data-kategori') || '';
+        if (!kategori || cardKategori === kategori) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Toggle empty state
+      if (visibleCount === 0 && kategori) {
+        emptyState.classList.remove('hidden');
+        grid.classList.add('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+        grid.classList.remove('hidden');
+      }
+    }
+  });
+</script>

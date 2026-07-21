@@ -1,0 +1,39 @@
+---
+/**
+ * Accordion component — expand/collapse list of questions and answers.
+ * Uses native <details>/<summary> for built-in keyboard accessibility
+ * (Enter/Space to toggle) and screen reader support.
+ *
+ * Validates: Requirements 10.1, 10.2
+ */
+interface AccordionItem {
+  pertanyaan: string;
+  jawaban: string;
+}
+
+interface Props {
+  items: AccordionItem[];
+}
+
+const { items } = Astro.props;
+---
+
+{items.length > 0 && (
+  <div class="divide-y divide-gray-200 border-t border-b border-gray-200">
+    {items.map((item) => (
+      <details class="group py-0">
+        <summary class="flex w-full cursor-pointer items-center justify-between gap-4 py-4 px-1 text-left text-base font-medium text-gray-900 hover:text-blue-600 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2 rounded transition-colors [&::-webkit-details-marker]:hidden list-none min-h-[44px]">
+          <span>{item.pertanyaan}</span>
+          <span class="ml-2 flex-shrink-0 text-gray-500 group-open:rotate-180 transition-transform duration-200" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </span>
+        </summary>
+        <div class="pb-4 px-1 text-gray-700 leading-relaxed prose prose-sm max-w-none">
+          <Fragment set:html={item.jawaban} />
+        </div>
+      </details>
+    ))}
+  </div>
+)}

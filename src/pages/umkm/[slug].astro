@@ -1,0 +1,169 @@
+---
+/**
+ * Halaman Detail UMKM — menampilkan informasi lengkap usaha berdasarkan slug.
+ * Menampilkan deskripsi usaha (Markdown), galeri produk, harga, dan kontak WhatsApp.
+ * Mendukung Pagefind indexing via data-pagefind-body dan data-pagefind-meta.
+ *
+ * Validates: Requirements 7.2, 7.3
+ */
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import Badge from '../../components/ui/Badge.astro';
+
+export async function getStaticPaths() {
+  const allUMKM = await getCollection('umkm', ({ data }) => data.status === 'published');
+
+  return allUMKM.map((umkm) => ({
+    params: { slug: umkm.slug },
+    props: { entry: umkm },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const {
+  nama_usaha,
+  pemilik,
+  kategori,
+  jenis_produk,
+  harga_range,
+  kontak_wa,
+  alamat,
+  foto_utama,
+  galeri_foto,
+} = entry.data;
+
+// Strip non-numeric characters from WhatsApp number for wa.me link
+const kontakWaNumeric = kontak_wa.replace(/\D/g, '');
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'UMKM', href: '/umkm' },
+  { label: nama_usaha },
+];
+---
+
+<ContentLayout
+  title={`${nama_usaha} — UMKM Desa Makmurjaya`}
+  description={`${nama_usaha} — ${jenis_produk}. UMKM Desa Makmurjaya.`}
+  breadcrumbItems={breadcrumbItems}
+  type="article"
+>
+  <article
+    data-pagefind-body
+    data-pagefind-meta={`title:${nama_usaha}`}
+  >
+    {/* Header */}
+    <header class="mb-8">
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+        {nama_usaha}
+      </h1>
+      {kategori && (
+        <div class="mt-3">
+          <Badge label={kategori} variant="info" />
+        </div>
+      )}
+    </header>
+
+    {/* Foto utama */}
+    {foto_utama && (
+      <figure class="mb-8">
+        <Image
+          src={foto_utama}
+          alt={nama_usaha}
+          width={960}
+          format="webp"
+          loading="eager"
+          class="w-full rounded-lg object-cover"
+        />
+      </figure>
+    )}
+
+    {/* Galeri produk */}
+    {galeri_foto && galeri_foto.length > 0 && (
+      <section class="mb-8" aria-labelledby="galeri-heading">
+        <h2 id="galeri-heading" class="text-xl font-semibold text-gray-900 mb-4">
+          Galeri Produk
+        </h2>
+        <div class="grid gap-4 grid-cols-2 sm:grid-cols-3">
+          {galeri_foto.map((foto, index) => (
+            <figure class="overflow-hidden rounded-lg">
+              <Image
+                src={foto}
+                alt={`${nama_usaha} - Foto ${index + 1}`}
+                width={400}
+                format="webp"
+                loading="lazy"
+                class="h-full w-full object-cover aspect-square"
+              />
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {/* Deskripsi usaha (Markdown body) */}
+    <section class="mb-8">
+      <div class="prose prose-lg prose-gray max-w-none prose-headings:text-gray-900 prose-a:text-green-700 prose-img:rounded-lg">
+        <Content />
+      </div>
+    </section>
+
+    {/* Informasi UMKM */}
+    <section class="rounded-lg border border-gray-200 bg-gray-50 p-6" aria-labelledby="info-heading">
+      <h2 id="info-heading" class="text-xl font-semibold text-gray-900 mb-4">
+        Informasi Usaha
+      </h2>
+      <dl class="space-y-4">
+        {/* Jenis Produk */}
+        <div>
+          <dt class="text-sm font-medium text-gray-600">Jenis Produk</dt>
+          <dd class="mt-1 text-base text-gray-900">{jenis_produk}</dd>
+        </div>
+
+        {/* Harga */}
+        {harga_range && (
+          <div>
+            <dt class="text-sm font-medium text-gray-600">Harga</dt>
+            <dd class="mt-1 text-base text-gray-900">{harga_range}</dd>
+          </div>
+        )}
+
+        {/* Pemilik */}
+        <div>
+          <dt class="text-sm font-medium text-gray-600">Pemilik</dt>
+          <dd class="mt-1 text-base text-gray-900">{pemilik}</dd>
+        </div>
+
+        {/* Kontak WhatsApp */}
+        <div>
+          <dt class="text-sm font-medium text-gray-600">Kontak WhatsApp</dt>
+          <dd class="mt-1">
+            <a
+              href={`https://wa.me/${kontakWaNumeric}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-lg bg-green-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-green-800 transition-colors min-h-[44px] min-w-[44px]"
+              aria-label={`Hubungi ${nama_usaha} via WhatsApp`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              Hubungi via WhatsApp
+            </a>
+          </dd>
+        </div>
+
+        {/* Alamat */}
+        {alamat && (
+          <div>
+            <dt class="text-sm font-medium text-gray-600">Alamat</dt>
+            <dd class="mt-1 text-base text-gray-900">{alamat}</dd>
+          </div>
+        )}
+      </dl>
+    </section>
+  </article>
+</ContentLayout>

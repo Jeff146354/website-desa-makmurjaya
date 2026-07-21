@@ -1,0 +1,71 @@
+---
+/**
+ * Halaman Daftar UMKM — menampilkan UMKM desa yang dipublikasikan,
+ * diurutkan berdasarkan nama usaha secara alfabetis (case-insensitive)
+ * dengan paginasi 12 per halaman dan filter kategori.
+ *
+ * Validates: Requirements 7.1, 7.4, 7.5, 7.6, 7.7
+ */
+import { getCollection } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import UMKMCard from '../../components/umkm/UMKMCard.astro';
+import UMKMFilter from '../../components/umkm/UMKMFilter.astro';
+import Pagination from '../../components/ui/Pagination.astro';
+import EmptyState from '../../components/ui/EmptyState.astro';
+import { paginate } from '../../utils/pagination';
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'UMKM' },
+];
+
+// Query UMKM yang sudah published, sort alfabetis by nama_usaha (case-insensitive)
+const allUMKM = await getCollection('umkm', ({ data }) => data.status === 'published');
+const sortedUMKM = allUMKM.sort(
+  (a, b) => a.data.nama_usaha.toLowerCase().localeCompare(b.data.nama_usaha.toLowerCase(), 'id')
+);
+
+// Extract unique categories from all published UMKM
+const kategoriList = [...new Set(
+  sortedUMKM
+    .map((u) => u.data.kategori)
+    .filter((k): k is string => !!k)
+)].sort((a, b) => a.localeCompare(b, 'id'));
+
+// Paginate halaman 1, 12 item per halaman
+const page = 1;
+const paginationResult = paginate(sortedUMKM, page, 12);
+---
+
+<ContentLayout
+  title="UMKM Desa — Desa Makmurjaya"
+  description="Daftar UMKM dan usaha mikro kecil menengah Desa Makmurjaya."
+  breadcrumbItems={breadcrumbItems}
+>
+  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">UMKM Desa</h1>
+
+  {sortedUMKM.length === 0 ? (
+    <EmptyState message="Daftar UMKM belum tersedia." icon="umkm" />
+  ) : (
+    <>
+      <UMKMFilter kategoriList={kategoriList} />
+
+      <div id="umkm-grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {paginationResult.data.map((umkm) => (
+          <UMKMCard
+            nama_usaha={umkm.data.nama_usaha}
+            slug={umkm.slug}
+            kategori={umkm.data.kategori}
+            foto_utama={umkm.data.foto_utama}
+          />
+        ))}
+      </div>
+
+      <Pagination
+        currentPage={paginationResult.currentPage}
+        totalPages={paginationResult.totalPages}
+        baseUrl="/umkm"
+      />
+    </>
+  )}
+</ContentLayout>

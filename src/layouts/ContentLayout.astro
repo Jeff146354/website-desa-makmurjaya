@@ -1,0 +1,83 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedDate?: string;
+  jsonLd?: object;
+  canonical?: string;
+  breadcrumbItems: BreadcrumbItem[];
+}
+
+const {
+  title,
+  description,
+  image,
+  type,
+  publishedDate,
+  jsonLd,
+  canonical,
+  breadcrumbItems,
+} = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  type={type}
+  publishedDate={publishedDate}
+  jsonLd={jsonLd}
+  canonical={canonical}
+>
+  <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
+    {/* Breadcrumb navigation - Requirement 12.3 */}
+    <nav aria-label="Breadcrumb" class="mb-6">
+      <ol class="flex flex-wrap items-center gap-1 text-sm text-gray-600">
+        {breadcrumbItems.map((item, index) => (
+          <li class="flex items-center">
+            {index > 0 && (
+              <svg
+                class="mx-1 h-4 w-4 flex-shrink-0 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            )}
+            {item.href ? (
+              <a
+                href={item.href}
+                class="hover:text-green-700 hover:underline transition-colors"
+              >
+                {item.label}
+              </a>
+            ) : (
+              <span class="font-medium text-gray-900" aria-current="page">
+                {item.label}
+              </span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    {/* Content slot */}
+    <slot />
+  </div>
+</BaseLayout>

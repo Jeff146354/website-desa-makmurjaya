@@ -1,0 +1,54 @@
+---
+/**
+ * PengumumanTerbaru — menampilkan 3 pengumuman terbaru (published) di halaman beranda.
+ * Sort by tanggal descending. Tampilkan judul + tanggal.
+ * Fallback EmptyState jika tidak ada pengumuman.
+ *
+ * Validates: Requirements 1.3, 1.8
+ */
+import { getCollection } from 'astro:content';
+import { formatTanggalIndonesia } from '../../utils/date';
+import EmptyState from '../ui/EmptyState.astro';
+
+const allPengumuman = await getCollection('pengumuman', ({ data }) => data.status === 'published');
+const pengumumanTerbaru = allPengumuman
+  .sort((a, b) => b.data.tanggal.getTime() - a.data.tanggal.getTime())
+  .slice(0, 3);
+---
+
+{pengumumanTerbaru.length === 0 ? (
+  <EmptyState message="Belum ada pengumuman yang tersedia." icon="pengumuman" />
+) : (
+  <ul class="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm">
+    {pengumumanTerbaru.map((pengumuman) => (
+      <li>
+        <a
+          href={`/pengumuman/${pengumuman.slug}`}
+          class="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-gray-50 group"
+        >
+          <div class="min-w-0">
+            <h3 class="text-base font-medium text-gray-900 group-hover:text-green-700 transition-colors truncate">
+              {pengumuman.data.judul}
+            </h3>
+            <time
+              datetime={pengumuman.data.tanggal.toISOString()}
+              class="mt-1 block text-sm text-gray-500"
+            >
+              {formatTanggalIndonesia(pengumuman.data.tanggal)}
+            </time>
+          </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-green-700 transition-colors"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </li>
+    ))}
+  </ul>
+)}

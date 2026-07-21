@@ -1,0 +1,37 @@
+---
+/**
+ * WisataGaleri.astro
+ * Grid galeri foto wisata dengan lazy loading dan format WebP.
+ * Container ditandai data-pagefind-ignore agar tidak diindex.
+ *
+ * Validates: Requirements 6.2
+ */
+import { Image } from 'astro:assets';
+
+interface Props {
+  galeri_foto: ImageMetadata[];
+  nama: string;
+}
+
+const { galeri_foto, nama } = Astro.props;
+---
+
+{galeri_foto.length > 0 && (
+  <section data-pagefind-ignore class="mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Galeri Foto</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      {galeri_foto.map((foto, index) => (
+        <div class="aspect-square overflow-hidden rounded-lg bg-gray-100">
+          <Image
+            src={foto}
+            alt={`Foto ${nama} ${index + 1}`}
+            width={400}
+            format="webp"
+            loading="lazy"
+            class="h-full w-full object-cover"
+          />
+        </div>
+      ))}
+    </div>
+  </section>
+)}

@@ -1,0 +1,106 @@
+---
+/**
+ * Halaman Detail Pengumuman — menampilkan pengumuman/agenda lengkap berdasarkan slug.
+ * Mendukung Pagefind indexing via data-pagefind-body dan data-pagefind-meta.
+ * Menampilkan lampiran dengan tautan unduh jika tersedia.
+ *
+ * Validates: Requirements 5.3, 5.4, 5.6
+ */
+import { getCollection } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import Badge from '../../components/ui/Badge.astro';
+import { formatTanggalIndonesia } from '../../utils/date';
+
+export async function getStaticPaths() {
+  const allPengumuman = await getCollection('pengumuman', ({ data }) => data.status === 'published');
+
+  return allPengumuman.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { judul, tanggal, kategori, tanggal_pelaksanaan, waktu_pelaksanaan, lampiran } = entry.data;
+const { Content } = await entry.render();
+
+const badgeLabel = kategori === 'agenda' ? 'Agenda' : 'Pengumuman';
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Pengumuman', href: '/pengumuman' },
+  { label: judul },
+];
+---
+
+<ContentLayout
+  title={`${judul} — Desa Makmurjaya`}
+  description={entry.data.cuplikan || judul}
+  breadcrumbItems={breadcrumbItems}
+  type="article"
+  publishedDate={tanggal.toISOString()}
+>
+  <article
+    data-pagefind-body
+    data-pagefind-meta={`title:${judul}, date:${tanggal.toISOString()}`}
+  >
+    {/* Header */}
+    <header class="mb-8">
+      <div class="mb-3">
+        <Badge label={badgeLabel} variant={kategori} />
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+        {judul}
+      </h1>
+
+      <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-600">
+        <time datetime={tanggal.toISOString()}>
+          {formatTanggalIndonesia(tanggal)}
+        </time>
+      </div>
+
+      {/* Tanggal pelaksanaan (hanya untuk agenda) */}
+      {kategori === 'agenda' && tanggal_pelaksanaan && (
+        <div class="mt-3 flex items-center gap-2 text-sm text-orange-700 bg-orange-50 rounded-md px-3 py-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span>
+            <strong>Pelaksanaan:</strong> {formatTanggalIndonesia(tanggal_pelaksanaan)}
+            {waktu_pelaksanaan && `, ${waktu_pelaksanaan}`}
+          </span>
+        </div>
+      )}
+    </header>
+
+    {/* Body artikel */}
+    <div class="prose prose-lg prose-gray max-w-none prose-headings:text-gray-900 prose-a:text-green-700 prose-img:rounded-lg">
+      <Content />
+    </div>
+
+    {/* Lampiran */}
+    {lampiran && lampiran.length > 0 && (
+      <section class="mt-8 border-t border-gray-200 pt-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Lampiran</h2>
+        <ul class="space-y-2">
+          {lampiran.map((file) => (
+            <li>
+              <a
+                href={file.url}
+                download
+                class="inline-flex items-center gap-2 text-green-700 hover:text-green-900 hover:underline transition-colors min-h-[44px] py-2"
+              >
+                <span aria-hidden="true">📎</span>
+                <span>{file.nama_file}</span>
+                {file.ukuran_kb && (
+                  <span class="text-sm text-gray-500">({file.ukuran_kb} KB)</span>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </article>
+</ContentLayout>

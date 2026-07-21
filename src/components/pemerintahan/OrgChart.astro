@@ -1,0 +1,142 @@
+---
+/**
+ * OrgChart.astro
+ * Menampilkan bagan struktur organisasi pemerintahan desa.
+ * - Desktop (≥768px): CSS Grid layout hierarkis berdasarkan level_hierarki dan parent_slug
+ * - Mobile (<768px): Daftar vertikal dengan indentasi berdasarkan level hierarki
+ */
+
+import PerangkatCard from './PerangkatCard.astro';
+
+interface Perangkat {
+  nama: string;
+  jabatan: string;
+  slug: string;
+  foto?: ImageMetadata;
+  urutan: number;
+  level_hierarki: number;
+  parent_slug?: string;
+}
+
+interface Props {
+  perangkatList: Perangkat[];
+}
+
+const { perangkatList } = Astro.props;
+
+// Build flat ordered list for mobile (DFS traversal respecting hierarchy)
+interface TreeNode extends Perangkat {
+  children: TreeNode[];
+}
+
+function buildTree(items: Perangkat[]): TreeNode[] {
+  const nodeMap = new Map<string, TreeNode>();
+  const roots: TreeNode[] = [];
+
+  // Create nodes
+  for (const item of items) {
+    nodeMap.set(item.slug, { ...item, children: [] });
+  }
+
+  // Build parent-child relationships
+  for (const item of items) {
+    const node = nodeMap.get(item.slug)!;
+    if (item.parent_slug && nodeMap.has(item.parent_slug)) {
+      nodeMap.get(item.parent_slug)!.children.push(node);
+    } else {
+      roots.push(node);
+    }
+  }
+
+  // Sort children by urutan
+  for (const node of nodeMap.values()) {
+    node.children.sort((a, b) => a.urutan - b.urutan);
+  }
+
+  return roots.sort((a, b) => a.urutan - b.urutan);
+}
+
+// Flatten tree via DFS for mobile view (preserves hierarchy order)
+interface FlatItem extends Perangkat {
+  depth: number;
+}
+
+function flattenTree(nodes: TreeNode[], depth: number = 0): FlatItem[] {
+  const result: FlatItem[] = [];
+  for (const node of nodes) {
+    result.push({ ...node, depth });
+    result.push(...flattenTree(node.children, depth + 1));
+  }
+  return result;
+}
+
+const tree = buildTree(perangkatList);
+const flatList = flattenTree(tree);
+
+// Group by level for desktop grid display
+const levels = new Map<number, Perangkat[]>();
+for (const p of perangkatList) {
+  if (!levels.has(p.level_hierarki)) {
+    levels.set(p.level_hierarki, []);
+  }
+  levels.get(p.level_hierarki)!.push(p);
+}
+const sortedLevels = [...levels.entries()].sort((a, b) => a[0] - b[0]);
+---
+
+{/* Desktop: CSS Grid hierarchical layout */}
+<div class="hidden md:block" role="figure" aria-label="Bagan Struktur Organisasi Pemerintahan Desa">
+  <div class="space-y-2">
+    {sortedLevels.map(([level, members]) => (
+      <div class="flex flex-col items-center">
+        {/* Connector line from above (except for top level) */}
+        {level > 1 && (
+          <div class="w-px h-6 bg-gray-300" aria-hidden="true"></div>
+        )}
+
+        {/* Horizontal connector for multiple children */}
+        {members.length > 1 && level > 1 && (
+          <div class="w-1/2 max-w-md h-px bg-gray-300" aria-hidden="true"></div>
+        )}
+
+        {/* Level row */}
+        <div
+          class:list={[
+            'grid gap-4 justify-items-center w-full',
+            members.length === 1 && 'grid-cols-1 max-w-xs mx-auto',
+            members.length === 2 && 'grid-cols-2 max-w-lg mx-auto',
+            members.length === 3 && 'grid-cols-3 max-w-2xl mx-auto',
+            members.length >= 4 && 'grid-cols-2 lg:grid-cols-4 max-w-4xl mx-auto',
+          ]}
+        >
+          {members.sort((a, b) => a.urutan - b.urutan).map((perangkat) => (
+            <PerangkatCard
+              nama={perangkat.nama}
+              jabatan={perangkat.jabatan}
+              slug={perangkat.slug}
+              foto={perangkat.foto}
+            />
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+{/* Mobile: Vertical list with indentation based on hierarchy depth */}
+<ul class="md:hidden space-y-1" role="list" aria-label="Daftar Struktur Organisasi Pemerintahan Desa">
+  {flatList.map((item) => (
+    <li
+      role="listitem"
+      style={`padding-left: ${item.depth * 1.5}rem;`}
+      class="border-l-2 border-green-200"
+    >
+      <PerangkatCard
+        nama={item.nama}
+        jabatan={item.jabatan}
+        slug={item.slug}
+        foto={item.foto}
+      />
+    </li>
+  ))}
+</ul>

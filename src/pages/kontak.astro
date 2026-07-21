@@ -1,0 +1,121 @@
+---
+/**
+ * Halaman Kontak — menampilkan informasi kontak desa,
+ * peta lokasi kantor, dan formulir kontak.
+ *
+ * Validates: Requirements 9.1, 9.2, 9.3, 9.4, 9.5, 9.6
+ */
+import { getCollection } from 'astro:content';
+import ContentLayout from '../layouts/ContentLayout.astro';
+import PetaKantor from '../components/kontak/PetaKantor.astro';
+import KontakForm from '../components/kontak/KontakForm.astro';
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Kontak' },
+];
+
+// Get kontak-info from halaman-statis collection
+const halamanStatis = await getCollection('halaman-statis');
+const kontakInfo = halamanStatis.find((item) => item.data.tipe === 'kontak-info');
+
+const lat = kontakInfo?.data.lokasi_lat ?? -7.5671;
+const lng = kontakInfo?.data.lokasi_lng ?? 110.8241;
+const label = kontakInfo?.data.lokasi_label ?? 'Kantor Desa Makmurjaya';
+---
+
+<ContentLayout
+  title="Kontak — Desa Makmurjaya"
+  description="Hubungi Kantor Desa Makmurjaya. Informasi alamat, telepon, email, jam layanan, dan formulir kontak."
+  breadcrumbItems={breadcrumbItems}
+>
+  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Hubungi Kami</h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+    {/* Informasi Kontak */}
+    <section aria-labelledby="info-kontak-heading">
+      <h2 id="info-kontak-heading" class="text-xl font-semibold text-gray-900 mb-4">
+        Informasi Kontak
+      </h2>
+
+      <div class="space-y-4">
+        {/* Alamat — Req 9.1 */}
+        <div class="flex items-start gap-3">
+          <svg class="h-5 w-5 text-green-700 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <div>
+            <p class="font-medium text-gray-900">Alamat</p>
+            <p class="text-gray-600">
+              Jl. Raya Desa No. 1, Desa Makmurjaya,<br />
+              Kecamatan Sejahtera, Kabupaten Sentosa,<br />
+              Jawa Tengah 57100
+            </p>
+          </div>
+        </div>
+
+        {/* Telepon — Req 9.1 */}
+        <div class="flex items-start gap-3">
+          <svg class="h-5 w-5 text-green-700 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+          <div>
+            <p class="font-medium text-gray-900">Telepon</p>
+            <p class="text-gray-600">(0271) 123-4567</p>
+          </div>
+        </div>
+
+        {/* Email — Req 9.1 */}
+        <div class="flex items-start gap-3">
+          <svg class="h-5 w-5 text-green-700 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          <div>
+            <p class="font-medium text-gray-900">Email</p>
+            <p class="text-gray-600">
+              <a href="mailto:desa.makmurjaya@gmail.com" class="text-green-700 hover:underline focus:outline-2 focus:outline-blue-600 focus:outline-offset-2 rounded">
+                desa.makmurjaya@gmail.com
+              </a>
+            </p>
+          </div>
+        </div>
+
+        {/* Jam Layanan — Req 9.2 */}
+        <div class="flex items-start gap-3">
+          <svg class="h-5 w-5 text-green-700 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div>
+            <p class="font-medium text-gray-900">Jam Layanan</p>
+            <div class="text-gray-600 text-sm space-y-1">
+              <p>Senin – Kamis: 08:00 – 15:00 WIB</p>
+              <p>Jumat: 08:00 – 11:00 WIB</p>
+              <p>Sabtu – Minggu: <span class="text-red-600 font-medium">Tutup</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Peta Lokasi — Req 9.3 */}
+    <section aria-labelledby="peta-lokasi-heading">
+      <h2 id="peta-lokasi-heading" class="text-xl font-semibold text-gray-900 mb-4">
+        Lokasi Kantor Desa
+      </h2>
+      <PetaKantor lat={lat} lng={lng} label={label} />
+    </section>
+  </div>
+
+  {/* Formulir Kontak — Req 9.4, 9.5, 9.6 */}
+  <section aria-labelledby="form-kontak-heading" class="max-w-2xl">
+    <h2 id="form-kontak-heading" class="text-xl font-semibold text-gray-900 mb-4">
+      Kirim Pesan
+    </h2>
+    <p class="text-gray-600 mb-6">
+      Silakan isi formulir di bawah ini untuk mengirim pesan atau pertanyaan kepada kami.
+      Kolom bertanda <span class="text-red-600">*</span> wajib diisi.
+    </p>
+    <KontakForm />
+  </section>
+</ContentLayout>

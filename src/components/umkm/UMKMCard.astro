@@ -1,0 +1,61 @@
+---
+/**
+ * UMKMCard.astro
+ * Menampilkan kartu UMKM individual dengan foto produk (WebP lazy),
+ * nama usaha, dan kategori sebagai Badge.
+ * Touch target minimal 44x44px untuk aksesibilitas mobile.
+ *
+ * Validates: Requirements 7.1
+ */
+import { Image } from 'astro:assets';
+import Badge from '../ui/Badge.astro';
+
+interface Props {
+  nama_usaha: string;
+  slug: string;
+  kategori?: string;
+  foto_utama?: ImageMetadata;
+}
+
+const { nama_usaha, slug, kategori, foto_utama } = Astro.props;
+---
+
+<article class="rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-md overflow-hidden" data-kategori={kategori || ''}>
+  <a
+    href={`/umkm/${slug}`}
+    class="block min-h-[44px] group focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 rounded-lg"
+    aria-label={`Lihat UMKM: ${nama_usaha}`}
+  >
+    {/* Foto produk */}
+    <div class="aspect-[4/3] w-full overflow-hidden bg-gray-100">
+      {foto_utama ? (
+        <Image
+          src={foto_utama}
+          alt={nama_usaha}
+          width={400}
+          format="webp"
+          loading="lazy"
+          class="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
+        />
+      ) : (
+        <div class="flex h-full w-full items-center justify-center text-gray-400" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+        </div>
+      )}
+    </div>
+
+    {/* Konten */}
+    <div class="p-4 sm:p-5">
+      <h3 class="text-base sm:text-lg font-semibold text-gray-900 group-hover:text-green-700 transition-colors line-clamp-2">
+        {nama_usaha}
+      </h3>
+      {kategori && (
+        <div class="mt-2">
+          <Badge label={kategori} variant="info" />
+        </div>
+      )}
+    </div>
+  </a>
+</article>

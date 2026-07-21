@@ -1,0 +1,56 @@
+---
+/**
+ * HighlightUMKM — menampilkan 2-4 UMKM terbaru (published) di halaman beranda.
+ * Tampilkan foto_utama, nama_usaha, jenis_produk.
+ * Fallback EmptyState jika tidak ada UMKM.
+ * Gambar menggunakan Astro <Image> dengan format WebP dan lazy loading.
+ *
+ * Validates: Requirements 1.5, 1.6, 1.8, 14.2, 14.3
+ */
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import EmptyState from '../ui/EmptyState.astro';
+
+const allUmkm = await getCollection('umkm', ({ data }) => data.status === 'published');
+const highlightUmkm = allUmkm.slice(0, 4);
+---
+
+{highlightUmkm.length === 0 ? (
+  <EmptyState message="Belum ada UMKM yang tersedia." icon="umkm" />
+) : (
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    {highlightUmkm.map((umkm) => (
+      <article class="group overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-md">
+        <a href={`/umkm/${umkm.slug}`} class="block">
+          <div class="aspect-square overflow-hidden bg-gray-100">
+            {umkm.data.foto_utama ? (
+              <Image
+                src={umkm.data.foto_utama}
+                alt={umkm.data.nama_usaha}
+                width={400}
+                height={400}
+                format="webp"
+                class="h-full w-full object-cover transition-transform group-hover:scale-105"
+                loading="lazy"
+              />
+            ) : (
+              <div class="flex h-full w-full items-center justify-center text-gray-400" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+              </div>
+            )}
+          </div>
+          <div class="p-4">
+            <h3 class="text-base font-semibold text-gray-900 group-hover:text-green-700 transition-colors">
+              {umkm.data.nama_usaha}
+            </h3>
+            <p class="mt-1 text-sm text-gray-600">
+              {umkm.data.jenis_produk}
+            </p>
+          </div>
+        </a>
+      </article>
+    ))}
+  </div>
+)}

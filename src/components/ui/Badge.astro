@@ -1,0 +1,36 @@
+---
+/**
+ * Badge component — visual indicator for categories.
+ * Used to distinguish content types (e.g., "pengumuman" vs "agenda").
+ *
+ * Validates: Requirements 5.5
+ */
+interface Props {
+  label: string;
+  variant?: 'default' | 'info' | 'success' | 'warning' | 'danger' | 'pengumuman' | 'agenda';
+}
+
+const { label, variant = 'default' } = Astro.props;
+
+/**
+ * Map variant to Tailwind color classes.
+ */
+const variantStyles: Record<string, string> = {
+  default: 'bg-gray-100 text-gray-800',
+  info: 'bg-blue-100 text-blue-800',
+  success: 'bg-green-100 text-green-800',
+  warning: 'bg-yellow-100 text-yellow-800',
+  danger: 'bg-red-100 text-red-800',
+  pengumuman: 'bg-blue-100 text-blue-800',
+  agenda: 'bg-orange-100 text-orange-800',
+};
+
+const classes = variantStyles[variant] || variantStyles.default;
+---
+
+<span class:list={[
+  'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
+  classes,
+]}>
+  {label}
+</span>

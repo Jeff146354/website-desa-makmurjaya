@@ -1,0 +1,43 @@
+---
+/**
+ * Halaman Daftar Wisata — menampilkan destinasi wisata desa yang dipublikasikan
+ * dengan foto, nama, dan deskripsi singkat dalam layout grid.
+ *
+ * Validates: Requirements 6.1
+ */
+import { getCollection } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import WisataCard from '../../components/wisata/WisataCard.astro';
+import EmptyState from '../../components/ui/EmptyState.astro';
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Wisata' },
+];
+
+// Query wisata yang sudah published
+const allWisata = await getCollection('wisata', ({ data }) => data.status === 'published');
+---
+
+<ContentLayout
+  title="Wisata Desa — Desa Makmurjaya"
+  description="Daftar destinasi wisata desa Makmurjaya yang menarik untuk dikunjungi."
+  breadcrumbItems={breadcrumbItems}
+>
+  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Wisata Desa</h1>
+
+  {allWisata.length === 0 ? (
+    <EmptyState message="Belum ada destinasi wisata yang dipublikasikan." icon="wisata" />
+  ) : (
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {allWisata.map((wisata) => (
+        <WisataCard
+          nama={wisata.data.nama}
+          slug={wisata.slug}
+          deskripsi_singkat={wisata.data.deskripsi_singkat}
+          foto_utama={wisata.data.foto_utama}
+        />
+      ))}
+    </div>
+  )}
+</ContentLayout>

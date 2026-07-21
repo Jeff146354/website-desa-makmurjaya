@@ -1,0 +1,334 @@
+---
+/**
+ * KontakForm — formulir kontak dengan validasi client-side,
+ * honeypot anti-spam, dan AJAX submit ke Formspree.
+ *
+ * Validates: Requirements 9.4, 9.5, 9.6
+ */
+---
+
+<form
+  id="kontak-form"
+  class="space-y-6"
+  novalidate
+  aria-label="Formulir Kontak"
+>
+  {/* Honeypot anti-spam field — hidden off-screen via CSS */}
+  <div class="kontak-form__hp" aria-hidden="true" tabindex={-1}>
+    <label for="kontak-website">Jangan isi kolom ini</label>
+    <input
+      type="text"
+      id="kontak-website"
+      name="_gotcha"
+      autocomplete="off"
+      tabindex={-1}
+    />
+  </div>
+
+  {/* Nama */}
+  <div>
+    <label for="kontak-nama" class="block text-sm font-medium text-gray-700 mb-1">
+      Nama <span class="text-red-600" aria-hidden="true">*</span>
+    </label>
+    <input
+      type="text"
+      id="kontak-nama"
+      name="nama"
+      required
+      class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors"
+      aria-required="true"
+    />
+    <p
+      id="kontak-nama-error"
+      class="mt-1 text-sm text-red-600 hidden"
+      role="alert"
+      aria-live="polite"
+    ></p>
+  </div>
+
+  {/* Email */}
+  <div>
+    <label for="kontak-email" class="block text-sm font-medium text-gray-700 mb-1">
+      Email <span class="text-red-600" aria-hidden="true">*</span>
+    </label>
+    <input
+      type="email"
+      id="kontak-email"
+      name="email"
+      required
+      class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors"
+      aria-required="true"
+    />
+    <p
+      id="kontak-email-error"
+      class="mt-1 text-sm text-red-600 hidden"
+      role="alert"
+      aria-live="polite"
+    ></p>
+  </div>
+
+  {/* Subjek */}
+  <div>
+    <label for="kontak-subjek" class="block text-sm font-medium text-gray-700 mb-1">
+      Subjek <span class="text-red-600" aria-hidden="true">*</span>
+    </label>
+    <input
+      type="text"
+      id="kontak-subjek"
+      name="subjek"
+      required
+      class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors"
+      aria-required="true"
+    />
+    <p
+      id="kontak-subjek-error"
+      class="mt-1 text-sm text-red-600 hidden"
+      role="alert"
+      aria-live="polite"
+    ></p>
+  </div>
+
+  {/* Pesan */}
+  <div>
+    <label for="kontak-pesan" class="block text-sm font-medium text-gray-700 mb-1">
+      Pesan <span class="text-red-600" aria-hidden="true">*</span>
+    </label>
+    <textarea
+      id="kontak-pesan"
+      name="pesan"
+      required
+      rows={5}
+      class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors resize-y"
+      aria-required="true"
+    ></textarea>
+    <p
+      id="kontak-pesan-error"
+      class="mt-1 text-sm text-red-600 hidden"
+      role="alert"
+      aria-live="polite"
+    ></p>
+  </div>
+
+  {/* Submit button */}
+  <div>
+    <button
+      type="submit"
+      id="kontak-submit"
+      class="inline-flex items-center gap-2 rounded-md bg-green-700 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      <span id="kontak-submit-text">Kirim Pesan</span>
+      <svg
+        id="kontak-submit-spinner"
+        class="hidden h-4 w-4 animate-spin"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </button>
+  </div>
+
+  {/* Success message */}
+  <div
+    id="kontak-success"
+    class="hidden rounded-md bg-green-50 border border-green-200 p-4"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="flex items-center gap-3">
+      <svg class="h-5 w-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+      <p class="text-sm font-medium text-green-800">
+        Pesan Anda berhasil dikirim! Kami akan segera merespons melalui email.
+      </p>
+    </div>
+  </div>
+
+  {/* Error message (general submission error) */}
+  <div
+    id="kontak-error-general"
+    class="hidden rounded-md bg-red-50 border border-red-200 p-4"
+    role="alert"
+    aria-live="polite"
+  >
+    <div class="flex items-center gap-3">
+      <svg class="h-5 w-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <p class="text-sm font-medium text-red-800">
+        Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.
+      </p>
+    </div>
+  </div>
+</form>
+
+<style>
+  /* Honeypot field hidden off-screen */
+  .kontak-form__hp {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  const FORMSPREE_ENDPOINT = import.meta.env.PUBLIC_FORMSPREE_ENDPOINT || '';
+
+  interface ValidationError {
+    field: string;
+    message: string;
+  }
+
+  function validateForm(data: { nama: string; email: string; subjek: string; pesan: string }) {
+    const errors: ValidationError[] = [];
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!data.nama || data.nama.trim() === '') {
+      errors.push({ field: 'nama', message: 'Nama wajib diisi' });
+    }
+
+    if (!data.email || data.email.trim() === '') {
+      errors.push({ field: 'email', message: 'Email wajib diisi' });
+    } else if (!emailRegex.test(data.email.trim())) {
+      errors.push({ field: 'email', message: 'Format email tidak valid' });
+    }
+
+    if (!data.subjek || data.subjek.trim() === '') {
+      errors.push({ field: 'subjek', message: 'Subjek wajib diisi' });
+    }
+
+    if (!data.pesan || data.pesan.trim() === '') {
+      errors.push({ field: 'pesan', message: 'Pesan wajib diisi' });
+    }
+
+    return { valid: errors.length === 0, errors };
+  }
+
+  function showFieldError(field: string, message: string) {
+    const input = document.getElementById(`kontak-${field}`) as HTMLInputElement | HTMLTextAreaElement | null;
+    const errorEl = document.getElementById(`kontak-${field}-error`);
+
+    if (input) {
+      input.setAttribute('aria-invalid', 'true');
+      input.setAttribute('aria-describedby', `kontak-${field}-error`);
+      input.classList.add('border-red-500');
+      input.classList.remove('border-gray-300');
+    }
+
+    if (errorEl) {
+      errorEl.textContent = message;
+      errorEl.classList.remove('hidden');
+    }
+  }
+
+  function clearFieldError(field: string) {
+    const input = document.getElementById(`kontak-${field}`) as HTMLInputElement | HTMLTextAreaElement | null;
+    const errorEl = document.getElementById(`kontak-${field}-error`);
+
+    if (input) {
+      input.removeAttribute('aria-invalid');
+      input.removeAttribute('aria-describedby');
+      input.classList.remove('border-red-500');
+      input.classList.add('border-gray-300');
+    }
+
+    if (errorEl) {
+      errorEl.textContent = '';
+      errorEl.classList.add('hidden');
+    }
+  }
+
+  function clearAllErrors() {
+    ['nama', 'email', 'subjek', 'pesan'].forEach(clearFieldError);
+    const generalError = document.getElementById('kontak-error-general');
+    if (generalError) generalError.classList.add('hidden');
+  }
+
+  function setSubmitting(isSubmitting: boolean) {
+    const btn = document.getElementById('kontak-submit') as HTMLButtonElement | null;
+    const text = document.getElementById('kontak-submit-text');
+    const spinner = document.getElementById('kontak-submit-spinner');
+
+    if (btn) btn.disabled = isSubmitting;
+    if (text) text.textContent = isSubmitting ? 'Mengirim...' : 'Kirim Pesan';
+    if (spinner) {
+      if (isSubmitting) {
+        spinner.classList.remove('hidden');
+      } else {
+        spinner.classList.add('hidden');
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('kontak-form') as HTMLFormElement | null;
+    if (!form) return;
+
+    form.addEventListener('submit', async (e: Event) => {
+      e.preventDefault();
+      clearAllErrors();
+
+      const formData = new FormData(form);
+      const data = {
+        nama: (formData.get('nama') as string) || '',
+        email: (formData.get('email') as string) || '',
+        subjek: (formData.get('subjek') as string) || '',
+        pesan: (formData.get('pesan') as string) || '',
+      };
+
+      // Check honeypot
+      const honeypot = (formData.get('_gotcha') as string) || '';
+      if (honeypot) return; // Bot detected, silently fail
+
+      // Validate
+      const result = validateForm(data);
+      if (!result.valid) {
+        result.errors.forEach((err) => showFieldError(err.field, err.message));
+        // Focus the first invalid field
+        const firstError = result.errors[0];
+        if (firstError) {
+          const firstInput = document.getElementById(`kontak-${firstError.field}`);
+          if (firstInput) firstInput.focus();
+        }
+        return;
+      }
+
+      // Submit via AJAX to Formspree
+      setSubmitting(true);
+      const successEl = document.getElementById('kontak-success');
+      const errorGeneralEl = document.getElementById('kontak-error-general');
+
+      try {
+        const response = await fetch(FORMSPREE_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+          // Show success message
+          if (successEl) successEl.classList.remove('hidden');
+          form.reset();
+        } else {
+          // Show general error
+          if (errorGeneralEl) errorGeneralEl.classList.remove('hidden');
+        }
+      } catch {
+        // Network error
+        if (errorGeneralEl) errorGeneralEl.classList.remove('hidden');
+      } finally {
+        setSubmitting(false);
+      }
+    });
+  });
+</script>

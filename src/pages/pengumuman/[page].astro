@@ -1,0 +1,79 @@
+---
+/**
+ * Halaman Daftar Pengumuman (halaman 2, 3, dst) — paginasi dinamis.
+ * Halaman 1 ditangani oleh index.astro.
+ *
+ * Validates: Requirements 5.3, 5.4, 5.6
+ */
+import { getCollection } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import PengumumanCard from '../../components/pengumuman/PengumumanCard.astro';
+import Pagination from '../../components/ui/Pagination.astro';
+import EmptyState from '../../components/ui/EmptyState.astro';
+import { paginate } from '../../utils/pagination';
+
+export async function getStaticPaths() {
+  const allPengumuman = await getCollection('pengumuman', ({ data }) => data.status === 'published');
+  const sortedPengumuman = allPengumuman.sort(
+    (a, b) => b.data.tanggal.getTime() - a.data.tanggal.getTime()
+  );
+
+  const pageSize = 10;
+  const totalPages = Math.ceil(sortedPengumuman.length / pageSize);
+
+  // Generate paths for page 2 onwards (page 1 is index.astro)
+  const paths = [];
+  for (let pageNum = 2; pageNum <= totalPages; pageNum++) {
+    paths.push({
+      params: { page: pageNum.toString() },
+      props: { page: pageNum, sortedPengumuman },
+    });
+  }
+
+  return paths;
+}
+
+const { page, sortedPengumuman } = Astro.props;
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'Pengumuman', href: '/pengumuman' },
+  { label: `Halaman ${page}` },
+];
+
+const paginationResult = paginate(sortedPengumuman, page, 10);
+---
+
+<ContentLayout
+  title={`Pengumuman & Agenda — Halaman ${page}`}
+  description={`Daftar pengumuman dan agenda Desa Makmurjaya halaman ${page}.`}
+  breadcrumbItems={breadcrumbItems}
+>
+  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Pengumuman & Agenda</h1>
+
+  {paginationResult.data.length === 0 ? (
+    <EmptyState message="Belum ada pengumuman yang dipublikasikan." icon="pengumuman" />
+  ) : (
+    <>
+      <div class="grid gap-6 sm:grid-cols-2">
+        {paginationResult.data.map((item) => (
+          <PengumumanCard
+            judul={item.data.judul}
+            tanggal={item.data.tanggal}
+            kategori={item.data.kategori}
+            cuplikan={item.data.cuplikan}
+            slug={item.slug}
+            tanggal_pelaksanaan={item.data.tanggal_pelaksanaan}
+            waktu_pelaksanaan={item.data.waktu_pelaksanaan}
+          />
+        ))}
+      </div>
+
+      <Pagination
+        currentPage={paginationResult.currentPage}
+        totalPages={paginationResult.totalPages}
+        baseUrl="/pengumuman"
+      />
+    </>
+  )}
+</ContentLayout>

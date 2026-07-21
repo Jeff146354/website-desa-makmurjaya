@@ -1,0 +1,84 @@
+---
+/**
+ * FAQ Page — displays frequently asked questions in accordion format.
+ * Groups by kategori if available, renders JSON-LD FAQPage structured data.
+ *
+ * Validates: Requirements 10.1, 10.2, 10.3, 19.4
+ */
+import { getCollection } from 'astro:content';
+import { marked } from 'marked';
+import ContentLayout from '../layouts/ContentLayout.astro';
+import Accordion from '../components/ui/Accordion.astro';
+import EmptyState from '../components/ui/EmptyState.astro';
+
+// Query all FAQ items and sort by urutan
+const allFaq = (await getCollection('faq')).sort((a, b) => a.data.urutan - b.data.urutan);
+
+// Convert markdown body to HTML for each FAQ entry
+const faqItems = allFaq.map((entry) => ({
+  pertanyaan: entry.data.pertanyaan,
+  jawaban: marked.parse(entry.body || '') as string,
+  kategori: entry.data.kategori,
+}));
+
+// Group by kategori if any items have kategori defined
+const hasKategori = faqItems.some((item) => item.kategori);
+
+type GroupedFaq = Record<string, { pertanyaan: string; jawaban: string }[]>;
+
+const groupedFaq: GroupedFaq = {};
+if (hasKategori) {
+  for (const item of faqItems) {
+    const key = item.kategori || 'Lainnya';
+    if (!groupedFaq[key]) {
+      groupedFaq[key] = [];
+    }
+    groupedFaq[key].push({ pertanyaan: item.pertanyaan, jawaban: item.jawaban });
+  }
+}
+
+// Build JSON-LD FAQPage structured data (Requirement 19.4)
+const jsonLd = faqItems.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.pertanyaan,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.jawaban,
+    },
+  })),
+} : undefined;
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'FAQ' },
+];
+---
+
+<ContentLayout
+  title="FAQ"
+  description="Pertanyaan yang sering diajukan seputar layanan dan informasi Desa Makmurjaya"
+  jsonLd={jsonLd}
+  breadcrumbItems={breadcrumbItems}
+>
+  <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl mb-6">
+    Pertanyaan yang Sering Diajukan
+  </h1>
+
+  {faqItems.length === 0 ? (
+    <EmptyState message="Belum ada pertanyaan yang tersedia saat ini." />
+  ) : hasKategori ? (
+    <div class="space-y-8">
+      {Object.entries(groupedFaq).map(([kategori, items]) => (
+        <section>
+          <h2 class="text-lg font-semibold text-gray-800 mb-3 capitalize">{kategori}</h2>
+          <Accordion items={items} />
+        </section>
+      ))}
+    </div>
+  ) : (
+    <Accordion items={faqItems.map(({ pertanyaan, jawaban }) => ({ pertanyaan, jawaban }))} />
+  )}
+</ContentLayout>

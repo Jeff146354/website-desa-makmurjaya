@@ -1,0 +1,86 @@
+---
+/**
+ * Halaman Daftar UMKM (halaman 2, 3, dst) — paginasi dinamis.
+ * Halaman 1 ditangani oleh index.astro.
+ *
+ * Validates: Requirements 7.1, 7.5
+ */
+import { getCollection } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import UMKMCard from '../../components/umkm/UMKMCard.astro';
+import UMKMFilter from '../../components/umkm/UMKMFilter.astro';
+import Pagination from '../../components/ui/Pagination.astro';
+import EmptyState from '../../components/ui/EmptyState.astro';
+import { paginate } from '../../utils/pagination';
+
+export async function getStaticPaths() {
+  const allUMKM = await getCollection('umkm', ({ data }) => data.status === 'published');
+  const sortedUMKM = allUMKM.sort(
+    (a, b) => a.data.nama_usaha.toLowerCase().localeCompare(b.data.nama_usaha.toLowerCase(), 'id')
+  );
+
+  const pageSize = 12;
+  const totalPages = Math.ceil(sortedUMKM.length / pageSize);
+
+  // Generate paths for page 2 onwards (page 1 is index.astro)
+  const paths = [];
+  for (let pageNum = 2; pageNum <= totalPages; pageNum++) {
+    paths.push({
+      params: { page: pageNum.toString() },
+      props: { page: pageNum, sortedUMKM },
+    });
+  }
+
+  return paths;
+}
+
+const { page, sortedUMKM } = Astro.props;
+
+const breadcrumbItems = [
+  { label: 'Beranda', href: '/' },
+  { label: 'UMKM', href: '/umkm' },
+  { label: `Halaman ${page}` },
+];
+
+// Extract unique categories for the filter
+const kategoriList = [...new Set(
+  sortedUMKM
+    .map((u: any) => u.data.kategori)
+    .filter((k: any): k is string => !!k)
+)].sort((a: string, b: string) => a.localeCompare(b, 'id'));
+
+const paginationResult = paginate(sortedUMKM, page, 12);
+---
+
+<ContentLayout
+  title={`UMKM Desa — Halaman ${page}`}
+  description={`Daftar UMKM Desa Makmurjaya halaman ${page}.`}
+  breadcrumbItems={breadcrumbItems}
+>
+  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">UMKM Desa</h1>
+
+  {paginationResult.data.length === 0 ? (
+    <EmptyState message="Daftar UMKM belum tersedia." icon="umkm" />
+  ) : (
+    <>
+      <UMKMFilter kategoriList={kategoriList} />
+
+      <div id="umkm-grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {paginationResult.data.map((umkm) => (
+          <UMKMCard
+            nama_usaha={umkm.data.nama_usaha}
+            slug={umkm.slug}
+            kategori={umkm.data.kategori}
+            foto_utama={umkm.data.foto_utama}
+          />
+        ))}
+      </div>
+
+      <Pagination
+        currentPage={paginationResult.currentPage}
+        totalPages={paginationResult.totalPages}
+        baseUrl="/umkm"
+      />
+    </>
+  )}
+</ContentLayout>

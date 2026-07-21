@@ -1,0 +1,59 @@
+---
+/**
+ * HeroSection — Hero banner utama halaman beranda.
+ * Gambar hero menggunakan loading="eager" + fetchpriority="high" untuk LCP optimal.
+ * Gambar dari folder public/ (URL string) sehingga menggunakan <img> dengan width/height eksplisit.
+ *
+ * Validates: Requirements 1.1, 14.2, 14.3
+ */
+interface Props {
+  foto?: string;
+  tagline?: string;
+  namaDesaSubtitle?: string;
+}
+
+const {
+  foto = '/uploads/hero-desa.webp',
+  tagline = 'Membangun Desa, Memajukan Bersama',
+  namaDesaSubtitle = 'Desa Makmurjaya',
+} = Astro.props;
+
+// Pastikan tagline tidak lebih dari 120 karakter
+const displayTagline = tagline.length > 120 ? tagline.slice(0, 120) : tagline;
+---
+
+<section
+  class="relative w-full h-[60vh] min-h-[400px] max-h-[700px] flex items-center justify-center overflow-hidden"
+  aria-label="Hero section"
+>
+  <!-- Hero Image: eager loading + fetchpriority high untuk LCP, format WebP direkomendasikan -->
+  <img
+    src={foto}
+    alt={`Pemandangan ${namaDesaSubtitle}`}
+    class="absolute inset-0 w-full h-full object-cover"
+    width={1920}
+    height={1080}
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+  />
+
+  <!-- Dark Overlay -->
+  <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+
+  <!-- Fallback gradient background (jika gambar gagal dimuat) -->
+  <div
+    class="absolute inset-0 -z-10 bg-gradient-to-br from-green-800 to-green-600"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Text Overlay -->
+  <div class="relative z-10 text-center px-4 max-w-3xl mx-auto">
+    <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
+      {displayTagline}
+    </h1>
+    <p class="text-lg md:text-2xl text-white/90 font-medium drop-shadow-md">
+      {namaDesaSubtitle}
+    </p>
+  </div>
+</section>

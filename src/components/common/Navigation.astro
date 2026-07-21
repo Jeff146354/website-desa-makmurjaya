@@ -1,0 +1,259 @@
+---
+/**
+ * Navigation.astro
+ * Menu navigasi utama — horizontal (desktop) dan vertical slide-down (mobile).
+ * Active state berdasarkan Astro.url.pathname.
+ * Dropdown untuk "Profil Desa" dengan sub-items: Sejarah, Visi-Misi, Lokasi.
+ *
+ * Requirements: 12.1, 12.2, 13.4, 18.5
+ */
+
+const currentPath = Astro.url.pathname;
+
+interface NavItem {
+  label: string;
+  href: string;
+  children?: { label: string; href: string }[];
+}
+
+const navItems: NavItem[] = [
+  { label: 'Beranda', href: '/' },
+  {
+    label: 'Profil Desa',
+    href: '/profil/sejarah',
+    children: [
+      { label: 'Sejarah', href: '/profil/sejarah' },
+      { label: 'Visi-Misi', href: '/profil/visi-misi' },
+      { label: 'Lokasi', href: '/profil/lokasi' },
+    ],
+  },
+  { label: 'Pemerintahan', href: '/pemerintahan' },
+  { label: 'Berita', href: '/berita' },
+  { label: 'Pengumuman', href: '/pengumuman' },
+  { label: 'Wisata', href: '/wisata' },
+  { label: 'UMKM', href: '/umkm' },
+  { label: 'Galeri', href: '/galeri' },
+  { label: 'Kontak', href: '/kontak' },
+  { label: 'FAQ', href: '/faq' },
+];
+
+function isActive(href: string, children?: { label: string; href: string }[]): boolean {
+  if (href === '/') return currentPath === '/';
+  if (currentPath.startsWith(href)) return true;
+  if (children) {
+    return children.some((child) => currentPath.startsWith(child.href));
+  }
+  return false;
+}
+---
+
+<!-- Desktop Navigation -->
+<nav class="hidden md:block" aria-label="Menu navigasi utama">
+  <ul class="flex items-center gap-1">
+    {navItems.map((item) => (
+      <li class="relative group">
+        {item.children ? (
+          <>
+            <button
+              type="button"
+              class:list={[
+                'nav-link inline-flex items-center gap-1 px-3 py-2 rounded-md text-sm font-medium transition-colors min-h-[44px] min-w-[44px]',
+                'focus:outline-2 focus:outline-blue-600 focus:outline-offset-2',
+                'hover:bg-green-50 hover:text-green-700',
+                isActive(item.href, item.children)
+                  ? 'text-green-700 bg-green-50'
+                  : 'text-gray-700',
+              ]}
+              aria-expanded="false"
+              aria-haspopup="true"
+            >
+              {item.label}
+              <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <ul
+              class="absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-100 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all z-50"
+              role="menu"
+            >
+              {item.children.map((child) => (
+                <li role="none">
+                  <a
+                    href={child.href}
+                    role="menuitem"
+                    class:list={[
+                      'block px-4 py-2 text-sm transition-colors min-h-[44px] flex items-center',
+                      'focus:outline-2 focus:outline-blue-600 focus:outline-offset-2',
+                      'hover:bg-green-50 hover:text-green-700',
+                      currentPath.startsWith(child.href)
+                        ? 'text-green-700 bg-green-50 font-medium'
+                        : 'text-gray-700',
+                    ]}
+                  >
+                    {child.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <a
+            href={item.href}
+            class:list={[
+              'nav-link inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors min-h-[44px] min-w-[44px]',
+              'focus:outline-2 focus:outline-blue-600 focus:outline-offset-2',
+              'hover:bg-green-50 hover:text-green-700',
+              isActive(item.href) ? 'text-green-700 bg-green-50' : 'text-gray-700',
+            ]}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        )}
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<!-- Mobile Navigation (slide-down panel) -->
+<nav
+  id="mobile-nav"
+  class="md:hidden absolute left-0 right-0 top-full bg-white border-b border-gray-200 shadow-lg overflow-hidden transition-all duration-300 max-h-0"
+  aria-label="Menu navigasi mobile"
+  aria-hidden="true"
+>
+  <ul class="px-4 py-2">
+    {navItems.map((item) => (
+      <li>
+        {item.children ? (
+          <div class="mobile-dropdown">
+            <button
+              type="button"
+              class:list={[
+                'mobile-dropdown-toggle w-full flex items-center justify-between px-3 py-3 rounded-md text-sm font-medium transition-colors min-h-[44px]',
+                'focus:outline-2 focus:outline-blue-600 focus:outline-offset-2',
+                isActive(item.href, item.children)
+                  ? 'text-green-700 bg-green-50'
+                  : 'text-gray-700',
+              ]}
+              aria-expanded="false"
+            >
+              {item.label}
+              <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <ul class="mobile-dropdown-menu hidden pl-4 pb-1">
+              {item.children.map((child) => (
+                <li>
+                  <a
+                    href={child.href}
+                    class:list={[
+                      'block px-3 py-2 rounded-md text-sm transition-colors min-h-[44px] flex items-center',
+                      'focus:outline-2 focus:outline-blue-600 focus:outline-offset-2',
+                      'hover:bg-green-50 hover:text-green-700',
+                      currentPath.startsWith(child.href)
+                        ? 'text-green-700 bg-green-50 font-medium'
+                        : 'text-gray-600',
+                    ]}
+                    aria-current={currentPath.startsWith(child.href) ? 'page' : undefined}
+                  >
+                    {child.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <a
+            href={item.href}
+            class:list={[
+              'block px-3 py-3 rounded-md text-sm font-medium transition-colors min-h-[44px] flex items-center',
+              'focus:outline-2 focus:outline-blue-600 focus:outline-offset-2',
+              'hover:bg-green-50 hover:text-green-700',
+              isActive(item.href) ? 'text-green-700 bg-green-50' : 'text-gray-700',
+            ]}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        )}
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<script>
+  // Desktop dropdown keyboard support
+  document.querySelectorAll<HTMLButtonElement>('nav[aria-label="Menu navigasi utama"] button[aria-haspopup]').forEach((btn) => {
+    const parent = btn.closest('li');
+    const menu = parent?.querySelector('ul[role="menu"]');
+    if (!menu) return;
+
+    btn.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        if (!expanded) {
+          menu.classList.remove('opacity-0', 'invisible');
+          menu.classList.add('opacity-100', 'visible');
+          const firstLink = menu.querySelector<HTMLAnchorElement>('a[role="menuitem"]');
+          firstLink?.focus();
+        } else {
+          menu.classList.add('opacity-0', 'invisible');
+          menu.classList.remove('opacity-100', 'visible');
+        }
+      }
+      if (e.key === 'Escape') {
+        btn.setAttribute('aria-expanded', 'false');
+        menu.classList.add('opacity-0', 'invisible');
+        menu.classList.remove('opacity-100', 'visible');
+        btn.focus();
+      }
+    });
+
+    // Close dropdown when focus leaves
+    parent?.addEventListener('focusout', (e: FocusEvent) => {
+      if (!parent.contains(e.relatedTarget as Node)) {
+        btn.setAttribute('aria-expanded', 'false');
+        menu.classList.add('opacity-0', 'invisible');
+        menu.classList.remove('opacity-100', 'visible');
+      }
+    });
+
+    // Escape from within dropdown menu
+    menu.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        btn.setAttribute('aria-expanded', 'false');
+        menu.classList.add('opacity-0', 'invisible');
+        menu.classList.remove('opacity-100', 'visible');
+        btn.focus();
+      }
+    });
+  });
+
+  // Mobile dropdown toggle
+  document.querySelectorAll<HTMLButtonElement>('.mobile-dropdown-toggle').forEach((btn) => {
+    const menu = btn.nextElementSibling as HTMLElement | null;
+    if (!menu) return;
+
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      menu.classList.toggle('hidden');
+      // Rotate chevron
+      const svg = btn.querySelector('svg');
+      if (svg) {
+        svg.style.transform = expanded ? '' : 'rotate(180deg)';
+      }
+    });
+
+    btn.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        btn.click();
+      }
+    });
+  });
+</script>
