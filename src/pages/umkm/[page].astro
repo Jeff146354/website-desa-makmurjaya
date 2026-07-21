@@ -12,6 +12,7 @@ import UMKMFilter from '../../components/umkm/UMKMFilter.astro';
 import Pagination from '../../components/ui/Pagination.astro';
 import EmptyState from '../../components/ui/EmptyState.astro';
 import { paginate } from '../../utils/pagination';
+import { getPath } from '../../utils/links';
 
 export async function getStaticPaths() {
   const allUMKM = await getCollection('umkm', ({ data }) => data.status === 'published');
@@ -37,8 +38,8 @@ export async function getStaticPaths() {
 const { page, sortedUMKM } = Astro.props;
 
 const breadcrumbItems = [
-  { label: 'Beranda', href: '/' },
-  { label: 'UMKM', href: '/umkm' },
+  { label: 'Beranda', href: getPath('/') },
+  { label: 'UMKM', href: getPath('/umkm') },
   { label: `Halaman ${page}` },
 ];
 
@@ -79,7 +80,7 @@ const paginationResult = paginate(sortedUMKM, page, 12);
       <Pagination
         currentPage={paginationResult.currentPage}
         totalPages={paginationResult.totalPages}
-        baseUrl="/umkm"
+        baseUrl={getPath('/umkm')}
       />
     </>
   )}

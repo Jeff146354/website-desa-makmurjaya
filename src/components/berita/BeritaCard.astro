@@ -9,6 +9,7 @@
  */
 import { Image } from 'astro:assets';
 import { formatTanggalIndonesia } from '../../utils/date';
+import { getPath } from '../../utils/links';
 
 interface Props {
   judul: string;
@@ -23,7 +24,7 @@ const { judul, tanggal, foto_thumbnail, cuplikan, slug } = Astro.props;
 
 <article class="rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-md overflow-hidden">
   <a
-    href={`/berita/${slug}`}
+    href={getPath(`/berita/${slug}`)}
     class="block min-h-[44px] group focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 rounded-lg"
     aria-label={`Baca berita: ${judul}`}
   >

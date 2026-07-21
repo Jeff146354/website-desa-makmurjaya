@@ -10,9 +10,10 @@ import ContentLayout from '../layouts/ContentLayout.astro';
 import GaleriGrid from '../components/galeri/GaleriGrid.astro';
 import Lightbox from '../components/galeri/Lightbox.astro';
 import EmptyState from '../components/ui/EmptyState.astro';
+import { getPath } from '../utils/links';
 
 const breadcrumbItems = [
-  { label: 'Beranda', href: '/' },
+  { label: 'Beranda', href: getPath('/') },
   { label: 'Galeri' },
 ];
 

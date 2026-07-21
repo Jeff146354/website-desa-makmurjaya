@@ -2,6 +2,7 @@
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import PetaKantor from '../../components/kontak/PetaKantor.astro';
 import { getCollection } from 'astro:content';
+import { getPath } from '../../utils/links';
 
 // Fetch halaman statis with type profil-lokasi
 const halamanStatis = await getCollection('halaman-statis');
@@ -17,14 +18,14 @@ const Content = lokasiPage ? (await lokasiPage.render()).Content : null;
 
 // Sub-page navigation items
 const subPages = [
-  { label: 'Sejarah', href: '/profil/sejarah' },
-  { label: 'Visi & Misi', href: '/profil/visi-misi' },
-  { label: 'Lokasi', href: '/profil/lokasi' },
+  { label: 'Sejarah', href: getPath('/profil/sejarah') },
+  { label: 'Visi & Misi', href: getPath('/profil/visi-misi') },
+  { label: 'Lokasi', href: getPath('/profil/lokasi') },
 ];
 
 const breadcrumbItems = [
-  { label: 'Beranda', href: '/' },
-  { label: 'Profil Desa', href: '/profil/sejarah' },
+  { label: 'Beranda', href: getPath('/') },
+  { label: 'Profil Desa', href: getPath('/profil/sejarah') },
   { label: 'Lokasi' },
 ];
 ---
@@ -43,11 +44,11 @@ const breadcrumbItems = [
             href={page.href}
             class:list={[
               'inline-block px-4 py-2 rounded-lg text-sm font-medium transition-colors min-h-[44px] flex items-center',
-              page.href === '/profil/lokasi'
+              page.href === getPath('/profil/lokasi')
                 ? 'bg-green-700 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900',
             ]}
-            aria-current={page.href === '/profil/lokasi' ? 'page' : undefined}
+            aria-current={page.href === getPath('/profil/lokasi') ? 'page' : undefined}
           >
             {page.label}
           </a>

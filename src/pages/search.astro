@@ -7,6 +7,7 @@
  * Validates: Requirements 11.2, 11.3, 11.4
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPath } from '../utils/links';
 
 const query = Astro.url.searchParams.get('q') || '';
 ---
@@ -15,12 +16,12 @@ const query = Astro.url.searchParams.get('q') || '';
   title={query ? `Hasil pencarian: ${query}` : 'Pencarian'}
   description="Cari informasi di website Desa Makmurjaya"
 >
-  <section class="max-w-3xl mx-auto px-4 py-8" data-pagefind-ignore>
+  <section class="max-w-3xl mx-auto px-4 py-8" data-pagefind-ignore data-base-url={import.meta.env.BASE_URL}>
     <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl mb-6">Pencarian</h1>
 
     <!-- Search form -->
     <form
-      action="/search"
+      action={getPath('/search')}
       method="GET"
       role="search"
       aria-label="Formulir pencarian"
@@ -140,7 +141,8 @@ const query = Astro.url.searchParams.get('q') || '';
 
     try {
       // Lazy load Pagefind using dynamic import (not processed by Vite bundler with is:inline)
-      var pagefind = await import('/pagefind/pagefind.js');
+      var baseUrl = document.querySelector('[data-base-url]').getAttribute('data-base-url') || '/';
+      var pagefind = await import(baseUrl + 'pagefind/pagefind.js');
       await pagefind.init();
 
       var search = await pagefind.search(query);

@@ -9,9 +9,10 @@ import { getCollection } from 'astro:content';
 import ContentLayout from '../layouts/ContentLayout.astro';
 import PetaKantor from '../components/kontak/PetaKantor.astro';
 import KontakForm from '../components/kontak/KontakForm.astro';
+import { getPath } from '../utils/links';
 
 const breadcrumbItems = [
-  { label: 'Beranda', href: '/' },
+  { label: 'Beranda', href: getPath('/') },
   { label: 'Kontak' },
 ];
 

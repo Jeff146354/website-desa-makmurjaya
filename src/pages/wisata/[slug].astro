@@ -11,6 +11,7 @@ import { Image } from 'astro:assets';
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import WisataGaleri from '../../components/wisata/WisataGaleri.astro';
 import WisataDetail from '../../components/wisata/WisataDetail.astro';
+import { getPath } from '../../utils/links';
 
 export async function getStaticPaths() {
   const allWisata = await getCollection('wisata', ({ data }) => data.status === 'published');
@@ -39,8 +40,8 @@ const {
 } = entry.data;
 
 const breadcrumbItems = [
-  { label: 'Beranda', href: '/' },
-  { label: 'Wisata', href: '/wisata' },
+  { label: 'Beranda', href: getPath('/') },
+  { label: 'Wisata', href: getPath('/wisata') },
   { label: nama },
 ];
 ---

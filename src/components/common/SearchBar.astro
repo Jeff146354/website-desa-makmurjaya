@@ -6,10 +6,11 @@
  *
  * Validates: Requirement 11.1
  */
+import { getPath } from '../../utils/links';
 ---
 
 <form
-  action="/search"
+  action={getPath('/search')}
   method="GET"
   class="flex items-center"
   role="search"

@@ -9,6 +9,7 @@
  */
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import { getPath } from '../../utils/links';
 import EmptyState from '../ui/EmptyState.astro';
 
 const allUmkm = await getCollection('umkm', ({ data }) => data.status === 'published');
@@ -21,7 +22,7 @@ const highlightUmkm = allUmkm.slice(0, 4);
   <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
     {highlightUmkm.map((umkm) => (
       <article class="group overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-md">
-        <a href={`/umkm/${umkm.slug}`} class="block">
+        <a href={getPath(`/umkm/${umkm.slug}`)} class="block">
           <div class="aspect-square overflow-hidden bg-gray-100">
             {umkm.data.foto_utama ? (
               <Image

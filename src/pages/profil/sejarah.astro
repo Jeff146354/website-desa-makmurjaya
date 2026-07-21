@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import ProfilNav from '../../components/profil/ProfilNav.astro';
+import { getPath } from '../../utils/links';
 
 const halamanStatis = await getCollection('halaman-statis');
 const sejarahEntry = halamanStatis.find((entry) => entry.data.tipe === 'profil-sejarah');
@@ -13,8 +14,8 @@ if (!sejarahEntry) {
 const { Content } = await sejarahEntry.render();
 
 const breadcrumbItems = [
-  { label: 'Beranda', href: '/' },
-  { label: 'Profil Desa', href: '/profil/sejarah' },
+  { label: 'Beranda', href: getPath('/') },
+  { label: 'Profil Desa', href: getPath('/profil/sejarah') },
   { label: 'Sejarah' },
 ];
 ---
@@ -24,7 +25,7 @@ const breadcrumbItems = [
   description="Mengenal sejarah dan perjalanan Desa Makmurjaya dari masa ke masa."
   breadcrumbItems={breadcrumbItems}
 >
-  <ProfilNav currentPath="/profil/sejarah" />
+  <ProfilNav currentPath={getPath('/profil/sejarah')} />
 
   <article class="prose prose-green max-w-none">
     <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">

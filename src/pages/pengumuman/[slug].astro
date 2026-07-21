@@ -10,6 +10,7 @@ import { getCollection } from 'astro:content';
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import Badge from '../../components/ui/Badge.astro';
 import { formatTanggalIndonesia } from '../../utils/date';
+import { getPath } from '../../utils/links';
 
 export async function getStaticPaths() {
   const allPengumuman = await getCollection('pengumuman', ({ data }) => data.status === 'published');
@@ -27,8 +28,8 @@ const { Content } = await entry.render();
 const badgeLabel = kategori === 'agenda' ? 'Agenda' : 'Pengumuman';
 
 const breadcrumbItems = [
-  { label: 'Beranda', href: '/' },
-  { label: 'Pengumuman', href: '/pengumuman' },
+  { label: 'Beranda', href: getPath('/') },
+  { label: 'Pengumuman', href: getPath('/pengumuman') },
   { label: judul },
 ];
 ---

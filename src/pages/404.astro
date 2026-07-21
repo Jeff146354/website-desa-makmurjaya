@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPath } from '../utils/links';
 ---
 
 <BaseLayout
@@ -15,7 +16,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       Maaf, halaman yang Anda cari tidak tersedia atau telah dipindahkan.
     </p>
     <a
-      href="/"
+      href={getPath('/')}
       class="inline-flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white font-medium px-6 py-3 rounded-lg transition-colors focus:outline-2 focus:outline-blue-600 focus:outline-offset-2"
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

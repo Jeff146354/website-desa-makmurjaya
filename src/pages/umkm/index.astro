@@ -13,9 +13,10 @@ import UMKMFilter from '../../components/umkm/UMKMFilter.astro';
 import Pagination from '../../components/ui/Pagination.astro';
 import EmptyState from '../../components/ui/EmptyState.astro';
 import { paginate } from '../../utils/pagination';
+import { getPath } from '../../utils/links';
 
 const breadcrumbItems = [
-  { label: 'Beranda', href: '/' },
+  { label: 'Beranda', href: getPath('/') },
   { label: 'UMKM' },
 ];
 
@@ -64,7 +65,7 @@ const paginationResult = paginate(sortedUMKM, page, 12);
       <Pagination
         currentPage={paginationResult.currentPage}
         totalPages={paginationResult.totalPages}
-        baseUrl="/umkm"
+        baseUrl={getPath('/umkm')}
       />
     </>
   )}

@@ -5,10 +5,12 @@ interface Props {
 
 const { currentPath } = Astro.props;
 
+import { getPath } from '../../utils/links';
+
 const navItems = [
-  { label: 'Sejarah', href: '/profil/sejarah' },
-  { label: 'Visi & Misi', href: '/profil/visi-misi' },
-  { label: 'Lokasi', href: '/profil/lokasi' },
+  { label: 'Sejarah', href: getPath('/profil/sejarah') },
+  { label: 'Visi & Misi', href: getPath('/profil/visi-misi') },
+  { label: 'Lokasi', href: getPath('/profil/lokasi') },
 ];
 ---
 

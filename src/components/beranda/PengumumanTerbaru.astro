@@ -8,6 +8,7 @@
  */
 import { getCollection } from 'astro:content';
 import { formatTanggalIndonesia } from '../../utils/date';
+import { getPath } from '../../utils/links';
 import EmptyState from '../ui/EmptyState.astro';
 
 const allPengumuman = await getCollection('pengumuman', ({ data }) => data.status === 'published');
@@ -23,7 +24,7 @@ const pengumumanTerbaru = allPengumuman
     {pengumumanTerbaru.map((pengumuman) => (
       <li>
         <a
-          href={`/pengumuman/${pengumuman.slug}`}
+          href={getPath(`/pengumuman/${pengumuman.slug}`)}
           class="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-gray-50 group"
         >
           <div class="min-w-0">

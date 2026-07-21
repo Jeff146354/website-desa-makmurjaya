@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import ProfilNav from '../../components/profil/ProfilNav.astro';
+import { getPath } from '../../utils/links';
 
 const halamanStatis = await getCollection('halaman-statis');
 const visiMisiEntry = halamanStatis.find((entry) => entry.data.tipe === 'profil-visi-misi');
@@ -13,8 +14,8 @@ if (!visiMisiEntry) {
 const { Content } = await visiMisiEntry.render();
 
 const breadcrumbItems = [
-  { label: 'Beranda', href: '/' },
-  { label: 'Profil Desa', href: '/profil/sejarah' },
+  { label: 'Beranda', href: getPath('/') },
+  { label: 'Profil Desa', href: getPath('/profil/sejarah') },
   { label: 'Visi & Misi' },
 ];
 ---
@@ -24,7 +25,7 @@ const breadcrumbItems = [
   description="Visi dan misi pemerintahan Desa Makmurjaya untuk mewujudkan desa yang mandiri dan sejahtera."
   breadcrumbItems={breadcrumbItems}
 >
-  <ProfilNav currentPath="/profil/visi-misi" />
+  <ProfilNav currentPath={getPath('/profil/visi-misi')} />
 
   <article class="prose prose-green max-w-none">
     <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">

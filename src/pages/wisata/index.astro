@@ -9,9 +9,10 @@ import { getCollection } from 'astro:content';
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import WisataCard from '../../components/wisata/WisataCard.astro';
 import EmptyState from '../../components/ui/EmptyState.astro';
+import { getPath } from '../../utils/links';
 
 const breadcrumbItems = [
-  { label: 'Beranda', href: '/' },
+  { label: 'Beranda', href: getPath('/') },
   { label: 'Wisata' },
 ];
 

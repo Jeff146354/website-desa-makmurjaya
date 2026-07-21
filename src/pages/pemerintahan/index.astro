@@ -8,6 +8,7 @@
 import { getCollection } from 'astro:content';
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import OrgChart from '../../components/pemerintahan/OrgChart.astro';
+import { getPath } from '../../utils/links';
 
 // Query all published perangkat-desa, sorted by urutan
 const allPerangkat = await getCollection('perangkat-desa');
@@ -26,7 +27,7 @@ const perangkatList = publishedPerangkat.map((entry) => ({
 }));
 
 const breadcrumbItems = [
-  { label: 'Beranda', href: '/' },
+  { label: 'Beranda', href: getPath('/') },
   { label: 'Pemerintahan Desa' },
 ];
 

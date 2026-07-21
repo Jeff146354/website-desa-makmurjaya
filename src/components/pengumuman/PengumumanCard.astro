@@ -10,6 +10,7 @@
  */
 import Badge from '../ui/Badge.astro';
 import { formatTanggalIndonesia } from '../../utils/date';
+import { getPath } from '../../utils/links';
 
 interface Props {
   judul: string;
@@ -28,7 +29,7 @@ const badgeLabel = kategori === 'agenda' ? 'Agenda' : 'Pengumuman';
 
 <article class="rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-md">
   <a
-    href={`/pengumuman/${slug}`}
+    href={getPath(`/pengumuman/${slug}`)}
     class="block min-h-[44px] p-4 sm:p-5 group focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 rounded-lg"
     aria-label={`Baca ${kategori}: ${judul}`}
   >

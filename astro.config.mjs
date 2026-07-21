@@ -6,6 +6,7 @@ export default defineConfig({
   site: 'https://jeff146354.github.io',
   base: '/website-desa-makmurjaya/',
   output: 'static',
+  trailingSlash: 'ignore',
   integrations: [
     tailwind(),
     sitemap(),

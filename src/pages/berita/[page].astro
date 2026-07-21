@@ -11,6 +11,7 @@ import BeritaCard from '../../components/berita/BeritaCard.astro';
 import Pagination from '../../components/ui/Pagination.astro';
 import EmptyState from '../../components/ui/EmptyState.astro';
 import { paginate } from '../../utils/pagination';
+import { getPath } from '../../utils/links';
 
 export async function getStaticPaths() {
   const allBerita = await getCollection('berita', ({ data }) => data.status === 'published');
@@ -36,8 +37,8 @@ export async function getStaticPaths() {
 const { page, sortedBerita } = Astro.props;
 
 const breadcrumbItems = [
-  { label: 'Beranda', href: '/' },
-  { label: 'Berita', href: '/berita' },
+  { label: 'Beranda', href: getPath('/') },
+  { label: 'Berita', href: getPath('/berita') },
   { label: `Halaman ${page}` },
 ];
 
@@ -70,7 +71,7 @@ const paginationResult = paginate(sortedBerita, page, 10);
       <Pagination
         currentPage={paginationResult.currentPage}
         totalPages={paginationResult.totalPages}
-        baseUrl="/berita"
+        baseUrl={getPath('/berita')}
       />
     </>
   )}

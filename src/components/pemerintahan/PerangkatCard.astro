@@ -14,12 +14,13 @@ interface Props {
 }
 
 import { Image } from 'astro:assets';
+import { getPath } from '../../utils/links';
 
 const { nama, jabatan, slug, foto } = Astro.props;
 ---
 
 <a
-  href={`/pemerintahan/${slug}`}
+  href={getPath(`/pemerintahan/${slug}`)}
   class="group flex flex-col items-center text-center p-4 rounded-lg
          min-w-[44px] min-h-[44px]
          hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2

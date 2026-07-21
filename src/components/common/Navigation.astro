@@ -7,8 +7,10 @@
  *
  * Requirements: 12.1, 12.2, 13.4, 18.5
  */
+import { getPath } from '../../utils/links';
 
 const currentPath = Astro.url.pathname;
+const base = import.meta.env.BASE_URL;
 
 interface NavItem {
   label: string;
@@ -17,28 +19,28 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Beranda', href: '/' },
+  { label: 'Beranda', href: getPath('/') },
   {
     label: 'Profil Desa',
-    href: '/profil/sejarah',
+    href: getPath('/profil/sejarah'),
     children: [
-      { label: 'Sejarah', href: '/profil/sejarah' },
-      { label: 'Visi-Misi', href: '/profil/visi-misi' },
-      { label: 'Lokasi', href: '/profil/lokasi' },
+      { label: 'Sejarah', href: getPath('/profil/sejarah') },
+      { label: 'Visi-Misi', href: getPath('/profil/visi-misi') },
+      { label: 'Lokasi', href: getPath('/profil/lokasi') },
     ],
   },
-  { label: 'Pemerintahan', href: '/pemerintahan' },
-  { label: 'Berita', href: '/berita' },
-  { label: 'Pengumuman', href: '/pengumuman' },
-  { label: 'Wisata', href: '/wisata' },
-  { label: 'UMKM', href: '/umkm' },
-  { label: 'Galeri', href: '/galeri' },
-  { label: 'Kontak', href: '/kontak' },
-  { label: 'FAQ', href: '/faq' },
+  { label: 'Pemerintahan', href: getPath('/pemerintahan') },
+  { label: 'Berita', href: getPath('/berita') },
+  { label: 'Pengumuman', href: getPath('/pengumuman') },
+  { label: 'Wisata', href: getPath('/wisata') },
+  { label: 'UMKM', href: getPath('/umkm') },
+  { label: 'Galeri', href: getPath('/galeri') },
+  { label: 'Kontak', href: getPath('/kontak') },
+  { label: 'FAQ', href: getPath('/faq') },
 ];
 
 function isActive(href: string, children?: { label: string; href: string }[]): boolean {
-  if (href === '/') return currentPath === '/';
+  if (href === base || href === base.slice(0, -1)) return currentPath === base || currentPath === base.slice(0, -1);
   if (currentPath.startsWith(href)) return true;
   if (children) {
     return children.some((child) => currentPath.startsWith(child.href));

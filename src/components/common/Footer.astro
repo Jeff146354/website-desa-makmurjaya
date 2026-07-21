@@ -6,20 +6,21 @@
  *
  * Requirements: 1.7, 12.4
  */
+import { getPath } from '../../utils/links';
 
 const currentYear = new Date().getFullYear();
 
 const tautanHalaman = [
-  { label: 'Beranda', href: '/' },
-  { label: 'Profil Desa', href: '/profil/sejarah' },
-  { label: 'Pemerintahan', href: '/pemerintahan' },
-  { label: 'Berita', href: '/berita' },
-  { label: 'Pengumuman', href: '/pengumuman' },
-  { label: 'Wisata', href: '/wisata' },
-  { label: 'UMKM', href: '/umkm' },
-  { label: 'Galeri', href: '/galeri' },
-  { label: 'Kontak', href: '/kontak' },
-  { label: 'FAQ', href: '/faq' },
+  { label: 'Beranda', href: getPath('/') },
+  { label: 'Profil Desa', href: getPath('/profil/sejarah') },
+  { label: 'Pemerintahan', href: getPath('/pemerintahan') },
+  { label: 'Berita', href: getPath('/berita') },
+  { label: 'Pengumuman', href: getPath('/pengumuman') },
+  { label: 'Wisata', href: getPath('/wisata') },
+  { label: 'UMKM', href: getPath('/umkm') },
+  { label: 'Galeri', href: getPath('/galeri') },
+  { label: 'Kontak', href: getPath('/kontak') },
+  { label: 'FAQ', href: getPath('/faq') },
 ];
 ---
 
