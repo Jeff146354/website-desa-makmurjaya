@@ -7,7 +7,23 @@
   <title>Admin CMS — Website Desa Makmurjaya</title>
 </head>
 <body>
-  <!-- Decap CMS 3.x loaded from unpkg CDN -->
+  <script>
+    window.CMS_MANUAL_INIT = true;
+  </script>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    CMS.init({
+      config: {
+        backend: {
+          name: 'github',
+          repo: 'Jeff146354/website-desa-makmurjaya',
+          branch: 'main',
+          base_url: 'https://api.netlify.com',
+          auth_endpoint: 'auth',
+          site_domain: 'thunderous-lebkuchen-7c63f3.netlify.app'
+        }
+      }
+    });
+  </script>
 </body>
 </html>
