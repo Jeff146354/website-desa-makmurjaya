@@ -3,8 +3,8 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://desamakmurjaya.id',
-  base: '/',
+  site: 'https://jeff146354.github.io',
+  base: '/website-desa-makmurjaya/',
   output: 'static',
   integrations: [
     tailwind(),
