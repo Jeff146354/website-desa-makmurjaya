@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: username/desa-makmurjaya        # ganti dengan repo aktual
+  repo: Jeff146354/website-desa-makmurjaya        # ganti dengan repo aktual
   branch: main
   base_url: https://api.netlify.com     # Netlify sebagai OAuth proxy
   auth_endpoint: auth
