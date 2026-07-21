@@ -1,18 +1,12 @@
-# ============================================================
-# CATATAN: File ini hanya sebagai referensi/backup.
-# Konfigurasi aktif Decap CMS sekarang berada di:
-#   public/admin/config.yml
-# ============================================================
-
 backend:
   name: github
-  repo: Jeff146354/website-desa-makmurjaya        # ganti dengan repo aktual
+  repo: username/desa-makmurjaya        # ganti dengan repo aktual
   branch: main
   base_url: https://api.netlify.com     # Netlify sebagai OAuth proxy
   auth_endpoint: auth
 
 media_folder: "public/uploads"
-public_folder: "/uploads"
+public_folder: "/website-desa-makmurjaya/uploads"
 
 locale: id
 
