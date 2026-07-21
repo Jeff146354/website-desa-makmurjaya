@@ -2,9 +2,8 @@ backend:
   name: github
   repo: Jeff146354/website-desa-makmurjaya
   branch: main
-  base_url: https://api.netlify.com
+  base_url: https://thunderous-lebkuchen-7c63f3.netlify.app
   auth_endpoint: auth
-  site_id: thunderous-lebkuchen-7c63f3.netlify.app
 
 media_folder: "public/uploads"
 public_folder: "/website-desa-makmurjaya/uploads"
