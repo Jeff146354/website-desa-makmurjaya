@@ -55,6 +55,7 @@
             folder: 'src/content/pengumuman',
             create: true,
             delete: true,
+            slug: '{{slug}}',
             fields: [
               { label: 'Judul', name: 'judul', widget: 'string' },
               { label: 'Slug URL', name: 'slug', widget: 'string' },
@@ -78,6 +79,7 @@
             folder: 'src/content/wisata',
             create: true,
             delete: true,
+            slug: '{{slug}}',
             fields: [
               { label: 'Nama Destinasi', name: 'nama', widget: 'string' },
               { label: 'Slug URL', name: 'slug', widget: 'string' },
@@ -101,6 +103,7 @@
             folder: 'src/content/umkm',
             create: true,
             delete: true,
+            slug: '{{slug}}',
             fields: [
               { label: 'Nama Usaha', name: 'nama_usaha', widget: 'string' },
               { label: 'Slug URL', name: 'slug', widget: 'string' },
@@ -122,6 +125,7 @@
             folder: 'src/content/galeri',
             create: true,
             delete: true,
+            slug: '{{judul_foto}}',
             extension: 'json',
             format: 'json',
             fields: [
@@ -139,6 +143,7 @@
             folder: 'src/content/perangkat-desa',
             create: true,
             delete: true,
+            slug: '{{slug}}',
             fields: [
               { label: 'Nama', name: 'nama', widget: 'string' },
               { label: 'Slug URL', name: 'slug', widget: 'string' },
@@ -157,6 +162,7 @@
             folder: 'src/content/faq',
             create: true,
             delete: true,
+            slug: '{{pertanyaan}}',
             fields: [
               { label: 'Pertanyaan', name: 'pertanyaan', widget: 'string' },
               { label: 'Kategori', name: 'kategori', widget: 'string', required: false },

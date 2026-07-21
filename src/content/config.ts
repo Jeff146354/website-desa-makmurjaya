@@ -24,7 +24,7 @@ const pengumumanCollection = defineCollection({
     waktu_pelaksanaan: z.string().optional(),
     lampiran: z.array(z.object({
       nama_file: z.string(),
-      url: z.string().url(),
+      url: z.string(),
       ukuran_kb: z.number().optional(),
     })).default([]),
     status: z.enum(['draft', 'published']).default('draft'),
