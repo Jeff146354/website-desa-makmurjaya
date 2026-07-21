@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Astro generated
+.astro/
+
+# Kiro (spec development files)
+.kiro/
+
+# Environment variables
+.env
+.env.*
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Reference materials (not part of website source)
+Phase 1 (Docs)/
+Phase 2 (References)/
+generate_admin.py
+generate_hifi.py
+
+# Coverage reports
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
