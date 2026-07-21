@@ -2,7 +2,8 @@ backend:
   name: github
   repo: Jeff146354/website-desa-makmurjaya
   branch: main
-  base_url: https://api.netlify.com     # Netlify sebagai OAuth proxy
+  site_domain: thunderous-lebkuchen-7c63f3.netlify.app
+  base_url: https://api.netlify.com
   auth_endpoint: auth
 
 media_folder: "public/uploads"
