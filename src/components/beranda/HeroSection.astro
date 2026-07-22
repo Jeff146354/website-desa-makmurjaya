@@ -13,7 +13,7 @@ interface Props {
 }
 
 const {
-  foto = '/uploads/hero-desa.webp',
+  foto = '/uploads/hero-desa.png',
   tagline = 'Membangun Desa, Memajukan Bersama',
   namaDesaSubtitle = 'Desa Makmurjaya',
 } = Astro.props;
@@ -38,8 +38,10 @@ const displayTagline = tagline.length > 120 ? tagline.slice(0, 120) : tagline;
     decoding="async"
   />
 
-  <!-- Dark Overlay -->
-  <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+  <!-- Dark Overlay with gradient -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" aria-hidden="true"></div>
+  <!-- Subtle green/blue tint -->
+  <div class="absolute inset-0 bg-gradient-to-br from-green-900/20 to-blue-900/20" aria-hidden="true"></div>
 
   <!-- Fallback gradient background (jika gambar gagal dimuat) -->
   <div
