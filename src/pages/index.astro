@@ -37,10 +37,11 @@ const jsonLd = {
   />
 
   <!-- Berita Terbaru -->
-  <section class="py-12 md:py-16 bg-gradient-to-b from-white to-green-50" aria-labelledby="berita-heading">
+  <section class="py-12 md:py-16 bg-gradient-to-b from-white to-green-50/50" aria-labelledby="berita-heading">
     <div class="container mx-auto px-4">
-      <h2 id="berita-heading" class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
-        <span class="relative inline-block pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-green-600 after:rounded-full">Berita Terbaru</span>
+      <h2 id="berita-heading" class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+        <span class="inline-block w-1.5 h-8 bg-green-600 rounded-full"></span>
+        Berita Terbaru
       </h2>
       <BeritaTerbaru />
     </div>
@@ -49,18 +50,20 @@ const jsonLd = {
   <!-- Pengumuman Terbaru -->
   <section class="py-12 md:py-16 bg-gradient-to-br from-green-50 to-blue-50" aria-labelledby="pengumuman-heading">
     <div class="container mx-auto px-4">
-      <h2 id="pengumuman-heading" class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
-        <span class="relative inline-block pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-blue-600 after:rounded-full">Pengumuman & Agenda</span>
+      <h2 id="pengumuman-heading" class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+        <span class="inline-block w-1.5 h-8 bg-blue-600 rounded-full"></span>
+        Pengumuman &amp; Agenda
       </h2>
       <PengumumanTerbaru />
     </div>
   </section>
 
   <!-- Highlight Wisata -->
-  <section class="py-12 md:py-16 bg-gradient-to-b from-blue-50 to-white" aria-labelledby="wisata-heading">
+  <section class="py-12 md:py-16 bg-gradient-to-b from-blue-50/50 to-white" aria-labelledby="wisata-heading">
     <div class="container mx-auto px-4">
-      <h2 id="wisata-heading" class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
-        <span class="relative inline-block pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-blue-500 after:rounded-full">Wisata Desa</span>
+      <h2 id="wisata-heading" class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+        <span class="inline-block w-1.5 h-8 bg-sky-500 rounded-full"></span>
+        Wisata Desa
       </h2>
       <HighlightWisata />
     </div>
@@ -69,8 +72,9 @@ const jsonLd = {
   <!-- Highlight UMKM -->
   <section class="py-12 md:py-16 bg-gradient-to-br from-emerald-50 to-teal-50" aria-labelledby="umkm-heading">
     <div class="container mx-auto px-4">
-      <h2 id="umkm-heading" class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
-        <span class="relative inline-block pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-emerald-600 after:rounded-full">UMKM Desa</span>
+      <h2 id="umkm-heading" class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+        <span class="inline-block w-1.5 h-8 bg-emerald-600 rounded-full"></span>
+        UMKM Desa
       </h2>
       <HighlightUMKM />
     </div>
