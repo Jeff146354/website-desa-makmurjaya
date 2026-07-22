@@ -21,7 +21,7 @@ const highlightUmkm = allUmkm.slice(0, 4);
 ) : (
   <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
     {highlightUmkm.map((umkm) => (
-      <article class="group overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-md">
+      <article class="group overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition hover:shadow-lg hover:shadow-emerald-100 hover:border-emerald-200">
         <a href={getPath(`/umkm/${umkm.slug}`)} class="block">
           <div class="aspect-square overflow-hidden bg-gray-100">
             {umkm.data.foto_utama ? (
@@ -46,7 +46,7 @@ const highlightUmkm = allUmkm.slice(0, 4);
             <h3 class="text-base font-semibold text-gray-900 group-hover:text-green-700 transition-colors">
               {umkm.data.nama_usaha}
             </h3>
-            <p class="mt-1 text-sm text-gray-600">
+            <p class="mt-1 text-sm text-emerald-700 font-medium">
               {umkm.data.jenis_produk}
             </p>
           </div>

@@ -20,12 +20,12 @@ const pengumumanTerbaru = allPengumuman
 {pengumumanTerbaru.length === 0 ? (
   <EmptyState message="Belum ada pengumuman yang tersedia." icon="pengumuman" />
 ) : (
-  <ul class="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm">
+  <ul class="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white shadow-sm border-l-4 border-l-blue-500">
     {pengumumanTerbaru.map((pengumuman) => (
       <li>
         <a
           href={getPath(`/pengumuman/${pengumuman.slug}`)}
-          class="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-gray-50 group"
+          class="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-blue-50 group"
         >
           <div class="min-w-0">
             <h3 class="text-base font-medium text-gray-900 group-hover:text-green-700 transition-colors truncate">
