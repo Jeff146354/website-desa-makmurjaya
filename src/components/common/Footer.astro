@@ -1,92 +1,129 @@
 ---
 /**
- * Footer component — ditampilkan di setiap halaman.
- * Menampilkan kontak ringkas (alamat, telepon, jam layanan),
- * tautan ke semua halaman utama, dan kredit pengembang.
+ * Footer.astro
+ * Dark green footer matching Figma hi-fi mockup.
+ * Desktop: 5-column grid (brand + 4 link columns)
+ * Mobile: stacked with accordion sections
  *
  * Requirements: 1.7, 12.4
  */
 import { getPath } from '../../utils/links';
-
-const currentYear = new Date().getFullYear();
-
-const tautanHalaman = [
-  { label: 'Beranda', href: getPath('/') },
-  { label: 'Profil Desa', href: getPath('/profil/sejarah') },
-  { label: 'Pemerintahan', href: getPath('/pemerintahan') },
-  { label: 'Berita', href: getPath('/berita') },
-  { label: 'Pengumuman', href: getPath('/pengumuman') },
-  { label: 'Wisata', href: getPath('/wisata') },
-  { label: 'UMKM', href: getPath('/umkm') },
-  { label: 'Galeri', href: getPath('/galeri') },
-  { label: 'Kontak', href: getPath('/kontak') },
-  { label: 'FAQ', href: getPath('/faq') },
-];
 ---
 
-<footer class="bg-gradient-to-b from-gray-900 to-gray-950 text-gray-300 py-10 mt-16 border-t-4 border-green-600" data-pagefind-ignore>
-  <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-    <!-- Kontak Ringkas -->
-    <div>
-      <h3 class="text-green-400 font-semibold text-lg mb-3">Kontak Desa</h3>
-      <address class="not-italic space-y-2 text-sm">
-        <p class="flex items-start gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          <span>Jl. Raya Desa No. 1, Desa Makmurjaya</span>
-        </p>
-        <p class="flex items-start gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-          </svg>
-          <span>(021) 000-0000</span>
-        </p>
-        <p class="flex items-start gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span>Senin – Jumat, 08.00 – 15.00 WIB</span>
-        </p>
-      </address>
+<footer class="bg-primary-800 text-white" data-pagefind-ignore>
+  <!-- Desktop Footer -->
+  <div class="hidden md:block px-8 py-10">
+    <div class="max-w-7xl mx-auto grid grid-cols-5 gap-8 mb-8">
+      <!-- Brand column -->
+      <div class="col-span-2">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-xl bg-primary-700 flex items-center justify-center text-gold-100 shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+          </div>
+          <div>
+            <div class="font-display font-semibold text-[15px] text-white">Desa Makmurjaya</div>
+            <div class="text-[11px] text-white/50">Kec. Jayakerta, Kab. Karawang, Jawa Barat</div>
+          </div>
+        </div>
+        <p class="text-[12px] text-white/60 leading-relaxed max-w-xs">Pemerintah Desa Makmurjaya melayani masyarakat dengan transparan, akuntabel, dan profesional.</p>
+      </div>
+
+      <!-- Hubungi Kami -->
+      <div>
+        <div class="font-display font-semibold text-[14px] text-white mb-3">Hubungi Kami</div>
+        <div class="space-y-1">
+          <div class="text-[12px] text-white/70 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            Jln. Raya Bendajaya No. 288
+          </div>
+          <div class="text-[12px] text-white/70 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            Senin–Jumat 08.00–15.00
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigasi -->
+      <div>
+        <div class="font-display font-semibold text-[14px] text-white mb-3">Navigasi</div>
+        <div class="space-y-1">
+          <a href={getPath('/')} class="block text-[12px] text-white/70 hover:text-white py-0.5 transition">Beranda</a>
+          <a href={getPath('/profil/sejarah')} class="block text-[12px] text-white/70 hover:text-white py-0.5 transition">Profil Desa</a>
+          <a href={getPath('/infografis')} class="block text-[12px] text-white/70 hover:text-white py-0.5 transition">Infografis</a>
+          <a href={getPath('/berita')} class="block text-[12px] text-white/70 hover:text-white py-0.5 transition">Berita</a>
+          <a href={getPath('/umkm')} class="block text-[12px] text-white/70 hover:text-white py-0.5 transition">Belanja</a>
+        </div>
+      </div>
+
+      <!-- Jelajahi -->
+      <div>
+        <div class="font-display font-semibold text-[14px] text-white mb-3">Jelajahi</div>
+        <div class="space-y-1">
+          <a href={getPath('/pemerintahan')} class="block text-[12px] text-white/70 hover:text-white py-0.5 transition">Pemerintahan</a>
+          <a href={getPath('/galeri')} class="block text-[12px] text-white/70 hover:text-white py-0.5 transition">Galeri</a>
+          <a href={getPath('/faq')} class="block text-[12px] text-white/70 hover:text-white py-0.5 transition">FAQ</a>
+          <a href={getPath('/kontak')} class="block text-[12px] text-white/70 hover:text-white py-0.5 transition">Kontak</a>
+        </div>
+      </div>
     </div>
 
-    <!-- Tautan Halaman Utama -->
-    <div>
-      <h3 class="text-green-400 font-semibold text-lg mb-3">Tautan</h3>
-      <nav aria-label="Tautan footer">
-        <ul class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-          {tautanHalaman.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                class="hover:text-white transition-colors min-h-[44px] inline-flex items-center focus:outline-2 focus:outline-blue-600 focus:outline-offset-2 rounded"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </div>
-
-    <!-- Kredit Pengembang -->
-    <div>
-      <h3 class="text-green-400 font-semibold text-lg mb-3">Pengembang</h3>
-      <p class="text-sm">
-        Dibangun dengan oleh <strong class="text-white">Tim KKN</strong>
-      </p>
-      <p class="text-sm mt-2">
-        &copy; {currentYear} Desa Makmurjaya. Seluruh hak cipta dilindungi.
-      </p>
+    <!-- Bottom bar -->
+    <div class="max-w-7xl mx-auto border-t border-white/10 pt-6 flex items-center justify-between">
+      <div class="text-[11px] text-white/40">© 2026 Pemerintah Desa Makmurjaya</div>
+      <div class="text-[11px] text-white/40">Dibangun dengan ❤ oleh Tim KKN</div>
     </div>
   </div>
 
-  <!-- Garis bawah -->
-  <div class="max-w-7xl mx-auto px-4 mt-8 pt-6 border-t border-gray-700">
-    <p class="text-xs text-gray-400 text-center">
-      Website Profil Desa Makmurjaya — Dibangun dengan Astro &amp; Decap CMS
-    </p>
+  <!-- Mobile Footer -->
+  <div class="md:hidden px-4 py-6">
+    <div class="flex items-center gap-2.5 mb-4">
+      <div class="w-9 h-9 rounded-xl bg-primary-700 flex items-center justify-center text-gold-100 shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+      </div>
+      <div>
+        <div class="font-display font-semibold text-[13px]">Desa Makmurjaya</div>
+        <div class="text-[10.5px] text-white/70">Kec. Jayakerta, Kab. Karawang</div>
+      </div>
+    </div>
+
+    <!-- Accordion items -->
+    <details class="border-b border-white/10">
+      <summary class="flex items-center justify-between py-2.5 text-[11.5px] text-white/85 cursor-pointer list-none">
+        <span class="flex items-center gap-2">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+          Kontak Desa
+        </span>
+        <svg class="w-3.5 h-3.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+      </summary>
+      <div class="pb-3 pl-6 text-[11px] text-white/60 space-y-1">
+        <p>Jln. Raya Bendajaya No. 288</p>
+        <p>Desa Makmurjaya, Kec. Jayakerta</p>
+        <p>Kab. Karawang, Jawa Barat 41352</p>
+        <p>Senin–Jumat 08.00–15.00</p>
+      </div>
+    </details>
+
+    <details class="border-b border-white/10">
+      <summary class="flex items-center justify-between py-2.5 text-[11.5px] text-white/85 cursor-pointer list-none">
+        <span class="flex items-center gap-2">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+          Jelajahi
+        </span>
+        <svg class="w-3.5 h-3.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+      </summary>
+      <div class="pb-3 pl-6 text-[11px] text-white/60 space-y-1.5">
+        <a href={getPath('/profil/sejarah')} class="block hover:text-white transition">Profil Desa</a>
+        <a href={getPath('/infografis')} class="block hover:text-white transition">Infografis</a>
+        <a href={getPath('/pemerintahan')} class="block hover:text-white transition">Pemerintahan</a>
+        <a href={getPath('/berita')} class="block hover:text-white transition">Berita</a>
+        <a href={getPath('/umkm')} class="block hover:text-white transition">Belanja</a>
+        <a href={getPath('/galeri')} class="block hover:text-white transition">Galeri</a>
+      </div>
+    </details>
+
+    <!-- Copyright -->
+    <div class="mt-6 text-center text-[10px] text-white/40">
+      © 2026 Pemerintah Desa Makmurjaya · Dibangun oleh Tim KKN
+    </div>
   </div>
 </footer>

@@ -14,7 +14,7 @@ import { paginate } from '../../utils/pagination';
 import { getPath } from '../../utils/links';
 
 export async function getStaticPaths() {
-  const allPengumuman = await getCollection('pengumuman', ({ data }) => data.status === 'published');
+  const allPengumuman = await getCollection('pengumuman');
   const sortedPengumuman = allPengumuman.sort(
     (a, b) => b.data.tanggal.getTime() - a.data.tanggal.getTime()
   );
@@ -50,7 +50,7 @@ const paginationResult = paginate(sortedPengumuman, page, 10);
   description={`Daftar pengumuman dan agenda Desa Makmurjaya halaman ${page}.`}
   breadcrumbItems={breadcrumbItems}
 >
-  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Pengumuman & Agenda</h1>
+  <h1 class="font-display font-semibold text-2xl text-ink mb-8">Pengumuman & Agenda</h1>
 
   {paginationResult.data.length === 0 ? (
     <EmptyState message="Belum ada pengumuman yang dipublikasikan." icon="pengumuman" />

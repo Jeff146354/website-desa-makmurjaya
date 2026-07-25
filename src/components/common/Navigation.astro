@@ -60,11 +60,11 @@ function isActive(href: string, children?: { label: string; href: string }[]): b
               type="button"
               class:list={[
                 'nav-link inline-flex items-center gap-1 px-3 py-2 rounded-md text-sm font-medium transition-colors min-h-[44px] min-w-[44px]',
-                'focus:outline-2 focus:outline-blue-600 focus:outline-offset-2',
-                'hover:bg-green-50 hover:text-green-700',
+                'focus:outline-2 focus:outline-primary-600 focus:outline-offset-2',
+                'hover:bg-primary-50 hover:text-primary-700',
                 isActive(item.href, item.children)
-                  ? 'text-green-700 bg-green-50'
-                  : 'text-gray-700',
+                  ? 'text-primary-700 bg-primary-50'
+                  : 'text-ink',
               ]}
               aria-expanded="false"
               aria-haspopup="true"
@@ -75,7 +75,7 @@ function isActive(href: string, children?: { label: string; href: string }[]): b
               </svg>
             </button>
             <ul
-              class="absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-100 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all z-50"
+              class="absolute left-0 top-full mt-1 w-48 bg-white rounded-md shadow-lg border border-line py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all z-50"
               role="menu"
             >
               {item.children.map((child) => (
@@ -85,11 +85,11 @@ function isActive(href: string, children?: { label: string; href: string }[]): b
                     role="menuitem"
                     class:list={[
                       'block px-4 py-2 text-sm transition-colors min-h-[44px] flex items-center',
-                      'focus:outline-2 focus:outline-blue-600 focus:outline-offset-2',
-                      'hover:bg-green-50 hover:text-green-700',
+                      'focus:outline-2 focus:outline-primary-600 focus:outline-offset-2',
+                      'hover:bg-primary-50 hover:text-primary-700',
                       currentPath.startsWith(child.href)
-                        ? 'text-green-700 bg-green-50 font-medium'
-                        : 'text-gray-700',
+                        ? 'text-primary-700 bg-primary-50 font-medium'
+                        : 'text-ink',
                     ]}
                   >
                     {child.label}
@@ -103,9 +103,9 @@ function isActive(href: string, children?: { label: string; href: string }[]): b
             href={item.href}
             class:list={[
               'nav-link inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors min-h-[44px] min-w-[44px]',
-              'focus:outline-2 focus:outline-blue-600 focus:outline-offset-2',
-              'hover:bg-green-50 hover:text-green-700',
-              isActive(item.href) ? 'text-green-700 bg-green-50' : 'text-gray-700',
+              'focus:outline-2 focus:outline-primary-600 focus:outline-offset-2',
+              'hover:bg-primary-50 hover:text-primary-700',
+              isActive(item.href) ? 'text-primary-700 bg-primary-50' : 'text-ink',
             ]}
             aria-current={isActive(item.href) ? 'page' : undefined}
           >
@@ -120,7 +120,7 @@ function isActive(href: string, children?: { label: string; href: string }[]): b
 <!-- Mobile Navigation (slide-down panel) -->
 <nav
   id="mobile-nav"
-  class="md:hidden absolute left-0 right-0 top-full bg-white border-b border-gray-200 shadow-lg overflow-hidden transition-all duration-300 max-h-0"
+  class="md:hidden absolute left-0 right-0 top-full bg-white border-b border-line shadow-lg overflow-hidden transition-all duration-300 max-h-0"
   aria-label="Menu navigasi mobile"
   aria-hidden="true"
 >
@@ -133,10 +133,10 @@ function isActive(href: string, children?: { label: string; href: string }[]): b
               type="button"
               class:list={[
                 'mobile-dropdown-toggle w-full flex items-center justify-between px-3 py-3 rounded-md text-sm font-medium transition-colors min-h-[44px]',
-                'focus:outline-2 focus:outline-blue-600 focus:outline-offset-2',
+                'focus:outline-2 focus:outline-primary-600 focus:outline-offset-2',
                 isActive(item.href, item.children)
-                  ? 'text-green-700 bg-green-50'
-                  : 'text-gray-700',
+                  ? 'text-primary-700 bg-primary-50'
+                  : 'text-ink',
               ]}
               aria-expanded="false"
             >
@@ -152,11 +152,11 @@ function isActive(href: string, children?: { label: string; href: string }[]): b
                     href={child.href}
                     class:list={[
                       'block px-3 py-2 rounded-md text-sm transition-colors min-h-[44px] flex items-center',
-                      'focus:outline-2 focus:outline-blue-600 focus:outline-offset-2',
-                      'hover:bg-green-50 hover:text-green-700',
+                      'focus:outline-2 focus:outline-primary-600 focus:outline-offset-2',
+                      'hover:bg-primary-50 hover:text-primary-700',
                       currentPath.startsWith(child.href)
-                        ? 'text-green-700 bg-green-50 font-medium'
-                        : 'text-gray-600',
+                        ? 'text-primary-700 bg-primary-50 font-medium'
+                        : 'text-muted',
                     ]}
                     aria-current={currentPath.startsWith(child.href) ? 'page' : undefined}
                   >
@@ -171,9 +171,9 @@ function isActive(href: string, children?: { label: string; href: string }[]): b
             href={item.href}
             class:list={[
               'block px-3 py-3 rounded-md text-sm font-medium transition-colors min-h-[44px] flex items-center',
-              'focus:outline-2 focus:outline-blue-600 focus:outline-offset-2',
-              'hover:bg-green-50 hover:text-green-700',
-              isActive(item.href) ? 'text-green-700 bg-green-50' : 'text-gray-700',
+              'focus:outline-2 focus:outline-primary-600 focus:outline-offset-2',
+              'hover:bg-primary-50 hover:text-primary-700',
+              isActive(item.href) ? 'text-primary-700 bg-primary-50' : 'text-ink',
             ]}
             aria-current={isActive(item.href) ? 'page' : undefined}
           >

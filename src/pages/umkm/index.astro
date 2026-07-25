@@ -1,27 +1,21 @@
 ---
 /**
- * Halaman Daftar UMKM — menampilkan UMKM desa yang dipublikasikan,
+ * Halaman Daftar UMKM (Belanja) — menampilkan UMKM desa yang dipublikasikan,
  * diurutkan berdasarkan nama usaha secara alfabetis (case-insensitive)
  * dengan paginasi 12 per halaman dan filter kategori.
  *
+ * Design: Dark gradient page-header banner, search + filter, responsive card grid.
  * Validates: Requirements 7.1, 7.4, 7.5, 7.6, 7.7
  */
 import { getCollection } from 'astro:content';
-import ContentLayout from '../../layouts/ContentLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import UMKMCard from '../../components/umkm/UMKMCard.astro';
-import UMKMFilter from '../../components/umkm/UMKMFilter.astro';
 import Pagination from '../../components/ui/Pagination.astro';
-import EmptyState from '../../components/ui/EmptyState.astro';
 import { paginate } from '../../utils/pagination';
 import { getPath } from '../../utils/links';
 
-const breadcrumbItems = [
-  { label: 'Beranda', href: getPath('/') },
-  { label: 'UMKM' },
-];
-
 // Query UMKM yang sudah published, sort alfabetis by nama_usaha (case-insensitive)
-const allUMKM = await getCollection('umkm', ({ data }) => data.status === 'published');
+const allUMKM = await getCollection('umkm');
 const sortedUMKM = allUMKM.sort(
   (a, b) => a.data.nama_usaha.toLowerCase().localeCompare(b.data.nama_usaha.toLowerCase(), 'id')
 );
@@ -38,35 +32,167 @@ const page = 1;
 const paginationResult = paginate(sortedUMKM, page, 12);
 ---
 
-<ContentLayout
-  title="UMKM Desa — Desa Makmurjaya"
-  description="Daftar UMKM dan usaha mikro kecil menengah Desa Makmurjaya."
-  breadcrumbItems={breadcrumbItems}
+<BaseLayout
+  title="Belanja UMKM — Desa Makmurjaya"
+  description="Beli produk dari UMKM dan usaha mikro kecil menengah Desa Makmurjaya."
 >
-  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">UMKM Desa</h1>
+  {/* ── Page Header Banner ── */}
+  <section class="page-header">
+    <div class="mx-auto max-w-6xl">
+      <p class="eyebrow text-primary-200 mb-2">UMKM Desa</p>
+      <h1 class="font-display font-bold text-white text-2xl md:text-[36px] leading-tight">
+        Beli Dari Desa
+      </h1>
+      <p class="text-primary-100 text-sm md:text-base mt-2 max-w-xl">
+        Dukung produk lokal berkualitas dari para pelaku usaha Desa Makmurjaya.
+      </p>
+    </div>
+  </section>
 
-  {sortedUMKM.length === 0 ? (
-    <EmptyState message="Daftar UMKM belum tersedia." icon="umkm" />
-  ) : (
-    <>
-      <UMKMFilter kategoriList={kategoriList} />
-
-      <div id="umkm-grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {paginationResult.data.map((umkm) => (
-          <UMKMCard
-            nama_usaha={umkm.data.nama_usaha}
-            slug={umkm.slug}
-            kategori={umkm.data.kategori}
-            foto_utama={umkm.data.foto_utama}
-          />
-        ))}
+  {/* ── Main Content ── */}
+  <div class="mx-auto max-w-6xl px-4 md:px-8 py-8">
+    {sortedUMKM.length === 0 ? (
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+        </svg>
+        <p class="sub-text">Daftar UMKM belum tersedia.</p>
       </div>
+    ) : (
+      <>
+        {/* Search bar + Filter */}
+        <div class="flex flex-col sm:flex-row gap-3 mb-8">
+          <div class="relative flex-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              id="umkm-search"
+              type="search"
+              placeholder="Cari produk atau usaha..."
+              class="w-full rounded-xl border border-line bg-white pl-10 pr-4 py-3 text-sm text-ink placeholder:text-muted focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:outline-none min-h-[44px]"
+              aria-label="Cari UMKM"
+            />
+          </div>
+          <select
+            id="umkm-filter"
+            class="rounded-xl border border-line bg-white px-4 py-3 text-sm text-ink focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus:outline-none min-h-[44px] sm:w-48"
+            aria-label="Filter kategori"
+          >
+            <option value="">Semua Kategori</option>
+            {kategoriList.map((kat) => (
+              <option value={kat}>{kat}</option>
+            ))}
+          </select>
+        </div>
 
-      <Pagination
-        currentPage={paginationResult.currentPage}
-        totalPages={paginationResult.totalPages}
-        baseUrl={getPath('/umkm')}
-      />
-    </>
-  )}
-</ContentLayout>
+        {/* Card Grid */}
+        <div id="umkm-grid" class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {paginationResult.data.map((umkm) => (
+            <UMKMCard
+              nama_usaha={umkm.data.nama_usaha}
+              slug={umkm.slug}
+              kategori={umkm.data.kategori}
+              pemilik={umkm.data.pemilik}
+              harga_range={umkm.data.harga_range}
+              kontak_wa={umkm.data.kontak_wa}
+              foto_utama={umkm.data.foto_utama}
+            />
+          ))}
+        </div>
+
+        {/* Empty state for filter (hidden by default) */}
+        <div id="umkm-empty-state" class="hidden">
+          <div class="empty-state mt-8">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <p class="sub-text">Tidak ada UMKM yang sesuai dengan pencarian.</p>
+          </div>
+        </div>
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={paginationResult.currentPage}
+          totalPages={paginationResult.totalPages}
+          baseUrl={getPath('/umkm')}
+        />
+      </>
+    )}
+  </div>
+</BaseLayout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('umkm-search') as HTMLInputElement | null;
+    const filter = document.getElementById('umkm-filter') as HTMLSelectElement | null;
+    const grid = document.getElementById('umkm-grid');
+    const emptyState = document.getElementById('umkm-empty-state');
+
+    if (!searchInput || !filter || !grid || !emptyState) return;
+
+    // Set initial value from URL params
+    const params = new URLSearchParams(window.location.search);
+    const initialKategori = params.get('kategori') || '';
+    const initialSearch = params.get('q') || '';
+    if (initialKategori) filter.value = initialKategori;
+    if (initialSearch) searchInput.value = initialSearch;
+    if (initialKategori || initialSearch) applyFilters();
+
+    filter.addEventListener('change', () => {
+      applyFilters();
+      updateURL();
+    });
+
+    searchInput.addEventListener('input', () => {
+      applyFilters();
+      updateURL();
+    });
+
+    function applyFilters() {
+      if (!grid || !emptyState || !filter || !searchInput) return;
+
+      const kategori = filter.value.toLowerCase();
+      const query = searchInput.value.toLowerCase().trim();
+      const cards = grid.querySelectorAll<HTMLElement>('[data-kategori]');
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const cardKategori = (card.getAttribute('data-kategori') || '').toLowerCase();
+        const cardText = card.textContent?.toLowerCase() || '';
+        const matchKategori = !kategori || cardKategori === kategori;
+        const matchSearch = !query || cardText.includes(query);
+
+        if (matchKategori && matchSearch) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (visibleCount === 0 && (kategori || query)) {
+        emptyState.classList.remove('hidden');
+        grid.classList.add('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+        grid.classList.remove('hidden');
+      }
+    }
+
+    function updateURL() {
+      if (!filter || !searchInput) return;
+      const url = new URL(window.location.href);
+      const kategori = filter.value;
+      const query = searchInput.value.trim();
+
+      if (kategori) url.searchParams.set('kategori', kategori);
+      else url.searchParams.delete('kategori');
+
+      if (query) url.searchParams.set('q', query);
+      else url.searchParams.delete('q');
+
+      window.history.replaceState({}, '', url.toString());
+    }
+  });
+</script>

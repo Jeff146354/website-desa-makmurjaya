@@ -11,7 +11,7 @@ import { formatTanggalIndonesia } from '../../utils/date';
 import { getPath } from '../../utils/links';
 import EmptyState from '../ui/EmptyState.astro';
 
-const allBerita = await getCollection('berita', ({ data }) => data.status === 'published');
+const allBerita = await getCollection('berita');
 const beritaTerbaru = allBerita
   .sort((a, b) => b.data.tanggal.getTime() - a.data.tanggal.getTime())
   .slice(0, 3);
@@ -29,19 +29,19 @@ const beritaTerbaru = allBerita
         : '';
 
       return (
-        <article class="rounded-lg border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md hover:shadow-green-100 border-l-4 border-l-green-500">
+        <article class="rounded-lg border border-line bg-white p-5 shadow-sm transition hover:shadow-elevated hover:shadow-primary-100 border-l-4 border-l-primary-500">
           <a href={getPath(`/berita/${berita.slug}`)} class="block group">
-            <h3 class="text-lg font-semibold text-gray-900 group-hover:text-green-700 transition-colors line-clamp-2">
+            <h3 class="text-lg font-semibold text-ink group-hover:text-primary-700 transition-colors line-clamp-2">
               {berita.data.judul}
             </h3>
             <time
               datetime={berita.data.tanggal.toISOString()}
-              class="mt-2 block text-sm text-gray-500"
+              class="mt-2 block text-sm text-muted"
             >
               {formatTanggalIndonesia(berita.data.tanggal)}
             </time>
             {cuplikan && (
-              <p class="mt-3 text-sm text-gray-600 line-clamp-3">{cuplikan}</p>
+              <p class="mt-3 text-sm text-muted line-clamp-3">{cuplikan}</p>
             )}
           </a>
         </article>

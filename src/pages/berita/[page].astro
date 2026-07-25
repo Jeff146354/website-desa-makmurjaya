@@ -14,7 +14,7 @@ import { paginate } from '../../utils/pagination';
 import { getPath } from '../../utils/links';
 
 export async function getStaticPaths() {
-  const allBerita = await getCollection('berita', ({ data }) => data.status === 'published');
+  const allBerita = await getCollection('berita');
   const sortedBerita = allBerita.sort(
     (a, b) => b.data.tanggal.getTime() - a.data.tanggal.getTime()
   );
@@ -50,7 +50,7 @@ const paginationResult = paginate(sortedBerita, page, 10);
   description={`Daftar berita Desa Makmurjaya halaman ${page}.`}
   breadcrumbItems={breadcrumbItems}
 >
-  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Berita Desa</h1>
+  <h1 class="font-display font-semibold text-2xl text-ink mb-8">Berita Desa</h1>
 
   {paginationResult.data.length === 0 ? (
     <EmptyState message="Belum ada berita yang dipublikasikan." icon="berita" />

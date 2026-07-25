@@ -1,58 +1,48 @@
 ---
 /**
- * HeroSection — Hero banner utama halaman beranda.
- * Gambar hero menggunakan loading="eager" + fetchpriority="high" untuk LCP optimal.
+ * HeroSection.astro
+ * Full-width hero with gradient background matching Figma hi-fi mockup.
+ * Dark green gradient with tagline, subtitle, and CTA buttons.
  *
- * Validates: Requirements 1.1, 14.2, 14.3
+ * Requirements: 1.1
  */
+import { getPath } from '../../utils/links';
+
 interface Props {
   foto?: string;
-  tagline?: string;
-  namaDesaSubtitle?: string;
+  tagline: string;
+  namaDesaSubtitle: string;
 }
 
-const {
-  foto = '/uploads/hero-desa.png',
-  tagline = 'Membangun Desa, Memajukan Bersama',
-  namaDesaSubtitle = 'Desa Makmurjaya',
-} = Astro.props;
-
-const displayTagline = tagline.length > 120 ? tagline.slice(0, 120) : tagline;
+const { tagline, namaDesaSubtitle } = Astro.props;
 ---
 
-<section
-  class="relative w-full h-[60vh] min-h-[400px] max-h-[700px] flex items-center justify-center overflow-hidden"
-  aria-label="Hero section"
->
-  <!-- Hero Image -->
-  <img
-    src={foto}
-    alt={`Pemandangan ${namaDesaSubtitle}`}
-    class="absolute inset-0 w-full h-full object-cover"
-    width={1920}
-    height={1080}
-    loading="eager"
-    fetchpriority="high"
-    decoding="async"
-  />
-
-  <!-- Gradient Overlay with green/blue tint -->
-  <div class="absolute inset-0 bg-gradient-to-t from-green-900/70 via-black/40 to-blue-900/30" aria-hidden="true"></div>
-
-  <!-- Fallback gradient background -->
-  <div
-    class="absolute inset-0 -z-10 bg-gradient-to-br from-green-800 to-blue-700"
-    aria-hidden="true"
-  ></div>
-
-  <!-- Text Overlay -->
-  <div class="relative z-10 text-center px-4 max-w-3xl mx-auto">
-    <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
-      {displayTagline}
-    </h1>
-    <p class="text-lg md:text-2xl text-white/90 font-medium drop-shadow-md">
-      {namaDesaSubtitle}
-    </p>
-    <div class="mt-6 w-20 h-1 bg-gradient-to-r from-green-400 to-blue-400 mx-auto rounded-full"></div>
+<section class="relative overflow-hidden bg-gradient-to-br from-primary-800 via-primary-700 to-primary-900 px-4 md:px-8 py-16 md:py-20">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12">
+    <div class="flex-1 max-w-xl">
+      <span class="eyebrow text-gold-300">Portal Resmi Pemerintah Desa</span>
+      <h1 class="font-display font-semibold text-3xl md:text-[40px] text-white leading-tight mt-2">
+        Selamat Datang di<br>{namaDesaSubtitle}
+      </h1>
+      <p class="text-sm md:text-[14px] text-white/70 mt-3 leading-relaxed max-w-md">
+        {tagline}
+      </p>
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-6">
+        <a href={getPath('/profil/sejarah')} class="btn-primary !bg-gold-500 !text-primary-900 hover:!bg-gold-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>
+          Jelajahi Desa
+        </a>
+        <a href={getPath('/infografis')} class="btn-outline !border-white/30 !text-white hover:!bg-white/10">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+          Lihat Infografis
+        </a>
+      </div>
+    </div>
+    <!-- Decorative image area -->
+    <div class="hidden md:flex flex-1 justify-end">
+      <div class="w-[440px] h-[280px] rounded-2xl bg-primary-600/40 border border-white/10 flex items-center justify-center">
+        <svg class="w-20 h-20 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+      </div>
+    </div>
   </div>
 </section>

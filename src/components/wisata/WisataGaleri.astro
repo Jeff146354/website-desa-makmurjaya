@@ -18,10 +18,10 @@ const { galeri_foto, nama } = Astro.props;
 
 {galeri_foto.length > 0 && (
   <section data-pagefind-ignore class="mb-8">
-    <h2 class="text-xl font-semibold text-gray-900 mb-4">Galeri Foto</h2>
+    <h2 class="text-xl font-semibold text-ink mb-4">Galeri Foto</h2>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
       {galeri_foto.map((foto, index) => (
-        <div class="aspect-square overflow-hidden rounded-lg bg-gray-100">
+        <div class="aspect-square overflow-hidden rounded-lg bg-primary-50">
           <Image
             src={foto}
             alt={`Foto ${nama} ${index + 1}`}

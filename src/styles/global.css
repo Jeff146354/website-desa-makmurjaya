@@ -4,37 +4,154 @@
 
 @layer base {
   /*
-   * ─── WCAG 2.1 AA Contrast Audit — Requirement 18.3 ───────────────────────────
+   * ─── Design System — Desa Makmurjaya ────────────────────────────────────────
    *
-   * Audit date: verified during implementation.
-   *
-   * Color combinations verified (on white #ffffff unless noted):
-   *   ✓ text-gray-900 (#111827)  → 15.4:1
-   *   ✓ text-gray-700 (#374151)  →  9.8:1
-   *   ✓ text-gray-600 (#4b5563)  →  7.0:1
-   *   ✓ text-gray-500 (#6b7280)  →  4.6:1 (used for meta/secondary text)
-   *   ✗ text-gray-400 (#9ca3af)  →  2.7:1 — ONLY used with aria-hidden decorative elements
-   *   ✓ text-green-700 (#15803d) →  4.5:1 (used for links/active states)
-   *   ✗ bg-green-600 (#16a34a) + white → 3.5:1 — replaced with bg-green-700
-   *   ✓ bg-green-700 (#15803d) + white → 4.5:1 (buttons)
-   *
-   * Dark background (footer bg-gray-900 #111827):
-   *   ✓ text-gray-300 (#d1d5db)  →  9.1:1
-   *   ✓ text-gray-400 (#9ca3af)  →  5.4:1
-   *   ✓ text-white (#ffffff)     → 15.4:1
-   *
-   * Base font size: 16px (enforced via text-base on <body> and tailwind.config.mjs)
-   * Touch targets: min 44×44px (min-h-[44px]/min-w-[44px] or h-11/w-11)
-   * ────────────────────────────────────────────────────────────────────────────────
+   * Colors: primary green palette + gold accents
+   * Fonts: Lexend (display/headings), Inter (body)
+   * Based on Figma hi-fi mockups
+   * ────────────────────────────────────────────────────────────────────────────
    */
 
-  /* Global focus indicator for all interactive elements — Requirement 18.5 */
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply font-body text-ink bg-white text-base antialiased;
+  }
+
+  /* Global focus indicator for all interactive elements */
   a:focus-visible,
   button:focus-visible,
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible,
   [tabindex]:focus-visible {
-    @apply outline-2 outline-blue-600 outline-offset-2;
+    @apply outline-2 outline-primary-600 outline-offset-2;
+  }
+}
+
+@layer components {
+  /* ── Section patterns ── */
+  .section-alt {
+    @apply bg-primary-50/50;
+  }
+
+  /* ── Typography ── */
+  .eyebrow {
+    @apply text-[11px] font-semibold tracking-widest uppercase text-primary-600;
+  }
+
+  .h-page {
+    @apply font-display font-semibold text-ink text-2xl md:text-[32px] leading-snug;
+  }
+
+  .h-section {
+    @apply font-display font-semibold text-ink text-lg leading-snug;
+  }
+
+  .sub-text {
+    @apply text-sm text-muted leading-relaxed;
+  }
+
+  /* ── Cards ── */
+  .card {
+    @apply bg-white border border-line rounded-2xl shadow-card overflow-hidden;
+  }
+
+  .stat-card {
+    @apply bg-white border border-line rounded-xl px-4 py-3;
+  }
+
+  .stat-k {
+    @apply text-[11px] text-muted mb-0.5;
+  }
+
+  .stat-v {
+    @apply text-xl md:text-[22px] font-display font-semibold text-ink leading-none;
+  }
+
+  /* ── Badges / Pills ── */
+  .pill {
+    @apply inline-flex items-center text-[11px] font-medium px-2.5 py-[3px] rounded-full bg-primary-50 text-primary-700 border border-primary-100;
+  }
+
+  .pill-gold {
+    @apply inline-flex items-center text-[11px] font-medium px-2.5 py-[3px] rounded-full bg-gold-50 text-gold-700 border border-gold-100;
+  }
+
+  .pill-red {
+    @apply inline-flex items-center text-[11px] font-medium px-2.5 py-[3px] rounded-full bg-red-50 text-red-700 border border-red-100;
+  }
+
+  /* ── Buttons ── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-primary-700 text-white text-sm font-semibold rounded-xl px-5 py-3 hover:bg-primary-800 active:bg-primary-900 transition min-h-[44px];
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 border border-line text-ink text-sm font-medium rounded-xl px-5 py-3 hover:bg-primary-50 transition min-h-[44px];
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 text-primary-700 text-sm font-medium hover:underline;
+  }
+
+  /* ── Progress bars ── */
+  .progress-wrap {
+    @apply h-2.5 rounded-full bg-primary-50;
+  }
+
+  .progress-fill {
+    @apply h-2.5 rounded-full bg-primary-600;
+  }
+
+  .progress-fill-gold {
+    @apply h-2.5 rounded-full bg-gold-500;
+  }
+
+  /* ── Tables ── */
+  .table-clean {
+    @apply w-full text-sm border-collapse;
+  }
+
+  .table-clean th {
+    @apply text-left font-semibold text-muted bg-primary-50 px-3 py-2.5 border-b border-line;
+  }
+
+  .table-clean td {
+    @apply px-3 py-2.5 border-b border-line text-ink;
+  }
+
+  /* ── Empty states ── */
+  .empty-state {
+    @apply flex flex-col items-center justify-center text-center gap-2 rounded-2xl border border-dashed border-line bg-paper/60 py-12 px-4;
+  }
+
+  /* ── Tab bar ── */
+  .tab-bar {
+    @apply flex border-b border-line overflow-x-auto;
+  }
+
+  .tab-item {
+    @apply shrink-0 px-5 py-3 text-sm font-medium text-muted border-b-2 border-transparent whitespace-nowrap cursor-pointer hover:text-primary-700 transition-colors;
+  }
+
+  .tab-item.active {
+    @apply text-primary-700 font-semibold border-primary-700;
+  }
+
+  /* ── Page header banner ── */
+  .page-header {
+    @apply bg-gradient-to-r from-primary-800 to-primary-700 px-4 md:px-8 py-8 md:py-10;
+  }
+
+  /* ── Pagination ── */
+  .page-btn {
+    @apply w-8 h-8 rounded-lg border border-line flex items-center justify-center text-xs text-ink hover:bg-primary-50 min-w-[44px] min-h-[44px];
+  }
+
+  .page-btn.active {
+    @apply bg-primary-700 border-primary-700 text-white font-semibold;
   }
 }

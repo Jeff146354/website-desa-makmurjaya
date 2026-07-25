@@ -18,12 +18,12 @@ const { kategoriList, selectedKategori } = Astro.props;
 ---
 
 <div class="mb-8">
-  <label for="umkm-filter" class="block text-sm font-medium text-gray-700 mb-2">
+  <label for="umkm-filter" class="block text-sm font-medium text-ink mb-2">
     Filter Kategori
   </label>
   <select
     id="umkm-filter"
-    class="block w-full sm:w-64 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none min-h-[44px]"
+    class="block w-full sm:w-64 rounded-lg border border-line bg-white px-4 py-2.5 text-sm text-ink focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none min-h-[44px]"
   >
     <option value="" selected={!selectedKategori}>Semua Kategori</option>
     {kategoriList.map((kat) => (

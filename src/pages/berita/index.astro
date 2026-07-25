@@ -1,62 +1,66 @@
 ---
 /**
- * Halaman Daftar Berita — menampilkan berita yang dipublikasikan,
- * diurutkan berdasarkan tanggal terbaru dengan paginasi 10 per halaman.
+ * Halaman Daftar Berita — matching Figma hi-fi design.
+ * Dark gradient page-header, search, grid of cards, pagination.
  *
  * Validates: Requirements 4.1, 4.2, 4.4
  */
 import { getCollection } from 'astro:content';
-import ContentLayout from '../../layouts/ContentLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import BeritaCard from '../../components/berita/BeritaCard.astro';
 import Pagination from '../../components/ui/Pagination.astro';
-import EmptyState from '../../components/ui/EmptyState.astro';
 import { paginate } from '../../utils/pagination';
 import { getPath } from '../../utils/links';
 
-const breadcrumbItems = [
-  { label: 'Beranda', href: getPath('/') },
-  { label: 'Berita' },
-];
-
-// Query berita yang sudah published, sort tanggal desc
-const allBerita = await getCollection('berita', ({ data }) => data.status === 'published');
+const allBerita = await getCollection('berita');
 const sortedBerita = allBerita.sort(
   (a, b) => b.data.tanggal.getTime() - a.data.tanggal.getTime()
 );
 
-// Paginate halaman 1, 10 item per halaman
 const page = 1;
 const paginationResult = paginate(sortedBerita, page, 10);
 ---
 
-<ContentLayout
+<BaseLayout
   title="Berita Desa — Desa Makmurjaya"
   description="Daftar berita dan informasi terbaru dari Desa Makmurjaya."
-  breadcrumbItems={breadcrumbItems}
 >
-  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Berita Desa</h1>
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="max-w-7xl mx-auto">
+      <p class="eyebrow text-gold-300 mb-1">Informasi Terkini</p>
+      <h1 class="font-display font-semibold text-2xl md:text-[32px] text-white">Berita Desa</h1>
+      <p class="text-sm text-white/60 mt-1">Info terbaru peristiwa &amp; artikel seputar Desa Makmurjaya.</p>
+    </div>
+  </section>
 
-  {paginationResult.data.length === 0 ? (
-    <EmptyState message="Belum ada berita yang dipublikasikan." icon="berita" />
-  ) : (
-    <>
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {paginationResult.data.map((berita) => (
-          <BeritaCard
-            judul={berita.data.judul}
-            tanggal={berita.data.tanggal}
-            foto_thumbnail={berita.data.foto_thumbnail}
-            cuplikan={berita.data.cuplikan}
-            slug={berita.slug}
-          />
-        ))}
+  <!-- Content -->
+  <div class="max-w-7xl mx-auto px-4 md:px-8 py-8">
+    {paginationResult.data.length === 0 ? (
+      <div class="empty-state">
+        <svg class="w-8 h-8 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" /></svg>
+        <p class="text-sm text-muted">Belum ada berita yang dipublikasikan.</p>
       </div>
+    ) : (
+      <>
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {paginationResult.data.map((berita) => (
+            <BeritaCard
+              judul={berita.data.judul}
+              tanggal={berita.data.tanggal}
+              foto_thumbnail={berita.data.foto_thumbnail}
+              cuplikan={berita.data.cuplikan}
+              slug={berita.slug}
+            />
+          ))}
+        </div>
 
-      <Pagination
-        currentPage={paginationResult.currentPage}
-        totalPages={paginationResult.totalPages}
-        baseUrl={getPath('/berita')}
-      />
-    </>
-  )}
-</ContentLayout>
+        <Pagination
+          currentPage={paginationResult.currentPage}
+          totalPages={paginationResult.totalPages}
+          baseUrl={getPath('/berita')}
+        />
+      </>
+    )}
+  </div>
+</BaseLayout>

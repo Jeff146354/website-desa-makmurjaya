@@ -46,7 +46,6 @@
               { label: 'Foto Thumbnail', name: 'foto_thumbnail', widget: 'image', required: false, hint: 'Maks 5MB. Format: JPG, PNG, WebP' },
               { label: 'Cuplikan', name: 'cuplikan', widget: 'text', required: false, hint: 'Ringkasan singkat artikel (maks 300 karakter)' },
               { label: 'Penulis', name: 'penulis', widget: 'string', required: false },
-              { label: 'Status', name: 'status', widget: 'select', options: ['draft', 'published'], default: 'draft' },
               { label: 'Isi Berita', name: 'body', widget: 'markdown' }
             ]
           },
@@ -60,12 +59,11 @@
             fields: [
               { label: 'Judul', name: 'judul', widget: 'string' },
               { label: 'Slug URL', name: 'slug', widget: 'string' },
-              { label: 'Kategori', name: 'kategori', widget: 'select', options: ['pengumuman', 'agenda'] },
+              { label: 'Kategori', name: 'kategori', widget: 'select', options: ['Pengumuman', 'Agenda'] },
               { label: 'Tanggal Publikasi', name: 'tanggal', widget: 'datetime', date_format: 'YYYY-MM-DD', time_format: false },
               { label: 'Tanggal Pelaksanaan (khusus Agenda)', name: 'tanggal_pelaksanaan', widget: 'datetime', date_format: 'YYYY-MM-DD', time_format: false, required: false },
               { label: 'Waktu Pelaksanaan', name: 'waktu_pelaksanaan', widget: 'string', required: false, hint: 'Contoh: 09.00 WIB' },
               { label: 'Cuplikan', name: 'cuplikan', widget: 'text', required: false },
-              { label: 'Status', name: 'status', widget: 'select', options: ['draft', 'published'], default: 'draft' },
               { label: 'Lampiran', name: 'lampiran', widget: 'list', required: false, fields: [
                 { label: 'Nama File', name: 'nama_file', widget: 'string' },
                 { label: 'File', name: 'url', widget: 'file' },
@@ -94,7 +92,6 @@
               { label: 'Longitude Peta', name: 'lokasi_lng', widget: 'number', required: false, value_type: 'float' },
               { label: 'Label Peta', name: 'lokasi_label', widget: 'string', required: false },
               { label: 'Galeri Foto', name: 'galeri_foto', widget: 'list', field: { label: 'Foto', name: 'foto', widget: 'image' }, required: false },
-              { label: 'Status', name: 'status', widget: 'select', options: ['draft', 'published'], default: 'draft' },
               { label: 'Deskripsi Lengkap', name: 'body', widget: 'markdown' }
             ]
           },
@@ -116,7 +113,6 @@
               { label: 'Alamat', name: 'alamat', widget: 'string', required: false },
               { label: 'Foto Utama', name: 'foto_utama', widget: 'image', required: false, hint: 'Maks 5MB. Format: JPG, PNG, WebP' },
               { label: 'Galeri Produk', name: 'galeri_foto', widget: 'list', field: { label: 'Foto', name: 'foto', widget: 'image' }, required: false },
-              { label: 'Status', name: 'status', widget: 'select', options: ['draft', 'published'], default: 'draft' },
               { label: 'Deskripsi Usaha', name: 'body', widget: 'markdown' }
             ]
           },

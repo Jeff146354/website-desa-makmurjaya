@@ -17,7 +17,7 @@ const breadcrumbItems = [
 ];
 
 // Query wisata yang sudah published
-const allWisata = await getCollection('wisata', ({ data }) => data.status === 'published');
+const allWisata = await getCollection('wisata');
 ---
 
 <ContentLayout
@@ -25,7 +25,7 @@ const allWisata = await getCollection('wisata', ({ data }) => data.status === 'p
   description="Daftar destinasi wisata desa Makmurjaya yang menarik untuk dikunjungi."
   breadcrumbItems={breadcrumbItems}
 >
-  <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Wisata Desa</h1>
+  <h1 class="font-display font-semibold text-2xl text-ink mb-8">Wisata Desa</h1>
 
   {allWisata.length === 0 ? (
     <EmptyState message="Belum ada destinasi wisata yang dipublikasikan." icon="wisata" />

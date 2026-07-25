@@ -1,12 +1,11 @@
 ---
 judul: "Musyawarah Desa Penyusunan RKPDes 2025"
 cuplikan: "Mengundang seluruh warga untuk hadir dalam musyawarah desa penyusunan RKPDes tahun 2025."
-kategori: "agenda"
+kategori: "Agenda"
 tanggal: 2024-12-15
 tanggal_pelaksanaan: 2025-01-10
 waktu_pelaksanaan: "09:00 WIB"
 lampiran: []
-status: "published"
 ---
 
 Kepada warga Desa Makmurjaya yang terhormat,

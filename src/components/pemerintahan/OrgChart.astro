@@ -91,12 +91,12 @@ const sortedLevels = [...levels.entries()].sort((a, b) => a[0] - b[0]);
       <div class="flex flex-col items-center">
         {/* Connector line from above (except for top level) */}
         {level > 1 && (
-          <div class="w-px h-6 bg-gray-300" aria-hidden="true"></div>
+          <div class="w-px h-6 bg-line" aria-hidden="true"></div>
         )}
 
         {/* Horizontal connector for multiple children */}
         {members.length > 1 && level > 1 && (
-          <div class="w-1/2 max-w-md h-px bg-gray-300" aria-hidden="true"></div>
+          <div class="w-1/2 max-w-md h-px bg-line" aria-hidden="true"></div>
         )}
 
         {/* Level row */}
@@ -129,7 +129,7 @@ const sortedLevels = [...levels.entries()].sort((a, b) => a[0] - b[0]);
     <li
       role="listitem"
       style={`padding-left: ${item.depth * 1.5}rem;`}
-      class="border-l-2 border-green-200"
+      class="border-l-2 border-primary-200"
     >
       <PerangkatCard
         nama={item.nama}

@@ -7,7 +7,7 @@
  */
 interface Props {
   label: string;
-  variant?: 'default' | 'info' | 'success' | 'warning' | 'danger' | 'pengumuman' | 'agenda';
+  variant?: 'default' | 'info' | 'success' | 'warning' | 'danger' | 'Pengumuman' | 'Agenda';
 }
 
 const { label, variant = 'default' } = Astro.props;
@@ -16,13 +16,13 @@ const { label, variant = 'default' } = Astro.props;
  * Map variant to Tailwind color classes.
  */
 const variantStyles: Record<string, string> = {
-  default: 'bg-gray-100 text-gray-800',
-  info: 'bg-blue-100 text-blue-800',
+  default: 'bg-primary-50 text-ink',
+  info: 'bg-primary-100 text-primary-800',
   success: 'bg-green-100 text-green-800',
   warning: 'bg-yellow-100 text-yellow-800',
   danger: 'bg-red-100 text-red-800',
-  pengumuman: 'bg-blue-100 text-blue-800',
-  agenda: 'bg-orange-100 text-orange-800',
+  Pengumuman: 'bg-primary-100 text-primary-800',
+  Agenda: 'bg-orange-100 text-orange-800',
 };
 
 const classes = variantStyles[variant] || variantStyles.default;

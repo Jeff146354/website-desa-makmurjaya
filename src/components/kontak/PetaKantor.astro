@@ -20,7 +20,7 @@ const osmUrl = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=${zoo
 
 <div
   id={mapId}
-  class="w-full h-[400px] rounded-lg border border-gray-200 shadow-sm z-0"
+  class="w-full h-[400px] rounded-lg border border-line shadow-sm z-0"
   role="application"
   aria-label={`Peta lokasi ${label}`}
   data-lat={lat}
@@ -29,14 +29,14 @@ const osmUrl = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=${zoo
   data-zoom={zoom}
 >
   <noscript>
-    <div class="flex items-center justify-center h-full bg-gray-100 p-4 text-center">
-      <p class="text-gray-700">
+    <div class="flex items-center justify-center h-full bg-primary-50 p-4 text-center">
+      <p class="text-ink">
         Peta tidak dapat ditampilkan karena JavaScript dinonaktifkan.
         <a
           href={osmUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-green-700 underline hover:text-green-900"
+          class="text-primary-700 underline hover:text-primary-900"
         >
           Buka lokasi di OpenStreetMap &rarr;
         </a>
@@ -82,11 +82,11 @@ const osmUrl = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=${zoo
     } catch (err) {
       // Fallback if Leaflet fails to load
       container.innerHTML = `
-        <div class="flex items-center justify-center h-full bg-gray-100 p-4 text-center rounded-lg">
-          <p class="text-gray-700">
+        <div class="flex items-center justify-center h-full bg-primary-50 p-4 text-center rounded-lg">
+          <p class="text-ink">
             Peta tidak dapat ditampilkan.
             <a href="${osmUrl}" target="_blank" rel="noopener noreferrer"
-               class="text-green-700 underline hover:text-green-900">
+               class="text-primary-700 underline hover:text-primary-900">
               Lihat lokasi di OpenStreetMap &rarr;
             </a>
           </p>

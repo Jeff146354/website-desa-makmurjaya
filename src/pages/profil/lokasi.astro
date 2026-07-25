@@ -45,8 +45,8 @@ const breadcrumbItems = [
             class:list={[
               'inline-block px-4 py-2 rounded-lg text-sm font-medium transition-colors min-h-[44px] flex items-center',
               page.href === getPath('/profil/lokasi')
-                ? 'bg-green-700 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900',
+                ? 'bg-primary-700 text-white'
+                : 'bg-primary-50 text-ink hover:bg-primary-50 hover:text-primary-700',
             ]}
             aria-current={page.href === getPath('/profil/lokasi') ? 'page' : undefined}
           >
@@ -58,7 +58,7 @@ const breadcrumbItems = [
   </nav>
 
   <article class="space-y-8">
-    <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">{title}</h1>
+    <h1 class="font-display font-semibold text-2xl text-ink">{title}</h1>
 
     {/* Peta interaktif - Requirements 2.3, 2.5 */}
     {lat && lng ? (
@@ -67,14 +67,14 @@ const breadcrumbItems = [
         <PetaKantor lat={lat} lng={lng} label={label} zoom={15} />
       </section>
     ) : (
-      <div class="rounded-lg bg-gray-100 p-6 text-center text-gray-600">
+      <div class="rounded-lg bg-primary-50 p-6 text-center text-muted">
         <p>
           Data koordinat lokasi belum tersedia.
           <a
             href="https://www.openstreetmap.org/"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-green-700 underline hover:text-green-900"
+            class="text-primary-700 underline hover:text-primary-900"
           >
             Cari lokasi di OpenStreetMap &rarr;
           </a>

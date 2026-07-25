@@ -27,7 +27,7 @@
 
   {/* Nama */}
   <div>
-    <label for="kontak-nama" class="block text-sm font-medium text-gray-700 mb-1">
+    <label for="kontak-nama" class="block text-sm font-medium text-ink mb-1">
       Nama <span class="text-red-600" aria-hidden="true">*</span>
     </label>
     <input
@@ -35,7 +35,7 @@
       id="kontak-nama"
       name="nama"
       required
-      class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors"
+      class="w-full rounded-md border border-line px-4 py-2 text-ink shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none transition-colors"
       aria-required="true"
     />
     <p
@@ -48,7 +48,7 @@
 
   {/* Email */}
   <div>
-    <label for="kontak-email" class="block text-sm font-medium text-gray-700 mb-1">
+    <label for="kontak-email" class="block text-sm font-medium text-ink mb-1">
       Email <span class="text-red-600" aria-hidden="true">*</span>
     </label>
     <input
@@ -56,7 +56,7 @@
       id="kontak-email"
       name="email"
       required
-      class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors"
+      class="w-full rounded-md border border-line px-4 py-2 text-ink shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none transition-colors"
       aria-required="true"
     />
     <p
@@ -69,7 +69,7 @@
 
   {/* Subjek */}
   <div>
-    <label for="kontak-subjek" class="block text-sm font-medium text-gray-700 mb-1">
+    <label for="kontak-subjek" class="block text-sm font-medium text-ink mb-1">
       Subjek <span class="text-red-600" aria-hidden="true">*</span>
     </label>
     <input
@@ -77,7 +77,7 @@
       id="kontak-subjek"
       name="subjek"
       required
-      class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors"
+      class="w-full rounded-md border border-line px-4 py-2 text-ink shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none transition-colors"
       aria-required="true"
     />
     <p
@@ -90,7 +90,7 @@
 
   {/* Pesan */}
   <div>
-    <label for="kontak-pesan" class="block text-sm font-medium text-gray-700 mb-1">
+    <label for="kontak-pesan" class="block text-sm font-medium text-ink mb-1">
       Pesan <span class="text-red-600" aria-hidden="true">*</span>
     </label>
     <textarea
@@ -98,7 +98,7 @@
       name="pesan"
       required
       rows={5}
-      class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 focus:outline-none transition-colors resize-y"
+      class="w-full rounded-md border border-line px-4 py-2 text-ink shadow-sm focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none transition-colors resize-y"
       aria-required="true"
     ></textarea>
     <p
@@ -114,7 +114,7 @@
     <button
       type="submit"
       id="kontak-submit"
-      class="inline-flex items-center gap-2 rounded-md bg-green-700 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      class="inline-flex items-center gap-2 rounded-md bg-primary-700 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
     >
       <span id="kontak-submit-text">Kirim Pesan</span>
       <svg
@@ -134,15 +134,15 @@
   {/* Success message */}
   <div
     id="kontak-success"
-    class="hidden rounded-md bg-green-50 border border-green-200 p-4"
+    class="hidden rounded-md bg-primary-50 border border-primary-200 p-4"
     role="status"
     aria-live="polite"
   >
     <div class="flex items-center gap-3">
-      <svg class="h-5 w-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <svg class="h-5 w-5 text-primary-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
       </svg>
-      <p class="text-sm font-medium text-green-800">
+      <p class="text-sm font-medium text-primary-800">
         Pesan Anda berhasil dikirim! Kami akan segera merespons melalui email.
       </p>
     </div>
@@ -219,7 +219,7 @@
       input.setAttribute('aria-invalid', 'true');
       input.setAttribute('aria-describedby', `kontak-${field}-error`);
       input.classList.add('border-red-500');
-      input.classList.remove('border-gray-300');
+      input.classList.remove('border-line');
     }
 
     if (errorEl) {
@@ -236,7 +236,7 @@
       input.removeAttribute('aria-invalid');
       input.removeAttribute('aria-describedby');
       input.classList.remove('border-red-500');
-      input.classList.add('border-gray-300');
+      input.classList.add('border-line');
     }
 
     if (errorEl) {

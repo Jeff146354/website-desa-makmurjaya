@@ -8,7 +8,6 @@ jam_operasional: "08.00 - 17.00 WIB"
 harga_tiket: "Rp 10.000 / orang"
 kontak: "081234567890"
 petunjuk_akses: "Dari pusat desa, ambil jalan ke arah selatan sejauh 2 km. Tersedia lahan parkir kendaraan roda dua dan empat."
-status: "published"
 ---
 
 ## Deskripsi

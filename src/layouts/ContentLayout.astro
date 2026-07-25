@@ -41,12 +41,12 @@ const {
   <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
     {/* Breadcrumb navigation - Requirement 12.3 */}
     <nav aria-label="Breadcrumb" class="mb-6">
-      <ol class="flex flex-wrap items-center gap-1 text-sm text-gray-600">
+      <ol class="flex flex-wrap items-center gap-1 text-sm text-muted">
         {breadcrumbItems.map((item, index) => (
           <li class="flex items-center">
             {index > 0 && (
               <svg
-                class="mx-1 h-4 w-4 flex-shrink-0 text-gray-400"
+                class="mx-1 h-4 w-4 flex-shrink-0 text-muted"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -63,12 +63,12 @@ const {
             {item.href ? (
               <a
                 href={item.href}
-                class="hover:text-green-700 hover:underline transition-colors"
+                class="hover:text-primary-700 hover:underline transition-colors"
               >
                 {item.label}
               </a>
             ) : (
-              <span class="font-medium text-gray-900" aria-current="page">
+              <span class="font-medium text-ink" aria-current="page">
                 {item.label}
               </span>
             )}

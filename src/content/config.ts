@@ -8,7 +8,6 @@ const beritaCollection = defineCollection({
     cuplikan: z.string().max(300).optional(),
     foto_thumbnail: image().optional(),
     tanggal: z.date(),
-    status: z.enum(['draft', 'published']).default('draft'),
     penulis: z.string().optional(),
   }),
 });
@@ -18,7 +17,7 @@ const pengumumanCollection = defineCollection({
   schema: z.object({
     judul: z.string().max(200),
     cuplikan: z.string().max(300).optional(),
-    kategori: z.enum(['pengumuman', 'agenda']),
+    kategori: z.enum(['Pengumuman', 'Agenda']),
     tanggal: z.date(),
     tanggal_pelaksanaan: z.date().optional(),
     waktu_pelaksanaan: z.string().optional(),
@@ -27,7 +26,6 @@ const pengumumanCollection = defineCollection({
       url: z.string(),
       ukuran_kb: z.number().optional(),
     })).default([]),
-    status: z.enum(['draft', 'published']).default('draft'),
   }),
 });
 
@@ -45,7 +43,6 @@ const wisataCollection = defineCollection({
     petunjuk_akses: z.string().optional(),
     galeri_foto: z.array(image()).default([]),
     foto_utama: image().optional(),
-    status: z.enum(['draft', 'published']).default('draft'),
   }),
 });
 
@@ -61,7 +58,6 @@ const umkmCollection = defineCollection({
     alamat: z.string().optional(),
     foto_utama: image().optional(),
     galeri_foto: z.array(image()).default([]),
-    status: z.enum(['draft', 'published']).default('draft'),
   }),
 });
 

@@ -1,178 +1,208 @@
 ---
 /**
  * Header.astro
- * Sticky header with logo, navigation, search, and hamburger button.
- * - Logo + Nama Desa di kiri
- * - Navigation bar di tengah/kanan (desktop)
- * - SearchBar placeholder — saat submit redirect ke /search?q={keyword}
- * - Hamburger icon for mobile (toggle Navigation mobile)
- * - Sticky positioning (position: sticky; top: 0) with backdrop blur
+ * Top navigation bar matching the Figma hi-fi mockup.
+ * - Desktop: brand left, navlinks center, search + pengaduan button right
+ * - Mobile: brand left, hamburger right → opens full-screen drawer
+ * - Sticky with white bg and border-bottom
  *
  * Requirements: 12.1, 12.2, 13.4, 18.5
  */
 import Navigation from './Navigation.astro';
 import { getPath } from '../../utils/links';
+
+const currentPath = Astro.url.pathname;
 ---
 
-<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b-2 border-green-600 shadow-sm" data-pagefind-ignore>
-  <div class="relative max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
-    <!-- Logo + Nama Desa -->
+<header class="sticky top-0 z-50 bg-white border-b border-line" data-pagefind-ignore>
+  <nav class="flex items-center justify-between px-4 md:px-8 py-3 md:py-4">
+    <!-- Brand -->
     <a
       href={getPath('/')}
-      class="flex items-center gap-2 text-lg font-bold text-gray-900 min-h-[44px] min-w-[44px] shrink-0 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2 rounded-md"
+      class="flex items-center gap-2.5 md:gap-3 min-h-[44px] shrink-0 rounded-lg focus:outline-2 focus:outline-primary-600 focus:outline-offset-2"
     >
-      <!-- Logo placeholder (SVG icon) -->
-      <span class="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-br from-green-600 to-blue-600 text-white rounded-full text-sm font-bold" aria-hidden="true">
-        DM
-      </span>
-      <span class="hidden sm:inline">Desa Makmurjaya</span>
-      <span class="sm:hidden">Desa M.</span>
+      <div class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-primary-700 flex items-center justify-center shrink-0">
+        <svg class="w-4 h-4 md:w-5 md:h-5 text-gold-100" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+        </svg>
+      </div>
+      <div>
+        <div class="font-display font-semibold text-[13px] md:text-[15px] text-ink leading-tight">Desa Makmurjaya</div>
+        <div class="text-[10.5px] md:text-[11px] text-muted leading-tight">Kab. Karawang, Jawa Barat</div>
+      </div>
     </a>
 
-    <!-- Navigation Component (desktop nav is flex-1, mobile nav is absolute positioned) -->
-    <div class="flex-1 flex justify-center">
-      <Navigation />
+    <!-- Desktop Nav Links -->
+    <div class="hidden lg:flex items-center gap-6 text-[12.5px] font-medium text-muted">
+      <a href={getPath('/')} class:list={[currentPath === import.meta.env.BASE_URL || currentPath === import.meta.env.BASE_URL.slice(0,-1) ? 'text-primary-700 font-semibold border-b-2 border-primary-700 pb-0.5' : 'hover:text-primary-700 transition-colors']}>Home</a>
+      <a href={getPath('/profil/sejarah')} class:list={[currentPath.includes('/profil') ? 'text-primary-700 font-semibold border-b-2 border-primary-700 pb-0.5' : 'hover:text-primary-700 transition-colors']}>Profil Desa</a>
+      <a href={getPath('/infografis')} class:list={[currentPath.includes('/infografis') ? 'text-primary-700 font-semibold border-b-2 border-primary-700 pb-0.5' : 'hover:text-primary-700 transition-colors']}>Infografis</a>
+      <a href={getPath('/pemerintahan')} class:list={[currentPath.includes('/pemerintahan') ? 'text-primary-700 font-semibold border-b-2 border-primary-700 pb-0.5' : 'hover:text-primary-700 transition-colors']}>Pemerintahan</a>
+      <a href={getPath('/berita')} class:list={[currentPath.includes('/berita') ? 'text-primary-700 font-semibold border-b-2 border-primary-700 pb-0.5' : 'hover:text-primary-700 transition-colors']}>Berita</a>
+      <a href={getPath('/umkm')} class:list={[currentPath.includes('/umkm') ? 'text-primary-700 font-semibold border-b-2 border-primary-700 pb-0.5' : 'hover:text-primary-700 transition-colors']}>Belanja</a>
+      <a href={getPath('/kontak')} class:list={[currentPath.includes('/kontak') ? 'text-primary-700 font-semibold border-b-2 border-primary-700 pb-0.5' : 'hover:text-primary-700 transition-colors']}>Kontak</a>
     </div>
 
-    <!-- Search + Hamburger -->
-    <div class="flex items-center gap-2 shrink-0">
-      <!-- Search Bar (inline placeholder — full SearchBar.astro will be task 4.5) -->
-      <form
-        action={getPath('/search')}
-        method="get"
-        class="hidden lg:flex items-center"
-        role="search"
-        aria-label="Pencarian website"
-      >
-        <label for="header-search" class="sr-only">Cari di website</label>
-        <div class="relative">
-          <input
-            id="header-search"
-            type="search"
-            name="q"
-            placeholder="Cari..."
-            class="w-40 xl:w-52 px-3 py-2 pl-9 text-sm border border-gray-300 rounded-md bg-gray-50 focus:bg-white focus:border-green-500 focus:outline-2 focus:outline-blue-600 focus:outline-offset-2 transition-colors"
-            autocomplete="off"
-          />
-          <svg
-            class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </div>
-      </form>
-
-      <!-- Mobile Search Button (opens /search page) -->
+    <!-- Desktop actions -->
+    <div class="hidden lg:flex items-center gap-2">
       <a
         href={getPath('/search')}
-        class="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-md text-gray-600 hover:text-green-700 hover:bg-green-50 transition-colors focus:outline-2 focus:outline-blue-600 focus:outline-offset-2"
-        aria-label="Buka halaman pencarian"
+        class="w-9 h-9 rounded-lg flex items-center justify-center text-ink hover:bg-primary-50 transition"
+        aria-label="Pencarian"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Mobile: Search + Hamburger -->
+    <div class="flex lg:hidden items-center gap-1">
+      <a
+        href={getPath('/search')}
+        class="w-10 h-10 rounded-lg flex items-center justify-center text-ink hover:bg-primary-50 transition"
+        aria-label="Pencarian"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       </a>
-
-      <!-- Hamburger Button (Mobile) -->
       <button
         id="hamburger-btn"
         type="button"
-        class="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-md text-gray-600 hover:text-green-700 hover:bg-green-50 transition-colors focus:outline-2 focus:outline-blue-600 focus:outline-offset-2"
+        class="w-10 h-10 rounded-lg flex items-center justify-center text-ink hover:bg-primary-50 transition"
         aria-expanded="false"
-        aria-controls="mobile-nav"
+        aria-controls="mobile-drawer"
         aria-label="Buka menu navigasi"
       >
-        <!-- Hamburger Icon -->
-        <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <svg id="hamburger-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
-        <!-- Close Icon (hidden by default) -->
-        <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <svg id="close-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Navigation -->
+  <div
+    id="mobile-drawer"
+    class="lg:hidden fixed inset-0 top-[57px] z-40 bg-white transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto"
+    aria-hidden="true"
+    role="dialog"
+    aria-label="Menu navigasi"
+  >
+    <nav class="py-2">
+      <a class="flex items-center justify-between px-4 py-3.5 border-b border-line" href={getPath('/')}>
+        <span class="flex items-center gap-3 font-display font-semibold text-[13px] text-ink">
+          <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+          Home
+        </span>
+        <svg class="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      </a>
+      <a class="flex items-center justify-between px-4 py-3.5 border-b border-line" href={getPath('/profil/sejarah')}>
+        <span class="flex items-center gap-3 font-display font-semibold text-[13px] text-ink">
+          <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+          Profil Desa
+        </span>
+        <svg class="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      </a>
+      <a class="flex items-center justify-between px-4 py-3.5 border-b border-line" href={getPath('/infografis')}>
+        <span class="flex items-center gap-3 font-display font-semibold text-[13px] text-ink">
+          <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+          Infografis
+        </span>
+        <svg class="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      </a>
+      <a class="flex items-center justify-between px-4 py-3.5 border-b border-line" href={getPath('/pemerintahan')}>
+        <span class="flex items-center gap-3 font-display font-semibold text-[13px] text-ink">
+          <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+          Pemerintahan
+        </span>
+        <svg class="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      </a>
+      <a class="flex items-center justify-between px-4 py-3.5 border-b border-line" href={getPath('/berita')}>
+        <span class="flex items-center gap-3 font-display font-semibold text-[13px] text-ink">
+          <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" /></svg>
+          Berita
+        </span>
+        <svg class="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      </a>
+      <a class="flex items-center justify-between px-4 py-3.5 border-b border-line" href={getPath('/umkm')}>
+        <span class="flex items-center gap-3 font-display font-semibold text-[13px] text-ink">
+          <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+          Belanja
+        </span>
+        <svg class="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      </a>
+      <a class="flex items-center justify-between px-4 py-3.5" href={getPath('/kontak')}>
+        <span class="flex items-center gap-3 font-display font-semibold text-[13px] text-ink">
+          <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+          Kontak
+        </span>
+        <svg class="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      </a>
+    </nav>
+
+    <!-- Quick contact card -->
+    <div class="px-4 py-5">
+      <div class="rounded-2xl bg-gold-50 border border-gold-100 px-4 py-3.5 flex items-start gap-3">
+        <svg class="w-5 h-5 text-gold-700 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+        <div>
+          <div class="text-[11.5px] font-semibold text-ink">Butuh bantuan cepat?</div>
+          <div class="text-[11px] text-muted">Hubungi Kantor Desa Makmurjaya</div>
+        </div>
+      </div>
     </div>
   </div>
 </header>
 
 <script>
   const hamburgerBtn = document.getElementById('hamburger-btn');
-  const mobileNav = document.getElementById('mobile-nav');
+  const drawer = document.getElementById('mobile-drawer');
   const hamburgerIcon = document.getElementById('hamburger-icon');
   const closeIcon = document.getElementById('close-icon');
 
-  if (hamburgerBtn && mobileNav && hamburgerIcon && closeIcon) {
-    function openMenu() {
+  if (hamburgerBtn && drawer && hamburgerIcon && closeIcon) {
+    function openDrawer() {
+      drawer!.classList.remove('translate-x-full');
+      drawer!.classList.add('translate-x-0');
+      drawer!.setAttribute('aria-hidden', 'false');
       hamburgerBtn!.setAttribute('aria-expanded', 'true');
       hamburgerBtn!.setAttribute('aria-label', 'Tutup menu navigasi');
-      mobileNav!.setAttribute('aria-hidden', 'false');
-      mobileNav!.style.maxHeight = mobileNav!.scrollHeight + 'px';
       hamburgerIcon!.classList.add('hidden');
       closeIcon!.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
     }
 
-    function closeMenu() {
+    function closeDrawer() {
+      drawer!.classList.remove('translate-x-0');
+      drawer!.classList.add('translate-x-full');
+      drawer!.setAttribute('aria-hidden', 'true');
       hamburgerBtn!.setAttribute('aria-expanded', 'false');
       hamburgerBtn!.setAttribute('aria-label', 'Buka menu navigasi');
-      mobileNav!.setAttribute('aria-hidden', 'true');
-      mobileNav!.style.maxHeight = '0';
       hamburgerIcon!.classList.remove('hidden');
       closeIcon!.classList.add('hidden');
+      document.body.style.overflow = '';
     }
 
-    function toggleMenu() {
-      const expanded = hamburgerBtn!.getAttribute('aria-expanded') === 'true';
-      if (expanded) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
-    }
+    hamburgerBtn.addEventListener('click', () => {
+      const isOpen = hamburgerBtn!.getAttribute('aria-expanded') === 'true';
+      isOpen ? closeDrawer() : openDrawer();
+    });
 
-    // Click handler
-    hamburgerBtn.addEventListener('click', toggleMenu);
-
-    // Keyboard handler: Enter, Space, Escape
-    hamburgerBtn.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggleMenu();
-      }
-      if (e.key === 'Escape') {
-        closeMenu();
+    // Escape key closes drawer
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && hamburgerBtn!.getAttribute('aria-expanded') === 'true') {
+        closeDrawer();
         hamburgerBtn!.focus();
       }
     });
 
-    // Close menu on Escape from within mobile nav
-    mobileNav.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        closeMenu();
-        hamburgerBtn!.focus();
-      }
-    });
-
-    // Close menu when clicking outside (optional UX improvement)
-    document.addEventListener('click', (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (
-        hamburgerBtn!.getAttribute('aria-expanded') === 'true' &&
-        !hamburgerBtn!.contains(target) &&
-        !mobileNav!.contains(target)
-      ) {
-        closeMenu();
-      }
-    });
-
-    // Close menu on window resize to desktop
+    // Close on resize to desktop
     window.addEventListener('resize', () => {
-      if (window.innerWidth >= 768) {
-        closeMenu();
-      }
+      if (window.innerWidth >= 1024) closeDrawer();
     });
   }
 </script>

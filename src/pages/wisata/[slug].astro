@@ -14,7 +14,7 @@ import WisataDetail from '../../components/wisata/WisataDetail.astro';
 import { getPath } from '../../utils/links';
 
 export async function getStaticPaths() {
-  const allWisata = await getCollection('wisata', ({ data }) => data.status === 'published');
+  const allWisata = await getCollection('wisata');
 
   return allWisata.map((wisata) => ({
     params: { slug: wisata.slug },
@@ -58,7 +58,7 @@ const breadcrumbItems = [
   >
     {/* Header */}
     <header class="mb-8">
-      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+      <h1 class="font-display font-semibold text-2xl text-ink leading-tight">
         {nama}
       </h1>
     </header>
@@ -83,7 +83,7 @@ const breadcrumbItems = [
     )}
 
     {/* Deskripsi lengkap (Markdown body) */}
-    <div class="prose prose-lg prose-gray max-w-none mb-8 prose-headings:text-gray-900 prose-a:text-green-700 prose-img:rounded-lg">
+    <div class="prose prose-lg prose-gray max-w-none mb-8 prose-headings:text-ink prose-a:text-primary-700 prose-img:rounded-lg">
       <Content />
     </div>
 

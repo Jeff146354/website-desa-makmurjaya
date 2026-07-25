@@ -1,0 +1,162 @@
+---
+/**
+ * Infografis page — tabbed infographics dashboard.
+ * Tabs: Penduduk, APBDes, IDM, Stunting, Bantuan, SDGs
+ * Client-side tab switching with vanilla JS.
+ *
+ * Data is placeholder (will be CMS-editable later).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPath } from '../utils/links';
+
+const seoTitle = 'Infografis — Desa Makmurjaya';
+const seoDescription = 'Data infografis Desa Makmurjaya: penduduk, APBDes, IDM, stunting, bantuan sosial, dan SDGs Desa.';
+---
+
+<BaseLayout title={seoTitle} description={seoDescription}>
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="max-w-7xl mx-auto">
+      <p class="eyebrow text-gold-300 mb-1">Data &amp; Statistik</p>
+      <h1 class="font-display font-semibold text-2xl md:text-[32px] text-white">Infografis Desa Makmurjaya</h1>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar max-w-7xl mx-auto px-4 md:px-8" role="tablist" aria-label="Kategori infografis">
+    <button class="tab-item active" role="tab" aria-selected="true" aria-controls="panel-penduduk" id="tab-penduduk">Penduduk</button>
+    <button class="tab-item" role="tab" aria-selected="false" aria-controls="panel-apbdes" id="tab-apbdes">APBDes</button>
+    <button class="tab-item" role="tab" aria-selected="false" aria-controls="panel-idm" id="tab-idm">IDM</button>
+    <button class="tab-item" role="tab" aria-selected="false" aria-controls="panel-stunting" id="tab-stunting">Stunting</button>
+    <button class="tab-item" role="tab" aria-selected="false" aria-controls="panel-bantuan" id="tab-bantuan">Bantuan</button>
+    <button class="tab-item" role="tab" aria-selected="false" aria-controls="panel-sdgs" id="tab-sdgs">SDGs</button>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 md:px-8">
+    <!-- PENDUDUK TAB -->
+    <div id="panel-penduduk" role="tabpanel" aria-labelledby="tab-penduduk" class="py-8">
+      <h2 class="h-section mb-4">Jumlah Penduduk</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+        <div class="stat-card"><div class="stat-k">Total Penduduk</div><div class="stat-v">631</div></div>
+        <div class="stat-card"><div class="stat-k">Kepala Keluarga</div><div class="stat-v">191</div></div>
+        <div class="stat-card"><div class="stat-k">Laki-Laki</div><div class="stat-v">319</div></div>
+        <div class="stat-card"><div class="stat-k">Perempuan</div><div class="stat-v">311</div></div>
+      </div>
+
+      <h3 class="h-section mb-4">Berdasarkan Kelompok Umur</h3>
+      <div class="card p-4 md:p-6 mb-8">
+        <div class="space-y-3">
+          <div>
+            <div class="flex justify-between text-sm mb-1.5"><span class="text-muted">0–14 Tahun</span><span class="font-semibold text-ink">Data belum tersedia</span></div>
+            <div class="progress-wrap"><div class="progress-fill" style="width:0%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1.5"><span class="text-muted">15–64 Tahun</span><span class="font-semibold text-ink">Data belum tersedia</span></div>
+            <div class="progress-wrap"><div class="progress-fill" style="width:0%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1.5"><span class="text-muted">65+ Tahun</span><span class="font-semibold text-ink">Data belum tersedia</span></div>
+            <div class="progress-wrap"><div class="progress-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <p class="sub-text mt-4">Data kelompok umur akan diperbarui setelah data kependudukan lengkap diinput.</p>
+      </div>
+    </div>
+
+    <!-- APBDES TAB -->
+    <div id="panel-apbdes" role="tabpanel" aria-labelledby="tab-apbdes" class="py-8 hidden">
+      <h2 class="h-section mb-2">APB Desa Makmurjaya</h2>
+      <p class="sub-text mb-6">Kec. Jayakerta, Kab. Karawang, Jawa Barat</p>
+
+      <div class="empty-state">
+        <svg class="w-8 h-8 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+        <p class="text-sm text-muted">Data APBDes belum tersedia. Silakan input melalui CMS.</p>
+      </div>
+    </div>
+
+    <!-- IDM TAB -->
+    <div id="panel-idm" role="tabpanel" aria-labelledby="tab-idm" class="py-8 hidden">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <div>
+          <h2 class="h-section mb-2">Indeks Desa Membangun (IDM)</h2>
+          <p class="sub-text mb-5">Indeks komposit yang mengukur kemandirian desa berdasarkan tiga dimensi: sosial (IKS), ekonomi (IKE), dan lingkungan (IKL).</p>
+          <div class="rounded-2xl bg-gradient-to-br from-primary-700 to-primary-900 text-white p-6 flex items-center justify-between">
+            <div>
+              <div class="text-xs text-white/60">Skor IDM 2024</div>
+              <div class="font-display font-bold text-4xl leading-none mt-1">0,6556</div>
+              <span class="inline-flex items-center mt-2 px-3 py-1 rounded-full bg-gold-500 text-primary-900 text-sm font-bold">Berkembang</span>
+            </div>
+            <svg class="w-14 h-14 text-gold-300 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 content-start">
+          <div class="stat-card"><div class="stat-k">Target Status</div><div class="font-display font-semibold text-base">Maju</div></div>
+          <div class="stat-card"><div class="stat-k">Skor Minimal</div><div class="stat-v text-lg">0,7073</div></div>
+          <div class="stat-card"><div class="stat-k">Penambahan Dibutuhkan</div><div class="stat-v text-lg text-primary-600">+0,0517</div></div>
+          <div class="stat-card"><div class="stat-k">IKS (Sosial)</div><div class="stat-v text-lg">0,8000</div></div>
+          <div class="stat-card"><div class="stat-k">IKE (Ekonomi)</div><div class="stat-v text-lg">0,5000</div></div>
+          <div class="stat-card"><div class="stat-k">IKL (Lingkungan)</div><div class="stat-v text-lg">0,6667</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUNTING TAB -->
+    <div id="panel-stunting" role="tabpanel" aria-labelledby="tab-stunting" class="py-8 hidden">
+      <h2 class="h-section mb-2">Data Stunting</h2>
+      <p class="sub-text mb-6">Pemantauan angka stunting balita di Desa Makmurjaya berdasarkan data Posyandu dan Puskesmas.</p>
+      <div class="empty-state">
+        <svg class="w-8 h-8 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+        <p class="text-sm text-muted">Data stunting belum tersedia. Silakan input melalui CMS.</p>
+      </div>
+    </div>
+
+    <!-- BANTUAN TAB -->
+    <div id="panel-bantuan" role="tabpanel" aria-labelledby="tab-bantuan" class="py-8 hidden">
+      <h2 class="h-section mb-2">Program Bantuan Sosial</h2>
+      <p class="sub-text mb-6">Data penerima bantuan sosial dari berbagai program pemerintah.</p>
+      <div class="empty-state">
+        <svg class="w-8 h-8 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>
+        <p class="text-sm text-muted">Data bantuan sosial belum tersedia. Silakan input melalui CMS.</p>
+      </div>
+    </div>
+
+    <!-- SDGS TAB -->
+    <div id="panel-sdgs" role="tabpanel" aria-labelledby="tab-sdgs" class="py-8 hidden">
+      <h2 class="h-section mb-2">SDGs Desa</h2>
+      <p class="sub-text mb-6">Sustainable Development Goals Desa — upaya terpadu mewujudkan desa tanpa kemiskinan dan inklusif.</p>
+      <div class="empty-state">
+        <svg class="w-8 h-8 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <p class="text-sm text-muted">Data SDGs Desa belum tersedia. Silakan input melalui CMS.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Tab switching logic
+  const tabs = document.querySelectorAll('[role="tab"]');
+  const panels = document.querySelectorAll('[role="tabpanel"]');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Deactivate all tabs
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      // Hide all panels
+      panels.forEach(p => p.classList.add('hidden'));
+
+      // Activate clicked tab
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+
+      // Show corresponding panel
+      const panelId = tab.getAttribute('aria-controls');
+      if (panelId) {
+        const panel = document.getElementById(panelId);
+        if (panel) panel.classList.remove('hidden');
+      }
+    });
+  });
+</script>
