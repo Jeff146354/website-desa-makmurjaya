@@ -8,13 +8,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PetaKantor from '../components/kontak/PetaKantor.astro';
 import KontakForm from '../components/kontak/KontakForm.astro';
 import { getPath } from '../utils/links';
+import situs from '../data/situs.json';
 
 const halamanStatis = await getCollection('halaman-statis');
 const kontakInfo = halamanStatis.find((item) => item.data.tipe === 'kontak-info');
 
-const lat = kontakInfo?.data.lokasi_lat ?? -6.3665;
-const lng = kontakInfo?.data.lokasi_lng ?? 107.3055;
-const label = kontakInfo?.data.lokasi_label ?? 'Kantor Desa Makmurjaya';
+const lat = kontakInfo?.data.lokasi_lat ?? situs.koordinat_lat;
+const lng = kontakInfo?.data.lokasi_lng ?? situs.koordinat_lng;
+const label = kontakInfo?.data.lokasi_label ?? 'Kantor ' + situs.nama_desa;
 ---
 
 <BaseLayout
@@ -39,7 +40,7 @@ const label = kontakInfo?.data.lokasi_label ?? 'Kantor Desa Makmurjaya';
             <svg class="h-5 w-5 text-primary-700 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
             <div>
               <p class="font-medium text-ink text-sm">Alamat</p>
-              <p class="text-muted text-sm">Jln. Raya Bendajaya No. 288, Desa Makmurjaya,<br/>Kec. Jayakerta, Kab. Karawang, Jawa Barat 41352</p>
+              <p class="text-muted text-sm">{situs.alamat}</p>
             </div>
           </div>
           <div class="flex items-start gap-3">
@@ -47,8 +48,7 @@ const label = kontakInfo?.data.lokasi_label ?? 'Kantor Desa Makmurjaya';
             <div>
               <p class="font-medium text-ink text-sm">Jam Layanan</p>
               <div class="text-muted text-sm space-y-0.5">
-                <p>Senin – Jumat: 08:00 – 15:00 WIB</p>
-                <p>Sabtu – Minggu: <span class="text-red-600 font-medium">Tutup</span></p>
+                <p>{situs.jam_layanan}</p>
               </div>
             </div>
           </div>

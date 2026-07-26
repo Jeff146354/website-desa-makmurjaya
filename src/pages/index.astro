@@ -6,6 +6,7 @@ import PengumumanTerbaru from '../components/beranda/PengumumanTerbaru.astro';
 import HighlightWisata from '../components/beranda/HighlightWisata.astro';
 import HighlightUMKM from '../components/beranda/HighlightUMKM.astro';
 import { getPath } from '../utils/links';
+import situs from '../data/situs.json';
 
 const seoTitle = 'Beranda — Desa Makmurjaya';
 const seoDescription =
@@ -31,8 +32,8 @@ const jsonLd = {
 <BaseLayout title={seoTitle} description={seoDescription} jsonLd={jsonLd}>
   <!-- Hero Section -->
   <HeroSection
-    tagline="Bersama membangun desa yang maju, mandiri, dan sejahtera untuk seluruh warga Makmurjaya."
-    namaDesaSubtitle="Desa Makmurjaya"
+    tagline={situs.tagline_hero}
+    namaDesaSubtitle={situs.nama_desa}
   />
 
   <!-- Jelajahi Desa (Quick Nav) -->

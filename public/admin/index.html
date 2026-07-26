@@ -183,6 +183,34 @@
             ]
           },
           {
+            name: 'pengaturan-situs',
+            label: 'Pengaturan Situs',
+            files: [
+              {
+                name: 'situs',
+                label: 'Informasi Umum Desa',
+                file: 'src/data/situs.json',
+                fields: [
+                  { label: 'Nama Desa', name: 'nama_desa', widget: 'string' },
+                  { label: 'Lokasi Singkat', name: 'lokasi_singkat', widget: 'string', hint: 'Contoh: Kec. Jayakerta, Kab. Karawang, Jawa Barat' },
+                  { label: 'Tagline Hero (Homepage)', name: 'tagline_hero', widget: 'text' },
+                  { label: 'Gambar Hero', name: 'hero_image', widget: 'image', required: false, hint: 'Foto utama yang tampil di homepage' },
+                  { label: 'Deskripsi Footer', name: 'deskripsi_footer', widget: 'text' },
+                  { label: 'Alamat Lengkap', name: 'alamat', widget: 'text' },
+                  { label: 'Nomor Telepon', name: 'telepon', widget: 'string', required: false },
+                  { label: 'Email', name: 'email', widget: 'string', required: false },
+                  { label: 'Jam Layanan', name: 'jam_layanan', widget: 'string' },
+                  { label: 'Latitude Peta', name: 'koordinat_lat', widget: 'number', value_type: 'float' },
+                  { label: 'Longitude Peta', name: 'koordinat_lng', widget: 'number', value_type: 'float' },
+                  { label: 'Sambutan Kepala Desa', name: 'sambutan_kades', widget: 'text', required: false },
+                  { label: 'Nama Kepala Desa', name: 'nama_kades', widget: 'string' },
+                  { label: 'Foto Kepala Desa', name: 'foto_kades', widget: 'image', required: false },
+                  { label: 'Teks Copyright', name: 'copyright', widget: 'string' }
+                ]
+              }
+            ]
+          },
+          {
             name: 'infografis',
             label: 'Infografis',
             files: [

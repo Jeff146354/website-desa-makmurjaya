@@ -10,6 +10,7 @@
  */
 import Navigation from './Navigation.astro';
 import { getPath } from '../../utils/links';
+import situs from '../../data/situs.json';
 
 const currentPath = Astro.url.pathname;
 ---
@@ -27,8 +28,8 @@ const currentPath = Astro.url.pathname;
         </svg>
       </div>
       <div>
-        <div class="font-display font-semibold text-[13px] md:text-[15px] text-ink leading-tight">Desa Makmurjaya</div>
-        <div class="text-[10.5px] md:text-[11px] text-muted leading-tight">Kab. Karawang, Jawa Barat</div>
+        <div class="font-display font-semibold text-[13px] md:text-[15px] text-ink leading-tight">{situs.nama_desa}</div>
+        <div class="text-[10.5px] md:text-[11px] text-muted leading-tight">{situs.lokasi_singkat}</div>
       </div>
     </a>
 

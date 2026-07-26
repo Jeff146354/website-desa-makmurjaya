@@ -2,12 +2,12 @@
 /**
  * Footer.astro
  * Dark green footer matching Figma hi-fi mockup.
- * Desktop: 5-column grid (brand + 4 link columns)
- * Mobile: stacked with accordion sections
+ * Reads site settings from src/data/situs.json for editable content.
  *
  * Requirements: 1.7, 12.4
  */
 import { getPath } from '../../utils/links';
+import situs from '../../data/situs.json';
 ---
 
 <footer class="bg-primary-800 text-white" data-pagefind-ignore>
@@ -21,11 +21,11 @@ import { getPath } from '../../utils/links';
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
           </div>
           <div>
-            <div class="font-display font-semibold text-[15px] text-white">Desa Makmurjaya</div>
-            <div class="text-[11px] text-white/50">Kec. Jayakerta, Kab. Karawang, Jawa Barat</div>
+            <div class="font-display font-semibold text-[15px] text-white">{situs.nama_desa}</div>
+            <div class="text-[11px] text-white/50">{situs.lokasi_singkat}</div>
           </div>
         </div>
-        <p class="text-[12px] text-white/60 leading-relaxed max-w-xs">Pemerintah Desa Makmurjaya melayani masyarakat dengan transparan, akuntabel, dan profesional.</p>
+        <p class="text-[12px] text-white/60 leading-relaxed max-w-xs">{situs.deskripsi_footer}</p>
       </div>
 
       <!-- Hubungi Kami -->
@@ -34,11 +34,11 @@ import { getPath } from '../../utils/links';
         <div class="space-y-1">
           <div class="text-[12px] text-white/70 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-            Jln. Raya Bendajaya No. 288
+            {situs.alamat}
           </div>
           <div class="text-[12px] text-white/70 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            Senin–Jumat 08.00–15.00
+            {situs.jam_layanan}
           </div>
         </div>
       </div>
@@ -69,8 +69,8 @@ import { getPath } from '../../utils/links';
 
     <!-- Bottom bar -->
     <div class="max-w-7xl mx-auto border-t border-white/10 pt-6 flex items-center justify-between">
-      <div class="text-[11px] text-white/40">© 2026 Pemerintah Desa Makmurjaya</div>
-      <div class="text-[11px] text-white/40">Dibangun dengan ❤ oleh Tim KKN</div>
+      <div class="text-[11px] text-white/40">{situs.copyright}</div>
+      <div class="text-[11px] text-white/40">Dibuat oleh Muhamad Tristan Farand · KKN IPB 2026</div>
     </div>
   </div>
 
@@ -81,8 +81,8 @@ import { getPath } from '../../utils/links';
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
       </div>
       <div>
-        <div class="font-display font-semibold text-[13px]">Desa Makmurjaya</div>
-        <div class="text-[10.5px] text-white/70">Kec. Jayakerta, Kab. Karawang</div>
+        <div class="font-display font-semibold text-[13px]">{situs.nama_desa}</div>
+        <div class="text-[10.5px] text-white/70">{situs.lokasi_singkat}</div>
       </div>
     </div>
 
@@ -96,10 +96,10 @@ import { getPath } from '../../utils/links';
         <svg class="w-3.5 h-3.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
       </summary>
       <div class="pb-3 pl-6 text-[11px] text-white/60 space-y-1">
-        <p>Jln. Raya Bendajaya No. 288</p>
-        <p>Desa Makmurjaya, Kec. Jayakerta</p>
-        <p>Kab. Karawang, Jawa Barat 41352</p>
-        <p>Senin–Jumat 08.00–15.00</p>
+        <p>{situs.alamat}</p>
+        <p>{situs.jam_layanan}</p>
+        {situs.telepon && <p>Tel: {situs.telepon}</p>}
+        {situs.email && <p>{situs.email}</p>}
       </div>
     </details>
 
@@ -123,7 +123,7 @@ import { getPath } from '../../utils/links';
 
     <!-- Copyright -->
     <div class="mt-6 text-center text-[10px] text-white/40">
-      © 2026 Pemerintah Desa Makmurjaya · Dibangun oleh Tim KKN
+      {situs.copyright} · Dibuat oleh Muhamad Tristan Farand · KKN IPB 2026
     </div>
   </div>
 </footer>
