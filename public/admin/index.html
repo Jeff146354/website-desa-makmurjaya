@@ -233,6 +233,16 @@
                   { label: 'Skor Per Tahun', name: 'skor_per_tahun', widget: 'list', fields: [
                     { label: 'Tahun', name: 'tahun', widget: 'number' },
                     { label: 'Skor', name: 'skor', widget: 'number', value_type: 'float' }
+                  ]},
+                  { label: 'Tabel Indikator', name: 'tabel_indikator', widget: 'list', fields: [
+                    { label: 'No', name: 'no', widget: 'number' },
+                    { label: 'Dimensi', name: 'dimensi', widget: 'select', options: ['IKS', 'IKE', 'IKL'] },
+                    { label: 'Indikator', name: 'indikator', widget: 'string' },
+                    { label: 'Skor', name: 'skor', widget: 'number', value_type: 'float' },
+                    { label: 'Keterangan', name: 'keterangan', widget: 'string', required: false },
+                    { label: 'Kegiatan yang Dapat Dilakukan', name: 'kegiatan', widget: 'string', required: false },
+                    { label: 'Nilai+', name: 'nilai_plus', widget: 'number', value_type: 'float', required: false },
+                    { label: 'Pelaksana', name: 'pelaksana', widget: 'string', required: false, hint: 'Contoh: Pusat, Provinsi, Kab., Desa, CSR' }
                   ]}
                 ]
               },
