@@ -1,10 +1,10 @@
 ---
-import ContentLayout from '../../layouts/ContentLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import PetaKantor from '../../components/kontak/PetaKantor.astro';
+import ProfilNav from '../../components/profil/ProfilNav.astro';
 import { getCollection } from 'astro:content';
 import { getPath } from '../../utils/links';
 
-// Fetch halaman statis with type profil-lokasi
 const halamanStatis = await getCollection('halaman-statis');
 const lokasiPage = halamanStatis.find((page) => page.data.tipe === 'profil-lokasi');
 
@@ -13,80 +13,43 @@ const lat = lokasiPage?.data.lokasi_lat;
 const lng = lokasiPage?.data.lokasi_lng;
 const label = lokasiPage?.data.lokasi_label || 'Lokasi Desa Makmurjaya';
 
-// Render markdown body
 const Content = lokasiPage ? (await lokasiPage.render()).Content : null;
-
-// Sub-page navigation items
-const subPages = [
-  { label: 'Sejarah', href: getPath('/profil/sejarah') },
-  { label: 'Visi & Misi', href: getPath('/profil/visi-misi') },
-  { label: 'Lokasi', href: getPath('/profil/lokasi') },
-];
-
-const breadcrumbItems = [
-  { label: 'Beranda', href: getPath('/') },
-  { label: 'Profil Desa', href: getPath('/profil/sejarah') },
-  { label: 'Lokasi' },
-];
 ---
 
-<ContentLayout
-  title={title}
-  description="Lokasi dan peta Desa Makmurjaya. Lihat posisi desa di peta interaktif dan petunjuk akses menuju desa."
-  breadcrumbItems={breadcrumbItems}
+<BaseLayout
+  title="Lokasi Desa Makmurjaya"
+  description="Lokasi dan peta Desa Makmurjaya."
 >
-  {/* Sub-page navigation - Requirement 2.4 */}
-  <nav aria-label="Navigasi sub-halaman Profil Desa" class="mb-8">
-    <ul class="flex flex-wrap gap-2">
-      {subPages.map((page) => (
-        <li>
-          <a
-            href={page.href}
-            class:list={[
-              'inline-block px-4 py-2 rounded-lg text-sm font-medium transition-colors min-h-[44px] flex items-center',
-              page.href === getPath('/profil/lokasi')
-                ? 'bg-primary-700 text-white'
-                : 'bg-primary-50 text-ink hover:bg-primary-50 hover:text-primary-700',
-            ]}
-            aria-current={page.href === getPath('/profil/lokasi') ? 'page' : undefined}
-          >
-            {page.label}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </nav>
+  <div class="page-header">
+    <div class="max-w-7xl mx-auto">
+      <p class="eyebrow text-gold-300 mb-1">Tentang Desa</p>
+      <h1 class="font-display font-semibold text-2xl md:text-[32px] text-white">Profil Desa Makmurjaya</h1>
+      <p class="text-sm text-white/60 mt-1">Kec. Jayakerta, Kab. Karawang, Jawa Barat</p>
+    </div>
+  </div>
 
-  <article class="space-y-8">
-    <h1 class="font-display font-semibold text-2xl text-ink">{title}</h1>
+  <div class="max-w-4xl mx-auto px-4 md:px-8 py-8">
+    <ProfilNav currentPath={getPath('/profil/lokasi')} />
 
-    {/* Peta interaktif - Requirements 2.3, 2.5 */}
-    {lat && lng ? (
-      <section aria-labelledby="peta-heading">
-        <h2 id="peta-heading" class="sr-only">Peta Lokasi Desa</h2>
-        <PetaKantor lat={lat} lng={lng} label={label} zoom={15} />
-      </section>
-    ) : (
-      <div class="rounded-lg bg-primary-50 p-6 text-center text-muted">
-        <p>
-          Data koordinat lokasi belum tersedia.
-          <a
-            href="https://www.openstreetmap.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-primary-700 underline hover:text-primary-900"
-          >
-            Cari lokasi di OpenStreetMap &rarr;
-          </a>
-        </p>
-      </div>
-    )}
+    <article class="space-y-6 mt-6">
+      <h2 class="font-display font-semibold text-xl text-ink">{title}</h2>
 
-    {/* Konten markdown dari halaman statis */}
-    {Content && (
-      <div class="prose prose-green max-w-none">
-        <Content />
-      </div>
-    )}
-  </article>
-</ContentLayout>
+      {lat && lng ? (
+        <section aria-labelledby="peta-heading">
+          <h3 id="peta-heading" class="sr-only">Peta Lokasi Desa</h3>
+          <PetaKantor lat={lat} lng={lng} label={label} zoom={15} />
+        </section>
+      ) : (
+        <div class="rounded-2xl bg-primary-50 p-6 text-center text-muted">
+          <p>Data koordinat lokasi belum tersedia.</p>
+        </div>
+      )}
+
+      {Content && (
+        <div class="prose prose-green max-w-none text-ink leading-relaxed">
+          <Content />
+        </div>
+      )}
+    </article>
+  </div>
+</BaseLayout>

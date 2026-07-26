@@ -1,0 +1,96 @@
+---
+/**
+ * Peta Desa — interactive map page showing points of interest.
+ * Matches Figma desktop-hifi/03-listing-peta-desa.html
+ * Uses Leaflet.js for the map with OpenStreetMap tiles.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPath } from '../utils/links';
+
+const seoTitle = 'Peta Desa — Desa Makmurjaya';
+const seoDescription = 'Peta interaktif Desa Makmurjaya. Temukan titik-titik penting di wilayah desa.';
+
+// Default center coordinates for Desa Makmurjaya (Jayakerta, Karawang)
+const defaultLat = -6.3665;
+const defaultLng = 107.3055;
+---
+
+<BaseLayout title={seoTitle} description={seoDescription}>
+  <div class="page-header">
+    <div class="max-w-7xl mx-auto">
+      <p class="eyebrow text-gold-300 mb-1">Peta Desa</p>
+      <h1 class="font-display font-semibold text-2xl md:text-[32px] text-white">Peta Desa Makmurjaya</h1>
+      <p class="text-sm text-white/60 mt-1">Temukan titik-titik penting di wilayah Desa Makmurjaya.</p>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 md:px-8 py-8">
+    <!-- Map container -->
+    <div
+      id="peta-desa"
+      class="w-full h-[400px] md:h-[520px] rounded-2xl border border-line overflow-hidden bg-primary-50"
+      role="application"
+      aria-label="Peta interaktif Desa Makmurjaya"
+      data-lat={defaultLat}
+      data-lng={defaultLng}
+    >
+      <!-- Fallback for no-JS -->
+      <noscript>
+        <div class="flex items-center justify-center h-full text-center p-8">
+          <p class="text-muted">
+            Peta memerlukan JavaScript untuk ditampilkan.
+            <a
+              href={`https://www.openstreetmap.org/?mlat=${defaultLat}&mlon=${defaultLng}#map=15/${defaultLat}/${defaultLng}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-primary-700 underline"
+            >
+              Lihat di OpenStreetMap →
+            </a>
+          </p>
+        </div>
+      </noscript>
+    </div>
+
+    <!-- Legend -->
+    <div class="flex flex-wrap items-center gap-4 md:gap-6 mt-4 text-sm text-muted">
+      <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-primary-700"></span>Pemerintahan</span>
+      <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-gold-500"></span>Kesehatan</span>
+      <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-blue-500"></span>Pendidikan</span>
+      <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-green-500"></span>Wisata</span>
+    </div>
+  </div>
+</BaseLayout>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<script>
+  async function initPetaDesa() {
+    const mapEl = document.getElementById('peta-desa');
+    if (!mapEl) return;
+
+    const lat = parseFloat(mapEl.dataset.lat || '-6.3665');
+    const lng = parseFloat(mapEl.dataset.lng || '107.3055');
+
+    const L = await import('leaflet');
+
+    const map = L.map(mapEl).setView([lat, lng], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19,
+    }).addTo(map);
+
+    // Kantor Desa marker
+    L.marker([lat, lng])
+      .addTo(map)
+      .bindPopup('<strong>Kantor Desa Makmurjaya</strong><br/>Jln. Raya Bendajaya No. 288')
+      .openPopup();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPetaDesa);
+  } else {
+    initPetaDesa();
+  }
+</script>

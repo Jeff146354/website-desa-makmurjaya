@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import ContentLayout from '../../layouts/ContentLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProfilNav from '../../components/profil/ProfilNav.astro';
 import { getPath } from '../../utils/links';
 
@@ -8,33 +8,32 @@ const halamanStatis = await getCollection('halaman-statis');
 const visiMisiEntry = halamanStatis.find((entry) => entry.data.tipe === 'profil-visi-misi');
 
 if (!visiMisiEntry) {
-  throw new Error('Konten halaman visi-misi belum tersedia. Buat file dengan tipe "profil-visi-misi" di collection halaman-statis.');
+  throw new Error('Konten halaman visi-misi belum tersedia.');
 }
 
 const { Content } = await visiMisiEntry.render();
-
-const breadcrumbItems = [
-  { label: 'Beranda', href: getPath('/') },
-  { label: 'Profil Desa', href: getPath('/profil/sejarah') },
-  { label: 'Visi & Misi' },
-];
 ---
 
-<ContentLayout
+<BaseLayout
   title="Visi dan Misi Desa Makmurjaya"
   description="Visi dan misi pemerintahan Desa Makmurjaya untuk mewujudkan desa yang mandiri dan sejahtera."
-  breadcrumbItems={breadcrumbItems}
 >
-  <ProfilNav currentPath={getPath('/profil/visi-misi')} />
-
-  <article class="prose prose-green max-w-none">
-    <h1 class="font-display font-semibold text-2xl text-ink mb-6">
-      {visiMisiEntry.data.judul}
-    </h1>
-
-    <!-- Konten Markdown visi dan misi -->
-    <div class="mt-6">
-      <Content />
+  <div class="page-header">
+    <div class="max-w-7xl mx-auto">
+      <p class="eyebrow text-gold-300 mb-1">Tentang Desa</p>
+      <h1 class="font-display font-semibold text-2xl md:text-[32px] text-white">Profil Desa Makmurjaya</h1>
+      <p class="text-sm text-white/60 mt-1">Kec. Jayakerta, Kab. Karawang, Jawa Barat</p>
     </div>
-  </article>
-</ContentLayout>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4 md:px-8 py-8">
+    <ProfilNav currentPath={getPath('/profil/visi-misi')} />
+
+    <article class="prose prose-green max-w-none mt-6">
+      <h2 class="font-display font-semibold text-xl text-ink mb-4">{visiMisiEntry.data.judul}</h2>
+      <div class="text-ink leading-relaxed">
+        <Content />
+      </div>
+    </article>
+  </div>
+</BaseLayout>

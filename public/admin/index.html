@@ -181,6 +181,125 @@
               { label: 'Label Peta', name: 'lokasi_label', widget: 'string', required: false },
               { label: 'Konten', name: 'body', widget: 'markdown' }
             ]
+          },
+          {
+            name: 'infografis',
+            label: 'Infografis',
+            files: [
+              {
+                name: 'penduduk',
+                label: 'Data Penduduk',
+                file: 'src/content/infografis/penduduk.json',
+                fields: [
+                  { label: 'Total Penduduk', name: 'total_penduduk', widget: 'number' },
+                  { label: 'Kepala Keluarga', name: 'jumlah_kk', widget: 'number' },
+                  { label: 'Laki-Laki', name: 'laki_laki', widget: 'number' },
+                  { label: 'Perempuan', name: 'perempuan', widget: 'number' },
+                  { label: 'Kelompok Umur', name: 'kelompok_umur', widget: 'list', fields: [
+                    { label: 'Rentang', name: 'rentang', widget: 'string' },
+                    { label: 'Jumlah', name: 'jumlah', widget: 'number' }
+                  ]},
+                  { label: 'Per Dusun', name: 'per_dusun', widget: 'list', fields: [
+                    { label: 'Nama Dusun', name: 'nama', widget: 'string' },
+                    { label: 'Jumlah', name: 'jumlah', widget: 'number' }
+                  ]},
+                  { label: 'Per Pendidikan', name: 'per_pendidikan', widget: 'list', fields: [
+                    { label: 'Tingkat', name: 'tingkat', widget: 'string' },
+                    { label: 'Jumlah', name: 'jumlah', widget: 'number' }
+                  ]},
+                  { label: 'Per Pekerjaan', name: 'per_pekerjaan', widget: 'list', fields: [
+                    { label: 'Jenis', name: 'jenis', widget: 'string' },
+                    { label: 'Jumlah', name: 'jumlah', widget: 'number' }
+                  ]},
+                  { label: 'Per Agama', name: 'per_agama', widget: 'list', fields: [
+                    { label: 'Agama', name: 'agama', widget: 'string' },
+                    { label: 'Jumlah', name: 'jumlah', widget: 'number' }
+                  ]}
+                ]
+              },
+              {
+                name: 'idm',
+                label: 'Data IDM',
+                file: 'src/content/infografis/idm.json',
+                fields: [
+                  { label: 'Skor IDM', name: 'skor_idm', widget: 'number', value_type: 'float' },
+                  { label: 'Status IDM', name: 'status_idm', widget: 'string', hint: 'Contoh: Berkembang, Maju, Mandiri' },
+                  { label: 'Target Status', name: 'target_status', widget: 'string' },
+                  { label: 'Skor Minimal', name: 'skor_minimal', widget: 'number', value_type: 'float' },
+                  { label: 'Penambahan Dibutuhkan', name: 'penambahan', widget: 'number', value_type: 'float' },
+                  { label: 'IKS (Sosial)', name: 'iks', widget: 'number', value_type: 'float' },
+                  { label: 'IKE (Ekonomi)', name: 'ike', widget: 'number', value_type: 'float' },
+                  { label: 'IKL (Lingkungan)', name: 'ikl', widget: 'number', value_type: 'float' },
+                  { label: 'Skor Per Tahun', name: 'skor_per_tahun', widget: 'list', fields: [
+                    { label: 'Tahun', name: 'tahun', widget: 'number' },
+                    { label: 'Skor', name: 'skor', widget: 'number', value_type: 'float' }
+                  ]}
+                ]
+              },
+              {
+                name: 'apbdes',
+                label: 'Data APBDes',
+                file: 'src/content/infografis/apbdes.json',
+                fields: [
+                  { label: 'Tahun Anggaran', name: 'tahun_anggaran', widget: 'number' },
+                  { label: 'Pendapatan (Rp)', name: 'pendapatan', widget: 'number' },
+                  { label: 'Belanja (Rp)', name: 'belanja', widget: 'number' },
+                  { label: 'Penerimaan Pembiayaan (Rp)', name: 'penerimaan_pembiayaan', widget: 'number' },
+                  { label: 'Pengeluaran Pembiayaan (Rp)', name: 'pengeluaran_pembiayaan', widget: 'number' },
+                  { label: 'Surplus/Defisit (Rp)', name: 'surplus_defisit', widget: 'number' },
+                  { label: 'Rincian Pendapatan', name: 'rincian_pendapatan', widget: 'list', fields: [
+                    { label: 'Sumber', name: 'sumber', widget: 'string' },
+                    { label: 'Nominal (Rp)', name: 'nominal', widget: 'number' }
+                  ]},
+                  { label: 'Rincian Belanja', name: 'rincian_belanja', widget: 'list', fields: [
+                    { label: 'Pos', name: 'pos', widget: 'string' },
+                    { label: 'Nominal (Rp)', name: 'nominal', widget: 'number' }
+                  ]}
+                ]
+              },
+              {
+                name: 'stunting',
+                label: 'Data Stunting',
+                file: 'src/content/infografis/stunting.json',
+                fields: [
+                  { label: 'Tahun', name: 'tahun', widget: 'number' },
+                  { label: 'Total Balita', name: 'total_balita', widget: 'number' },
+                  { label: 'Terindikasi Stunting', name: 'terindikasi', widget: 'number' },
+                  { label: 'Prevalensi (%)', name: 'prevalensi', widget: 'number', value_type: 'float' },
+                  { label: 'Kategori', name: 'kategori', widget: 'list', fields: [
+                    { label: 'Nama', name: 'nama', widget: 'string', hint: 'Contoh: Keluarga Sasaran, Berisiko, Baduta, Balita, PUS, PUS Hamil' },
+                    { label: 'Jumlah', name: 'jumlah', widget: 'number' }
+                  ]}
+                ]
+              },
+              {
+                name: 'bantuan',
+                label: 'Data Bantuan Sosial',
+                file: 'src/content/infografis/bantuan.json',
+                fields: [
+                  { label: 'Program Bantuan', name: 'program', widget: 'list', fields: [
+                    { label: 'Nama Program', name: 'nama', widget: 'string', hint: 'Contoh: PKH, BLT, BPNT, PIP' },
+                    { label: 'Deskripsi', name: 'deskripsi', widget: 'string' },
+                    { label: 'Jumlah Penerima', name: 'jumlah_penerima', widget: 'number' },
+                    { label: 'Satuan', name: 'satuan', widget: 'string', hint: 'Contoh: KPM, siswa' },
+                    { label: 'Sumber', name: 'sumber', widget: 'string', hint: 'Contoh: Kemensos, Kemendikbud' }
+                  ]}
+                ]
+              },
+              {
+                name: 'sdgs',
+                label: 'Data SDGs Desa',
+                file: 'src/content/infografis/sdgs.json',
+                fields: [
+                  { label: 'Skor SDGs Total', name: 'skor_total', widget: 'number', value_type: 'float' },
+                  { label: 'Capaian per Tujuan', name: 'capaian', widget: 'list', fields: [
+                    { label: 'Nomor SDGs', name: 'nomor', widget: 'number' },
+                    { label: 'Nama Tujuan', name: 'nama', widget: 'string' },
+                    { label: 'Persentase (%)', name: 'persentase', widget: 'number' }
+                  ]}
+                ]
+              }
+            ]
           }
         ]
       }
