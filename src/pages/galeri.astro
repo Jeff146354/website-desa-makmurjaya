@@ -1,23 +1,14 @@
 ---
 /**
- * Halaman Galeri — menampilkan galeri foto desa dalam layout grid responsif,
- * dikelompokkan berdasarkan album, dengan mode lightbox untuk tampilan penuh.
- *
+ * Halaman Galeri — matching Figma hi-fi design.
  * Validates: Requirements 8.1, 8.2, 8.3, 8.4, 8.5
  */
 import { getCollection } from 'astro:content';
-import ContentLayout from '../layouts/ContentLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import GaleriGrid from '../components/galeri/GaleriGrid.astro';
 import Lightbox from '../components/galeri/Lightbox.astro';
-import EmptyState from '../components/ui/EmptyState.astro';
 import { getPath } from '../utils/links';
 
-const breadcrumbItems = [
-  { label: 'Beranda', href: getPath('/') },
-  { label: 'Galeri' },
-];
-
-// Query semua galeri, sort by urutan
 const allGaleri = await getCollection('galeri');
 const sortedGaleri = allGaleri
   .sort((a, b) => a.data.urutan - b.data.urutan)
@@ -31,18 +22,28 @@ const sortedGaleri = allGaleri
   }));
 ---
 
-<ContentLayout
+<BaseLayout
   title="Galeri Foto — Desa Makmurjaya"
   description="Galeri foto kegiatan dan dokumentasi Desa Makmurjaya."
-  breadcrumbItems={breadcrumbItems}
 >
-  <h1 class="font-display font-semibold text-2xl text-ink mb-8">Galeri Foto</h1>
+  <section class="page-header">
+    <div class="max-w-7xl mx-auto">
+      <p class="eyebrow text-gold-300 mb-1">Dokumentasi</p>
+      <h1 class="font-display font-semibold text-2xl md:text-[32px] text-white">Galeri Foto</h1>
+      <p class="text-sm text-white/60 mt-1">Dokumentasi kegiatan dan momen di Desa Makmurjaya.</p>
+    </div>
+  </section>
 
-  {sortedGaleri.length === 0 ? (
-    <EmptyState message="Belum ada foto galeri yang tersedia." icon="galeri" />
-  ) : (
-    <GaleriGrid items={sortedGaleri} />
-  )}
+  <div class="max-w-7xl mx-auto px-4 md:px-8 py-8">
+    {sortedGaleri.length === 0 ? (
+      <div class="empty-state">
+        <svg class="w-8 h-8 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+        <p class="text-sm text-muted">Belum ada foto galeri yang tersedia.</p>
+      </div>
+    ) : (
+      <GaleriGrid items={sortedGaleri} />
+    )}
 
-  <Lightbox />
-</ContentLayout>
+    <Lightbox />
+  </div>
+</BaseLayout>

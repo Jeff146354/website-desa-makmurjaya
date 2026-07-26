@@ -1,21 +1,16 @@
 ---
 /**
- * pages/pemerintahan/index.astro
- * Halaman Pemerintahan Desa - Menampilkan bagan struktur organisasi.
+ * Halaman Pemerintahan Desa — matching Figma hi-fi design.
  * Requirement 3.1, 3.2, 3.3, 3.5
  */
-
 import { getCollection } from 'astro:content';
-import ContentLayout from '../../layouts/ContentLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import OrgChart from '../../components/pemerintahan/OrgChart.astro';
 import { getPath } from '../../utils/links';
 
-// Query all published perangkat-desa, sorted by urutan
 const allPerangkat = await getCollection('perangkat-desa');
-const publishedPerangkat = allPerangkat
-  .sort((a, b) => a.data.urutan - b.data.urutan);
+const publishedPerangkat = allPerangkat.sort((a, b) => a.data.urutan - b.data.urutan);
 
-// Prepare data for OrgChart (slug comes from Astro's built-in entry.slug)
 const perangkatList = publishedPerangkat.map((entry) => ({
   nama: entry.data.nama,
   jabatan: entry.data.jabatan,
@@ -25,32 +20,28 @@ const perangkatList = publishedPerangkat.map((entry) => ({
   level_hierarki: entry.data.level_hierarki,
   parent_slug: entry.data.parent_slug,
 }));
-
-const breadcrumbItems = [
-  { label: 'Beranda', href: getPath('/') },
-  { label: 'Pemerintahan Desa' },
-];
-
-const pageTitle = 'Pemerintahan Desa — Desa Makmurjaya';
-const pageDescription = 'Struktur organisasi dan daftar perangkat pemerintahan Desa Makmurjaya.';
 ---
 
-<ContentLayout
-  title={pageTitle}
-  description={pageDescription}
-  breadcrumbItems={breadcrumbItems}
+<BaseLayout
+  title="Pemerintahan Desa — Desa Makmurjaya"
+  description="Struktur organisasi dan daftar perangkat pemerintahan Desa Makmurjaya."
 >
-  <section aria-labelledby="pemerintahan-heading">
-    <h1 id="pemerintahan-heading" class="font-display font-semibold text-2xl text-ink mb-8">
-      Struktur Organisasi Pemerintahan Desa
-    </h1>
+  <section class="page-header">
+    <div class="max-w-7xl mx-auto">
+      <p class="eyebrow text-gold-300 mb-1">Aparatur Desa</p>
+      <h1 class="font-display font-semibold text-2xl md:text-[32px] text-white">Pemerintahan Desa</h1>
+      <p class="text-sm text-white/60 mt-1">Struktur organisasi pemerintahan Desa Makmurjaya.</p>
+    </div>
+  </section>
 
+  <div class="max-w-7xl mx-auto px-4 md:px-8 py-8">
     {perangkatList.length > 0 ? (
       <OrgChart perangkatList={perangkatList} />
     ) : (
-      <p class="text-muted text-center py-12">
-        Data perangkat desa belum tersedia.
-      </p>
+      <div class="empty-state">
+        <svg class="w-8 h-8 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+        <p class="text-sm text-muted">Data perangkat desa belum tersedia.</p>
+      </div>
     )}
-  </section>
-</ContentLayout>
+  </div>
+</BaseLayout>

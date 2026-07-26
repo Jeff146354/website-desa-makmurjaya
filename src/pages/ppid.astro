@@ -1,0 +1,91 @@
+---
+/**
+ * PPID (Pejabat Pengelola Informasi dan Dokumentasi) page.
+ * Matches Figma hi-fi desktop-hifi/13-ppid.html
+ *
+ * Sections:
+ * - Page header banner
+ * - About PPID + 3 info category cards
+ * - Informasi Publik Terbaru (empty state for now)
+ * - Ajukan Permohonan CTA
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPath } from '../utils/links';
+
+const seoTitle = 'PPID — Desa Makmurjaya';
+const seoDescription = 'Pejabat Pengelola Informasi dan Dokumentasi Desa Makmurjaya. Keterbukaan informasi publik desa.';
+---
+
+<BaseLayout title={seoTitle} description={seoDescription}>
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="max-w-7xl mx-auto">
+      <p class="eyebrow text-gold-300 mb-1">Keterbukaan Informasi</p>
+      <h1 class="font-display font-semibold text-2xl md:text-[32px] text-white">PPID Desa Makmurjaya</h1>
+      <p class="text-sm text-white/60 mt-1">Pejabat Pengelola Informasi dan Dokumentasi</p>
+    </div>
+  </div>
+
+  <!-- About PPID + Info Categories -->
+  <section class="px-4 md:px-8 py-8 md:py-10 border-b border-line">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+      <!-- Left: About -->
+      <div>
+        <h2 class="h-section mb-3">Tentang PPID</h2>
+        <p class="sub-text leading-relaxed">
+          PPID Desa Makmurjaya bertugas mengelola, mendokumentasikan, dan menyediakan layanan informasi publik kepada seluruh masyarakat berdasarkan amanah UU No. 14 Tahun 2008 tentang Keterbukaan Informasi Publik.
+        </p>
+      </div>
+
+      <!-- Right: 3 category cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="card p-5 flex flex-col items-center text-center gap-3 hover:shadow-elevated transition">
+          <div class="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center">
+            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
+          <div class="font-display font-semibold text-sm text-ink">Informasi Berkala</div>
+          <p class="text-xs text-muted">Disampaikan secara rutin &amp; periodik</p>
+        </div>
+        <div class="card p-5 flex flex-col items-center text-center gap-3 hover:shadow-elevated transition">
+          <div class="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center">
+            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+          </div>
+          <div class="font-display font-semibold text-sm text-ink">Informasi Serta Merta</div>
+          <p class="text-xs text-muted">Wajib diumumkan segera tanpa permohonan</p>
+        </div>
+        <div class="card p-5 flex flex-col items-center text-center gap-3 hover:shadow-elevated transition">
+          <div class="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center">
+            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+          </div>
+          <div class="font-display font-semibold text-sm text-ink">Informasi Setiap Saat</div>
+          <p class="text-xs text-muted">Tersedia kapan pun diminta pemohon</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Informasi Publik Terbaru -->
+  <section class="px-4 md:px-8 py-8 md:py-10 border-b border-line section-alt">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="h-section">Informasi Publik Terbaru</h2>
+      </div>
+      <div class="empty-state mb-6">
+        <svg class="w-8 h-8 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v11m0 5l4.879-4.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242z" /></svg>
+        <p class="text-sm text-muted">Belum ada informasi PPID yang dipublikasi.</p>
+      </div>
+
+      <!-- Ajukan Permohonan CTA -->
+      <div class="card p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h3 class="font-display font-semibold text-base text-ink">Ajukan Permohonan Informasi</h3>
+          <p class="sub-text text-sm mt-1 max-w-md">Masyarakat dapat mengajukan permohonan informasi publik secara online atau langsung ke kantor desa.</p>
+        </div>
+        <a href={getPath('/kontak')} class="btn-primary shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+          Ajukan Permohonan
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

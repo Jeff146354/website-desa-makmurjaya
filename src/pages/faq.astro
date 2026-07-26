@@ -1,85 +1,75 @@
 ---
 /**
- * FAQ Page — displays frequently asked questions in accordion format.
- * Groups by kategori if available, renders JSON-LD FAQPage structured data.
- *
+ * FAQ Page — matching Figma hi-fi design.
  * Validates: Requirements 10.1, 10.2, 10.3, 19.4
  */
 import { getCollection } from 'astro:content';
 import { marked } from 'marked';
-import ContentLayout from '../layouts/ContentLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import Accordion from '../components/ui/Accordion.astro';
-import EmptyState from '../components/ui/EmptyState.astro';
 import { getPath } from '../utils/links';
 
-// Query all FAQ items and sort by urutan
 const allFaq = (await getCollection('faq')).sort((a, b) => a.data.urutan - b.data.urutan);
 
-// Convert markdown body to HTML for each FAQ entry
 const faqItems = allFaq.map((entry) => ({
   pertanyaan: entry.data.pertanyaan,
   jawaban: marked.parse(entry.body || '') as string,
   kategori: entry.data.kategori,
 }));
 
-// Group by kategori if any items have kategori defined
 const hasKategori = faqItems.some((item) => item.kategori);
 
 type GroupedFaq = Record<string, { pertanyaan: string; jawaban: string }[]>;
-
 const groupedFaq: GroupedFaq = {};
 if (hasKategori) {
   for (const item of faqItems) {
     const key = item.kategori || 'Lainnya';
-    if (!groupedFaq[key]) {
-      groupedFaq[key] = [];
-    }
+    if (!groupedFaq[key]) groupedFaq[key] = [];
     groupedFaq[key].push({ pertanyaan: item.pertanyaan, jawaban: item.jawaban });
   }
 }
 
-// Build JSON-LD FAQPage structured data (Requirement 19.4)
 const jsonLd = faqItems.length > 0 ? {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: faqItems.map((item) => ({
     '@type': 'Question',
     name: item.pertanyaan,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: item.jawaban,
-    },
+    acceptedAnswer: { '@type': 'Answer', text: item.jawaban },
   })),
 } : undefined;
-
-const breadcrumbItems = [
-  { label: 'Beranda', href: getPath('/') },
-  { label: 'FAQ' },
-];
 ---
 
-<ContentLayout
-  title="FAQ"
-  description="Pertanyaan yang sering diajukan seputar layanan dan informasi Desa Makmurjaya"
+<BaseLayout
+  title="FAQ — Desa Makmurjaya"
+  description="Pertanyaan yang sering diajukan seputar layanan dan informasi Desa Makmurjaya."
   jsonLd={jsonLd}
-  breadcrumbItems={breadcrumbItems}
 >
-  <h1 class="font-display font-semibold text-2xl text-ink mb-6">
-    Pertanyaan yang Sering Diajukan
-  </h1>
-
-  {faqItems.length === 0 ? (
-    <EmptyState message="Belum ada pertanyaan yang tersedia saat ini." />
-  ) : hasKategori ? (
-    <div class="space-y-8">
-      {Object.entries(groupedFaq).map(([kategori, items]) => (
-        <section>
-          <h2 class="text-lg font-semibold text-ink mb-3 capitalize">{kategori}</h2>
-          <Accordion items={items} />
-        </section>
-      ))}
+  <section class="page-header">
+    <div class="max-w-7xl mx-auto">
+      <p class="eyebrow text-gold-300 mb-1">Bantuan</p>
+      <h1 class="font-display font-semibold text-2xl md:text-[32px] text-white">Pertanyaan yang Sering Diajukan</h1>
+      <p class="text-sm text-white/60 mt-1">Temukan jawaban atas pertanyaan umum tentang layanan desa.</p>
     </div>
-  ) : (
-    <Accordion items={faqItems.map(({ pertanyaan, jawaban }) => ({ pertanyaan, jawaban }))} />
-  )}
-</ContentLayout>
+  </section>
+
+  <div class="max-w-3xl mx-auto px-4 md:px-8 py-8">
+    {faqItems.length === 0 ? (
+      <div class="empty-state">
+        <svg class="w-8 h-8 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <p class="text-sm text-muted">Belum ada pertanyaan yang tersedia saat ini.</p>
+      </div>
+    ) : hasKategori ? (
+      <div class="space-y-8">
+        {Object.entries(groupedFaq).map(([kategori, items]) => (
+          <section>
+            <h2 class="font-display font-semibold text-lg text-ink mb-3">{kategori}</h2>
+            <Accordion items={items} />
+          </section>
+        ))}
+      </div>
+    ) : (
+      <Accordion items={faqItems.map(({ pertanyaan, jawaban }) => ({ pertanyaan, jawaban }))} />
+    )}
+  </div>
+</BaseLayout>
